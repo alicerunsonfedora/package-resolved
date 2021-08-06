@@ -27,10 +27,29 @@ namespace PackageResolved
         ///<summary>The kind of obstacle this instance will be.</summary>
         [Export] public Kind ObstacleKind = Kind.Instant_Death;
 
+        private TileMap _tilemapDeath;
+        private TileMap _tilemapSpeed;
+
         public override void _Ready()
         {
             Connect("body_entered", this, "_OnAreaEntered");
             Connect("body_exited", this, "_OnAreaExited");
+
+            _tilemapDeath = GetNode("DeathMap") as TileMap;
+            _tilemapSpeed = GetNode("FastSpeedMap") as TileMap;
+
+            SwapTextures();
+        }
+
+        /// <summary>Loads the appropriate texture for the obstacle.</summary>
+        public void SwapTextures()
+        {
+            if (_tilemapDeath == null || _tilemapSpeed == null)
+                return;
+            if (ObstacleKind == Kind.Faster_Speed)
+                _tilemapSpeed.Visible = true;
+            else if (ObstacleKind == Kind.Instant_Death)
+                _tilemapDeath.Visible = true;
         }
 
         private void _OnAreaEntered(Node2D body)

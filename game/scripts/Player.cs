@@ -52,8 +52,11 @@ namespace PackageResolved
                 velocity = velocity.MoveToward(Vector2.Zero, Friction * delta);
             }
             MoveAndSlide(velocity * delta * Speed);
-            if (GlobalPosition.y > 600)
+            if (GlobalPosition.y > 800)
+            {
                 Position = new Vector2(GlobalPosition.x, 32);
+                EmitSignal("PlayerRelocated");
+            }
         }
 
         /// <summary>Update the player's friction.</summary>
@@ -63,5 +66,9 @@ namespace PackageResolved
             Friction = isSliding ? 100 : 200;
             Speed = isSliding ? 225 : 175;
         }
+
+        /// <summary>A signal that indicated the player has moved to the top
+        /// of the screen.</summary>
+        [Signal] private delegate void PlayerRelocated();
     }
 }
