@@ -11,7 +11,7 @@ using System;
 namespace PackageDelivered
 {
     /// <summary>Documentation for <c>%CLASS%</c> goes here.</summary>
-    public class %CLASS% : %BASE%
+    public class % CLASS % : % BASE %
     {
         // Declare member variables here. Examples:
         // private int a = 2;
