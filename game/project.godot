@@ -10,7 +10,10 @@ config_version=4
 
 [application]
 
-config/name="game"
+config/name="Package.resolved"
+config/description="Deliver all the packages!"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="net.marquiskurt.package-resolved"
 config/icon="res://icon.png"
 
 [display]
