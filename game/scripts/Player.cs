@@ -8,7 +8,7 @@
 using Godot;
 using System;
 
-namespace PackageDelivered
+namespace PackageResolved
 {
     /// <summary>A class that represents the player in the game.</summary>
     public class Player : KinematicBody2D

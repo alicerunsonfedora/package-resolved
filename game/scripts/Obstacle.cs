@@ -8,7 +8,7 @@
 using Godot;
 using System;
 
-namespace PackageDelivered
+namespace PackageResolved
 {
     ///<summary>A class that represents an obstacle in the game.</summary>
     public class Obstacle : Area2D

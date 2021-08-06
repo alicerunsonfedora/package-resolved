@@ -8,16 +8,11 @@
 using Godot;
 using System;
 
-namespace PackageDelivered
+namespace PackageResolved
 {
     /// <summary>Documentation for <c>%CLASS%</c> goes here.</summary>
     public class %CLASS% : %BASE%
     {
-        // Declare member variables here. Examples:
-        // private int a = 2;
-        // private string b = "text";
-
-        // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
 
