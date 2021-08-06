@@ -32,6 +32,7 @@ namespace PackageDelivered
         {
             var moveVector = Vector2.Zero;
             moveVector.x = Input.GetActionStrength("moveRight") - Input.GetActionStrength("moveLeft");
+            moveVector.y = 1;
             return moveVector.Normalized();
         }
 
@@ -48,6 +49,8 @@ namespace PackageDelivered
                 velocity = velocity.MoveToward(Vector2.Zero, Friction * delta);
             }
             MoveAndSlide(velocity * delta * Speed);
+            if (GlobalPosition.y > 600)
+                SetPosition(new Vector2(GlobalPosition.x, 32));
         }
     }
 }

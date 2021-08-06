@@ -393,3 +393,4 @@ FodyWeavers.xsd
 **/export_presets.cfg
 dist/
 .vscode
+**/.mono/

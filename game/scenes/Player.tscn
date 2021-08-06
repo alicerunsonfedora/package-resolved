@@ -38,6 +38,10 @@ height = 10.8682
 [node name="Player" type="KinematicBody2D"]
 script = SubResource( 1 )
 
+[node name="Camera2D" type="Camera2D" parent="."]
+offset = Vector2( 0, 256 )
+current = true
+
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
 hframes = 24
