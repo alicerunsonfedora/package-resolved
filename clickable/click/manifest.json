@@ -1,0 +1,15 @@
+{
+    "architecture": "@CLICK_ARCH@",
+    "description": "Fix all the bugs.",
+    "framework": "ubuntu-sdk-16.04.5",
+    "hooks": {
+        "xcbughunter": {
+            "apparmor": "xcbughunter.apparmor",
+            "desktop": "xcbughunter.desktop"
+        }
+    },
+    "maintainer": "Marquis Kurt <software@marquiskurt.net>",
+    "name": "xcbughunter.marquiskurt",
+    "title": "Bug Bounty!",
+    "version": "1.1.0"
+}

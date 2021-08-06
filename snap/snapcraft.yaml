@@ -1,0 +1,88 @@
+name: bug-bounty
+version: '1.1.0'
+base: core20
+summary: Fix all the bugs!
+description : |
+  Bug Bounty! is a small, fast-paced game where you need to look for
+  the bugs and squash as many as you can in a minute. This game was
+  designed for the 129th Trijam game jam.
+grade: stable
+confinement: strict
+compression: lzo
+
+layout:
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/alsa-lib:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/alsa-lib
+  /usr/share/alsa:
+    symlink: $SNAP/usr/share/alsa
+  /usr/share/libdrm/amdgpu.ids:
+    symlink: $SNAP/usr/share/libdrm/amdgpu.ids
+
+parts:
+  alsa-mixin:
+    plugin: dump
+    source: https://github.com/diddlesnaps/snapcraft-alsa.git
+    source-subdir: snapcraft-assets
+    build-packages:
+      - libasound2-dev
+    stage-packages:
+      - libasound2
+      - libasound2-plugins
+
+  desktop:
+    after: [ alsa-mixin ]
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: glib-only
+    plugin: make
+    build-packages:
+      - libglib2.0-dev
+    stage-packages:
+      - libglib2.0-bin
+
+  bug-bounty:
+    after: [ desktop ]
+    plugin: dump
+    source: xcbughunter_linux.zip
+    stage-packages:
+      - libglu1-mesa
+      - libxcursor1
+      - libxi6
+      - libxinerama1
+      - libxrandr2
+      - libxrender1
+    prime:
+      - -usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libLLVM-11*
+
+  cleanup:
+    plugin: nil
+    after: [ bug-bounty ]
+    override-prime: |
+      for CRUFT in \
+        usr/share/bug \
+        usr/share/lintian \
+        usr/share/man; do
+        rm -rf ${SNAPCRAFT_PRIME}/${CRUFT}
+      done
+      find ${SNAPCRAFT_PRIME}/usr/share/doc/ -type f -not -name 'copyright' -delete || true
+      rm ${SNAPCRAFT_PRIME}/usr/share/doc/*/*.gz 2>/dev/null || true
+      rm -rf ${SNAPCRAFT_PRIME}/usr/share/doc/*/examples || true
+      rm ${SNAPCRAFT_PRIME}/usr/share/doc/*/README* 2>/dev/null || true
+      find ${SNAPCRAFT_PRIME}/usr -type d -empty -delete || true
+apps:
+  bug-bounty:
+    command: xcbughunter.x86_64
+    command-chain:
+      - bin/desktop-launch
+      - snap/command-chain/alsa-launch
+    environment:
+      ALWAYS_USE_PULSEAUDIO: 1
+    plugs:
+      - audio-playback
+      - desktop
+      - desktop-legacy
+      - joystick
+      - network
+      - opengl
+      - pulseaudio
+      - wayland
+      - x11
