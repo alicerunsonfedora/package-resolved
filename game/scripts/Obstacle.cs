@@ -6,7 +6,6 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using Godot;
-using System;
 
 namespace PackageResolved
 {
@@ -17,18 +16,20 @@ namespace PackageResolved
         public enum Kind
         {
             ///<summary>An obstacle that results in instant death on contact.</summary>
-            Instant_Death,
+            InstantDeath,
 
-            ///<summary>An obstacle that results in players that pass through to speed
-            ///up and lose their friction.</summary>
-            Faster_Speed
+            /// <summary>
+            ///     An obstacle that results in players that pass through to speed
+            ///     up and lose their friction.
+            /// </summary>
+            FasterSpeed
         }
-
-        ///<summary>The kind of obstacle this instance will be.</summary>
-        [Export] public Kind ObstacleKind = Kind.Instant_Death;
 
         private TileMap _tilemapDeath;
         private TileMap _tilemapSpeed;
+
+        ///<summary>The kind of obstacle this instance will be.</summary>
+        [Export] public Kind ObstacleKind = Kind.InstantDeath;
 
         public override void _Ready()
         {
@@ -46,9 +47,9 @@ namespace PackageResolved
         {
             if (_tilemapDeath == null || _tilemapSpeed == null)
                 return;
-            if (ObstacleKind == Kind.Faster_Speed)
+            if (ObstacleKind == Kind.FasterSpeed)
                 _tilemapSpeed.Visible = true;
-            else if (ObstacleKind == Kind.Instant_Death)
+            else if (ObstacleKind == Kind.InstantDeath)
                 _tilemapDeath.Visible = true;
         }
 
@@ -56,7 +57,7 @@ namespace PackageResolved
         {
             if (!(body is Player))
                 return;
-            if (ObstacleKind == Kind.Faster_Speed)
+            if (ObstacleKind == Kind.FasterSpeed)
                 (body as Player).UpdateFrictionAndSpeed(true);
         }
 
@@ -64,7 +65,7 @@ namespace PackageResolved
         {
             if (!(body is Player))
                 return;
-            if (ObstacleKind == Kind.Faster_Speed)
+            if (ObstacleKind == Kind.FasterSpeed)
                 (body as Player).UpdateFrictionAndSpeed(false);
         }
     }

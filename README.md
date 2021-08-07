@@ -1,4 +1,4 @@
-# Package Resolved 
+# Package Resolved
 
 **In Development**
 

@@ -6,32 +6,27 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using Godot;
-using System;
 
 namespace PackageResolved
 {
     /// <summary>A class that represents the player in the game.</summary>
     public class Player : KinematicBody2D
     {
-
         private const int Mass = 100;
         private const int Acceleration = 50;
 
         private const int MaxSpeed = 200;
 
-        private int Friction = 200;
-        private int Speed = 175;
-        private Vector2 velocity = Vector2.Zero;
-
-        public override void _Ready()
-        {
-
-        }
+        private int _friction = 200;
+        private int _speed = 175;
+        private Vector2 _velocity = Vector2.Zero;
 
         /// <summary>Returns the movement vector from the player's input.</summary>
-        /// <returns>A <c>Vector2</c> that represents the direction that the player
-        /// move.</returns>
-        public Vector2 GetMovementVector()
+        /// <returns>
+        ///     A <c>Vector2</c> that represents the direction that the player
+        ///     move.
+        /// </returns>
+        private Vector2 GetMovementVector()
         {
             var moveVector = Vector2.Zero;
             moveVector.x = Input.GetActionStrength("moveRight") - Input.GetActionStrength("moveLeft");
@@ -44,17 +39,18 @@ namespace PackageResolved
             var currentMovementVector = GetMovementVector();
             if (currentMovementVector != Vector2.Zero)
             {
-                velocity = currentMovementVector * Acceleration * Mass * delta;
-                velocity = velocity.Clamped(MaxSpeed * Mass * delta);
+                _velocity = currentMovementVector * Acceleration * Mass * delta;
+                _velocity = _velocity.Clamped(MaxSpeed * Mass * delta);
             }
             else
             {
-                velocity = velocity.MoveToward(Vector2.Zero, Friction * delta);
+                _velocity = _velocity.MoveToward(Vector2.Zero, _friction * delta);
             }
-            MoveAndSlide(velocity * delta * Speed);
-            if (GlobalPosition.y > 800)
+
+            MoveAndSlide(_velocity * delta * _speed);
+            if (GlobalPosition.y > 928)
             {
-                Position = new Vector2(GlobalPosition.x, 32);
+                Position = new Vector2(GlobalPosition.x, -650);
                 EmitSignal("PlayerRelocated");
             }
         }
@@ -63,12 +59,15 @@ namespace PackageResolved
         /// <param name="isSliding">Whether the player is sliding.</param>
         public void UpdateFrictionAndSpeed(bool isSliding)
         {
-            Friction = isSliding ? 100 : 200;
-            Speed = isSliding ? 225 : 175;
+            _friction = isSliding ? 100 : 200;
+            _speed = isSliding ? 225 : 175;
         }
 
-        /// <summary>A signal that indicated the player has moved to the top
-        /// of the screen.</summary>
-        [Signal] private delegate void PlayerRelocated();
+        /// <summary>
+        ///     A signal that indicated the player has moved to the top
+        ///     of the screen.
+        /// </summary>
+        [Signal]
+        private delegate void PlayerRelocated();
     }
 }

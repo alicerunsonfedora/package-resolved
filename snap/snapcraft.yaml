@@ -2,7 +2,7 @@ name: bug-bounty
 version: '1.1.0'
 base: core20
 summary: Fix all the bugs!
-description : |
+description: |
   Bug Bounty! is a small, fast-paced game where you need to look for
   the bugs and squash as many as you can in a minute. This game was
   designed for the 129th Trijam game jam.

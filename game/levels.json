@@ -1,0 +1,14 @@
+[
+  {
+    "requiredPackages": 15,
+    "timeLimit": 60
+  },
+  {
+    "requiredPackages": 30,
+    "timeLimit": 90
+  },
+  {
+    "requiredPackages": 45,
+    "timeLimit": 120
+  }
+]
