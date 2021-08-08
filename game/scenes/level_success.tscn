@@ -1,0 +1,78 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/default_theme.tres" type="Theme" id=1]
+[ext_resource path="res://assets/Inter-Bold.otf" type="DynamicFontData" id=2]
+[ext_resource path="res://scripts/LevelSuccess.gd" type="Script" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 32
+font_data = ExtResource( 2 )
+
+[node name="LevelSuccess" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="."]
+anchor_top = 0.00124166
+anchor_right = 1.0
+anchor_bottom = 1.00124
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -231.0
+margin_right = 231.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+modulate = Color( 1, 1, 1, 0 )
+margin_right = 462.0
+margin_bottom = 169.0
+size_flags_vertical = 3
+
+[node name="TitleText" type="Label" parent="VBoxContainer"]
+margin_top = 177.0
+margin_right = 462.0
+margin_bottom = 232.0
+custom_fonts/font = SubResource( 1 )
+text = "Great Job!"
+align = 1
+
+[node name="Label2" type="Label" parent="VBoxContainer"]
+margin_top = 240.0
+margin_right = 462.0
+margin_bottom = 312.0
+text = "You delivered the package and its dependencies."
+align = 1
+autowrap = true
+
+[node name="Restart" type="Button" parent="VBoxContainer"]
+margin_top = 320.0
+margin_right = 462.0
+margin_bottom = 367.0
+text = "Next Level"
+
+[node name="MainMenu" type="Button" parent="VBoxContainer"]
+margin_top = 375.0
+margin_right = 462.0
+margin_bottom = 422.0
+text = "Back to Main Menu"
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
+modulate = Color( 1, 1, 1, 0 )
+margin_top = 430.0
+margin_right = 462.0
+margin_bottom = 600.0
+size_flags_vertical = 3

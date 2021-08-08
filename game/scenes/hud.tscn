@@ -1,0 +1,163 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://assets/tileset.png" type="Texture" id=1]
+[ext_resource path="res://scripts/HUD.gd" type="Script" id=2]
+[ext_resource path="res://assets/default_theme.tres" type="Theme" id=3]
+[ext_resource path="res://assets/JetBrainsMono-Regular.ttf" type="DynamicFontData" id=4]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 1 )
+region = Rect2( 96, 144, 48, 48 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 24
+font_data = ExtResource( 4 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 1 )
+region = Rect2( 144, 144, 48, 48 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 24
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 4 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 128, 300 )
+
+[node name="HUD" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 0.813484
+margin_top = 0.941315
+margin_right = 0.813477
+margin_bottom = 0.941284
+theme = ExtResource( 3 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PackagesRemaining" type="TextureRect" parent="."]
+margin_left = 16.0
+margin_top = 16.0
+margin_right = 80.0
+margin_bottom = 80.0
+texture = SubResource( 1 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="PackagesRemaining"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = -15.0
+custom_fonts/font = SubResource( 2 )
+text = "00"
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TimeLimit" type="TextureRect" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -80.0
+margin_top = 16.0
+margin_right = -16.0
+margin_bottom = 80.0
+texture = SubResource( 3 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="TimeLimit"]
+anchor_left = -0.00334263
+anchor_right = 0.996657
+anchor_bottom = 1.0
+margin_bottom = -15.0
+custom_fonts/font = SubResource( 4 )
+text = "00"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LeftButton" type="TouchScreenButton" parent="."]
+position = Vector2( 128, 300 )
+shape = SubResource( 5 )
+shape_centered = false
+action = "move_left"
+
+[node name="RightButton" type="TouchScreenButton" parent="."]
+position = Vector2( 896, 300 )
+shape = SubResource( 5 )
+shape_centered = false
+action = "move_right"
+
+[node name="IntroLabel" type="Control" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -252.0
+margin_top = 16.0
+margin_right = 253.0
+margin_bottom = -15.9999
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bottom" type="Panel" parent="IntroLabel"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -256.5
+margin_top = -69.0
+margin_right = 256.5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Text" type="Label" parent="IntroLabel/Bottom"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "Collect as many packages as you can before time runs out. Avoid palletes."
+align = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Top" type="Panel" parent="IntroLabel"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -256.5
+margin_right = 256.5
+margin_bottom = 69.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Text" type="Label" parent="IntroLabel/Top"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "Press the arrow keys or tap the left/right edges of the screen to move."
+align = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 5.0
+
+[node name="Tween" type="Tween" parent="."]
