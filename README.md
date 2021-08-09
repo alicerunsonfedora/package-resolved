@@ -4,7 +4,7 @@ It's another day at the Swifty Package Factory, and you have a long list of orde
 
 Package Resolved is a short game written in Godot for the 132nd Trijam* game jam. Development time overall was 4 hours, and the artwork in 3 hours.
 
-[![Available on Itch.io](./.github/itch-badge-color.png)](https://marquiskurt.itch.io/package-resolved)
+[![Available on Itch.io](./.github/itch-badge-color.png)](https://marquiskurt.itch.io/package-resolved) [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/package-resolved) [![OpenStore](https://open-store.io/badges/en_US.png)](https://open-store.io/app/package-resolved.marquiskurt)
 
 ## How to play
 
