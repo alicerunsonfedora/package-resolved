@@ -40,7 +40,7 @@ parts:
     stage-packages:
       - libglib2.0-bin
 
-  bug-bounty:
+  package-resolved:
     after: [ desktop ]
     plugin: dump
     source: package-resolved_linux.zip
@@ -56,7 +56,7 @@ parts:
 
   cleanup:
     plugin: nil
-    after: [ bug-bounty ]
+    after: [ package-resolved ]
     override-prime: |
       for CRUFT in \
         usr/share/bug \
