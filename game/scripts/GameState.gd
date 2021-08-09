@@ -16,6 +16,9 @@ enum GameMode {
 var current_level = 0
 var current_mode = GameMode.ARCADE
 
+var music_enabled = true setget _update_music
+var sfx_enabled = true setget _update_sfx
+
 var _max_levels = 0
 
 var _level_data = []
@@ -49,3 +52,11 @@ func is_complete() -> bool:
 
 func progress() -> void:
 	current_level += 1
+	
+func _update_music(value: bool) -> void:
+	music_enabled = value
+	AudioServer.set_bus_mute(AudioServer.get_bus_index("Music"), not value)
+	
+func _update_sfx(value: bool) -> void:
+	sfx_enabled = value
+	AudioServer.set_bus_mute(AudioServer.get_bus_index("SFX"), not value)

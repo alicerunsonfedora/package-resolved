@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scripts/Hazard.gd" type="Script" id=1]
 [ext_resource path="res://assets/game_tileset.tres" type="TileSet" id=2]
+[ext_resource path="res://assets/audio/hit.wav" type="AudioStream" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 30.4023, 30.0492 )
@@ -34,3 +35,7 @@ tile_set = ExtResource( 2 )
 cell_size = Vector2( 48, 48 )
 format = 1
 tile_data = PoolIntArray( -1, 6, 0, -65536, 1, 0, -65535, 6, 0, 0, 2, 0, 65536, 2, 0, 131072, 3, 0 )
+
+[node name="Effect" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 3 )
+bus = "SFX"

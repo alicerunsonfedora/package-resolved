@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Bug Bounty!
-Comment=Fix all the bugs.
-Exec=godot --main-pack xcbughunter.pck
-Icon=icon.png
-Terminal=false
-Type=Application
-X-Ubuntu-Touch=true
-X-Ubuntu-Supported-Orientations=landscape

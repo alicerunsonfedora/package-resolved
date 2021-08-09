@@ -1,15 +1,27 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://assets/default_theme.tres" type="Theme" id=1]
-[ext_resource path="res://assets/Inter-Bold.otf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/fonts/Inter-Bold.otf" type="DynamicFontData" id=2]
 [ext_resource path="res://scripts/MainMenu.gd" type="Script" id=3]
-[ext_resource path="res://assets/Inter-Regular.otf" type="DynamicFontData" id=4]
+[ext_resource path="res://assets/fonts/JetBrainsMono-Regular.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://assets/sprites/base.png" type="Texture" id=5]
+[ext_resource path="res://assets/sprites/helmet.png" type="Texture" id=6]
+[ext_resource path="res://assets/audio/theme.wav" type="AudioStream" id=7]
 
-[sub_resource type="DynamicFont" id=1]
-size = 56
+[sub_resource type="Gradient" id=1]
+offsets = PoolRealArray( 0.168571, 0.54 )
+colors = PoolColorArray( 0, 0, 0, 0.443137, 0, 0, 0, 0 )
+
+[sub_resource type="GradientTexture" id=2]
+gradient = SubResource( 1 )
+width = 1024
+
+[sub_resource type="DynamicFont" id=3]
+size = 76
+outline_size = 3
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=4]
 font_data = ExtResource( 4 )
 
 [node name="MainMenu" type="Control"]
@@ -28,20 +40,55 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Base" type="TextureRect" parent="."]
+modulate = Color( 1, 0.937255, 0.901961, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 5 )
+expand = true
+stretch_mode = 7
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Helmet" type="TextureRect" parent="Base"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 6 )
+expand = true
+stretch_mode = 7
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Gradient" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = SubResource( 2 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Title" type="Label" parent="."]
 margin_left = 16.0
 margin_top = 16.0
-margin_right = 557.0
-margin_bottom = 101.0
-custom_fonts/font = SubResource( 1 )
-text = "Package Delivered"
+margin_right = 416.0
+margin_bottom = 271.0
+custom_fonts/font = SubResource( 3 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_outline_modulate = Color( 0.894118, 0.341176, 0.0705882, 1 )
+text = "Package Resolved"
 autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-anchor_top = 0.5
+anchor_top = 0.46
 anchor_bottom = 1.0
 margin_left = 16.0
-margin_right = 579.0
+margin_right = 421.0
 margin_bottom = -16.0
 alignment = 2
 __meta__ = {
@@ -49,31 +96,48 @@ __meta__ = {
 }
 
 [node name="Start" type="Button" parent="VBoxContainer"]
-margin_top = 100.0
-margin_right = 563.0
-margin_bottom = 147.0
+margin_right = 406.0
+margin_bottom = 47.0
 text = "Start Game"
 flat = true
 align = 0
 
 [node name="Endless" type="Button" parent="VBoxContainer"]
-margin_top = 155.0
-margin_right = 563.0
-margin_bottom = 202.0
+margin_top = 55.0
+margin_right = 406.0
+margin_bottom = 102.0
 text = "Play Endless"
 flat = true
 align = 0
 
+[node name="Music" type="CheckButton" parent="VBoxContainer"]
+margin_top = 110.0
+margin_right = 406.0
+margin_bottom = 164.0
+text = "Music"
+
+[node name="SFX" type="CheckButton" parent="VBoxContainer"]
+margin_top = 172.0
+margin_right = 406.0
+margin_bottom = 226.0
+text = "SFX"
+
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
 modulate = Color( 1, 1, 1, 0 )
-margin_top = 210.0
-margin_right = 563.0
-margin_bottom = 214.0
+margin_top = 234.0
+margin_right = 406.0
+margin_bottom = 238.0
 
-[node name="Label" type="Label" parent="VBoxContainer"]
-margin_top = 222.0
-margin_right = 563.0
-margin_bottom = 284.0
-custom_fonts/font = SubResource( 2 )
-text = "© 2021 Marquis Kurt and Raseruuu.
+[node name="Attribute" type="Label" parent="VBoxContainer"]
+margin_top = 246.0
+margin_right = 406.0
+margin_bottom = 312.0
+custom_fonts/font = SubResource( 4 )
+text = "(C) 2021 Marquis Kurt and Raseruuu.
 Designed for the 132nd Trijam game jam."
+
+[node name="Theme" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+volume_db = -0.7
+autoplay = true
+bus = "Music"

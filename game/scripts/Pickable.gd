@@ -23,6 +23,9 @@ signal picked_modifier()
 onready var sprite := $Sprite as AnimatedSprite
 onready var tween := $Tween as Tween
 
+onready var audio_pickup := $"Pickup"
+onready var audio_powerup := $"Powerup"
+
 func _ready() -> void:
 	var _connect_err = connect("body_entered", self, "_on_body_entered")
 	_connect_err = tween.connect("tween_all_completed", self, "queue_free")
@@ -51,10 +54,13 @@ func _on_body_entered(body: Node2D) -> void:
 	
 	match Kind:
 		Type.PACKAGE:
+			audio_pickup.play()
 			emit_signal("picked_package", 1)
 		Type.PACKAGE_PLUS:
+			audio_pickup.play()
 			emit_signal("picked_package", 2)
 		Type.TIME_MODIFIER:
+			audio_powerup.play()
 			emit_signal("picked_modifier")
 	teardown()
 

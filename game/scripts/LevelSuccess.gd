@@ -11,6 +11,8 @@ extends Control
 onready var btn_restart := $"VBoxContainer/Restart"
 onready var btn_quit_to_menu := $"VBoxContainer/MainMenu"
 
+onready var helmet := $"Panel/Base/Helmet"
+
 func _ready() -> void:
 	var _connect_err = btn_restart.connect("button_up", self, "_btn_press_restart")
 	_connect_err = btn_quit_to_menu.connect("button_up", self, "_btn_press_quit_to_menu")
@@ -18,6 +20,7 @@ func _ready() -> void:
 	GameState.progress()
 	if GameState.is_complete():
 		btn_restart.visible = false
+		helmet.visible = false
 
 func _btn_press_restart() -> void:
 	var _err = get_tree().change_scene("res://scenes/game_loop.tscn")

@@ -21,6 +21,7 @@ signal stopped_contact()
 
 onready var shape_pallete := $"Palette"
 onready var shape_wetfloor := $"WetFloor"
+onready var audio_effect := $"Effect"
 
 func _ready() -> void:
 	setup_hazard()
@@ -28,6 +29,11 @@ func _ready() -> void:
 	_connect_err = connect("body_exited", self, "_on_body_exited")
 	if _connect_err != OK:
 		push_error("Failed to connect - code %s" % _connect_err)
+		
+func get_rect() -> RectangleShape2D:
+	if shape_pallete == null or shape_wetfloor == null:
+		return RectangleShape2D.new()
+	return shape_pallete.shape if Kind == Type.PALLETE else shape_wetfloor.shape
 	
 func setup_hazard() -> void:
 	if shape_wetfloor != null:
@@ -43,6 +49,7 @@ func teardown() -> void:
 func _on_body_entered(body: Node2D) -> void:
 	if not body is Player:
 		return
+	audio_effect.play()
 	emit_signal("started_contact")
 
 func _on_body_exited(body: Node2D) -> void:

@@ -394,3 +394,4 @@ FodyWeavers.xsd
 dist/
 .vscode
 **/.mono/
+build/

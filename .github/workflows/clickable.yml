@@ -1,0 +1,54 @@
+name: Clickable
+on:
+  push:
+    paths:
+      - 'clickable/**'
+      - 'game/**'
+      - '.github/workflows/**.yml'
+
+jobs:
+  build:
+    name: Create clickable package
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        architectures:
+          - armhf
+          - arm64
+    steps:
+      - name: Clone source
+        uses: actions/checkout@v2
+      - name: Install clickable dependencies
+        run: |
+          sudo add-apt-repository ppa:bhdouglass/clickable
+          sudo apt update
+          sudo apt install -y containerd docker.io runc clickable
+          sudo systemctl unmask docker.service
+          sudo systemctl start docker.service
+      - name: Add export_presets.cfg
+        run: | 
+          echo $EXPORT_PRESETS_CFG > game/export_presets.cfg
+        env:
+          EXPORT_PRESETS_CFG: ${{ secrets.EXPORT_PRESETS_CFG }}
+      - name: Build Godot project
+        id: build_godot
+        uses: josephbmanley/build-godot-action@v1.4.1
+        with:
+          name: "package-resolved"
+          preset: "Linux/X11" 
+          projectDir: "game"
+          debugMode: "false"
+      - name: Copy Package Resolved pack file
+        run: |
+          cp build/*.pck clickable/
+      - name: Run Clickable
+        run: |
+          cd clickable
+          clickable build
+        env:
+          CLICKABLE_ARCH: ${{ matrix.architectures }}
+      - name: Upload click package artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: package_resolved_click
+          path: clickable/build/**.click

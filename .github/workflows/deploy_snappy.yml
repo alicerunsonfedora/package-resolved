@@ -1,0 +1,41 @@
+name: Snapcraft (Deploy)
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Publish snap package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone source
+        uses: actions/checkout@v2
+      - name: Add export_presets.cfg
+        run: | 
+          echo $EXPORT_PRESETS_CFG > game/export_presets.cfg
+        env:
+          EXPORT_PRESETS_CFG: ${{ secrets.EXPORT_PRESETS_CFG }}
+      - name: Build Godot project
+        id: build_godot
+        uses: josephbmanley/build-godot-action@v1.4.1
+        with:
+          name: "package-resolved"
+          preset: "Linux/X11" 
+          projectDir: "game"
+          debugMode: "false"
+      - name: Create Linux archive
+        run: | 
+          cd build
+          sudo mv package-resolved package-resolved.x86_64
+          sudo chmod +x package-resolved.x86_64
+          zip -v ../package-resolved_linux.zip ./*
+          cd ..
+      - name: Build snap package
+        uses: snapcore/action-build@v1
+        id: snapcraft
+      - name: Publish to Snap Store
+        uses: snapcore/action-publish@v1
+        with:
+          store_login: ${{ secrets.STORE_LOGIN }}
+          snap: ${{ steps.snapcraft.outputs.snap }}
+          release: stable

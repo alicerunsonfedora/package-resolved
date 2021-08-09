@@ -29,12 +29,14 @@ func _ready() -> void:
 	if _connect_err != OK:
 		push_error("An error occured - Code %s" % _connect_err)
 	
+	randomize()
 	_place_hazards()
 	_place_pickables()
 	
 	if GameState.current_mode == GameState.GameMode.ARCADE:
 		remaining_packages = GameState.get_required_packages()
 		timer_level.wait_time = GameState.get_time_limit()
+		hud.update_packages_remaining("%s" % remaining_packages)
 		_tick()
 		timer_level.start()
 	
@@ -99,15 +101,13 @@ func _place_hazards() -> void:
 	var last_vert_position = 300
 	for _index in range(3):
 		var random_x_position = rand_range(-4, 8)
-		if random_x_position > -2 and random_x_position < 3:
-			random_x_position += 3 if random_x_position < 0 else -3
+		if random_x_position == 0:
+			random_x_position += 3 if randf() > 0 else -3
 		var hazard_object := _make_hazard()
 		hazard_object.position = Vector2(random_x_position * 48 * 2, last_vert_position)
 		obstacle_positions.append(hazard_object.position)
 		call_deferred("add_child", hazard_object)
-		last_vert_position += 48 * 2
-		if hazard_object.Kind == Hazard.Type.WET_FLOOR:
-			last_vert_position = 144
+		last_vert_position += 16 + (hazard_object.get_rect().extents.y * 2)
 
 func _place_pickables() -> void:
 	var last_vert_position = -64

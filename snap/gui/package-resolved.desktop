@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=2.5
+Encoding=UTF-8
+Name=Package Resolved
+Comment=Collect all the packages!
+Icon=${SNAP}/meta/gui/package-resolved.png
+Exec=package-resolved
+Terminal=false
+Startup-Notify=false
+Categories=Game;

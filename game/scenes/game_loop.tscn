@@ -1,15 +1,20 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://objects/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/game_tileset.tres" type="TileSet" id=2]
 [ext_resource path="res://scripts/GameLoop.gd" type="Script" id=3]
 [ext_resource path="res://scenes/hud.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/audio/theme.wav" type="AudioStream" id=5]
+[ext_resource path="res://assets/sprites/light.png" type="Texture" id=6]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 524.585, 44.2334 )
 
 [node name="World" type="Node2D"]
 script = ExtResource( 3 )
+
+[node name="Darken" type="CanvasModulate" parent="."]
+color = Color( 0.388235, 0.364706, 0.356863, 1 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -44,3 +49,69 @@ autostart = true
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
+
+[node name="Theme" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+volume_db = -0.7
+autoplay = true
+bus = "Music"
+
+[node name="LeftEdgeLight" type="Light2D" parent="."]
+position = Vector2( -512, -300 )
+texture = ExtResource( 6 )
+texture_scale = 12.0
+color = Color( 0.639216, 0.54902, 0.435294, 1 )
+
+[node name="LeftEdgeLight2" type="Light2D" parent="."]
+position = Vector2( -512, 300 )
+texture = ExtResource( 6 )
+texture_scale = 12.0
+color = Color( 0.639216, 0.54902, 0.435294, 1 )
+
+[node name="LeftEdgeLight3" type="Light2D" parent="."]
+position = Vector2( -512, -900 )
+texture = ExtResource( 6 )
+texture_scale = 12.0
+color = Color( 0.639216, 0.54902, 0.435294, 1 )
+
+[node name="LeftEdgeLight4" type="Light2D" parent="."]
+position = Vector2( -512, 876 )
+texture = ExtResource( 6 )
+texture_scale = 12.0
+color = Color( 0.639216, 0.54902, 0.435294, 1 )
+
+[node name="RightEdgeLight3" type="Light2D" parent="."]
+position = Vector2( 512, -300 )
+texture = ExtResource( 6 )
+texture_scale = 12.0
+color = Color( 0.639216, 0.54902, 0.435294, 1 )
+
+[node name="RightEdgeLight4" type="Light2D" parent="."]
+position = Vector2( 512, 300 )
+texture = ExtResource( 6 )
+texture_scale = 12.0
+color = Color( 0.639216, 0.54902, 0.435294, 1 )
+
+[node name="RightEdgeLight5" type="Light2D" parent="."]
+position = Vector2( 512, -900 )
+texture = ExtResource( 6 )
+texture_scale = 12.0
+color = Color( 0.639216, 0.54902, 0.435294, 1 )
+
+[node name="LeftEdgeLight5" type="Light2D" parent="."]
+position = Vector2( -512, -1500 )
+texture = ExtResource( 6 )
+texture_scale = 12.0
+color = Color( 0.639216, 0.54902, 0.435294, 1 )
+
+[node name="RightEdgeLight7" type="Light2D" parent="."]
+position = Vector2( 512, -1500 )
+texture = ExtResource( 6 )
+texture_scale = 12.0
+color = Color( 0.639216, 0.54902, 0.435294, 1 )
+
+[node name="RightEdgeLight6" type="Light2D" parent="."]
+position = Vector2( 512, 876 )
+texture = ExtResource( 6 )
+texture_scale = 12.0
+color = Color( 0.639216, 0.54902, 0.435294, 1 )

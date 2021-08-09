@@ -1,15 +1,15 @@
 {
   "architecture": "@CLICK_ARCH@",
-  "description": "Fix all the bugs.",
+  "description": "Collect all the packages.",
   "framework": "ubuntu-sdk-16.04.5",
   "hooks": {
-    "xcbughunter": {
-      "apparmor": "xcbughunter.apparmor",
-      "desktop": "xcbughunter.desktop"
+    "package-resolved": {
+      "apparmor": "package-resolved.apparmor",
+      "desktop": "package-resolved.desktop"
     }
   },
   "maintainer": "Marquis Kurt <software@marquiskurt.net>",
-  "name": "xcbughunter.marquiskurt",
-  "title": "Bug Bounty!",
-  "version": "1.1.0"
+  "name": "package-resolved.marquiskurt",
+  "title": "Package Resolved",
+  "version": "1.0.0"
 }
