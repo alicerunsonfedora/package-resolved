@@ -68,7 +68,7 @@ $ CLICKABLE_ARCH=arm64 clickable build
 > Note: It is recommended that you provide packages for at least the `armhf` and `arm64` architectures.
 
 ### Snap packages
-After exporting the project, create a ZIP file of the exported `linux` directory and name it `cm-reloaded_linux.zip`. Move the ZIP fil
+After exporting the project, create a ZIP file of the exported `linux` directory and name it `package-resolved_linux.zip`. Move the ZIP file to the root of the project and run `snapcraft` to make a snap.
 
 ## Credits
 
