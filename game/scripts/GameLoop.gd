@@ -92,6 +92,8 @@ func _on_picked_package(amount: int) -> void:
 	hud.update_packages_remaining("%s" % remaining_packages)
 
 func _on_picked_modifier() -> void:
+	if GameState.current_mode == GameState.GameMode.ENDLESS:
+		return
 	var _elapsed_time = timer_level.time_left
 	timer_level.stop()
 	timer_level.wait_time = _elapsed_time + 7
@@ -99,7 +101,7 @@ func _on_picked_modifier() -> void:
 
 func _place_hazards() -> void:
 	var last_vert_position = 300
-	for _index in range(3):
+	for _index in range(4):
 		var random_x_position = rand_range(-4, 8)
 		if random_x_position == 0:
 			random_x_position += 3 if randf() > 0 else -3
@@ -107,11 +109,12 @@ func _place_hazards() -> void:
 		hazard_object.position = Vector2(random_x_position * 48 * 2, last_vert_position)
 		obstacle_positions.append(hazard_object.position)
 		call_deferred("add_child", hazard_object)
-		last_vert_position += 16 + (hazard_object.get_rect().extents.y * 2)
+		last_vert_position += (hazard_object.get_rect().extents.y * 2)
+		last_vert_position += hazard_object.get_rect().extents.y / 3
 
 func _place_pickables() -> void:
 	var last_vert_position = -64
-	for _index in range(6):
+	for _index in range(8):
 		var random_x_position = rand_range(-5, 7)
 		var pickable_object := _make_pickable()
 		pickable_object.position = Vector2(random_x_position * 48 * 2, last_vert_position)
