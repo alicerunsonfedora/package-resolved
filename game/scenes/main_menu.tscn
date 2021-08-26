@@ -6,7 +6,7 @@
 [ext_resource path="res://assets/fonts/JetBrainsMono-Regular.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://assets/sprites/base.png" type="Texture" id=5]
 [ext_resource path="res://assets/sprites/helmet.png" type="Texture" id=6]
-[ext_resource path="res://assets/audio/theme.wav" type="AudioStream" id=7]
+[ext_resource path="res://assets/audio/theme.ogg" type="AudioStream" id=7]
 
 [sub_resource type="Gradient" id=1]
 offsets = PoolRealArray( 0.168571, 0.54 )
