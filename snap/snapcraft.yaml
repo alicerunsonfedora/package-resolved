@@ -1,5 +1,5 @@
 name: package-resolved
-version: '1.0.0'
+version: '1.0.1'
 base: core20
 summary: Collect all the packages!
 description: |
