@@ -2,7 +2,7 @@
 
 [ext_resource path="res://assets/default_theme.tres" type="Theme" id=1]
 [ext_resource path="res://assets/fonts/Inter-Bold.otf" type="DynamicFontData" id=2]
-[ext_resource path="res://scripts/LevelSuccess.gd" type="Script" id=3]
+[ext_resource path="res://scripts/UI/LevelSuccess.cs" type="Script" id=3]
 [ext_resource path="res://assets/sprites/base.png" type="Texture" id=4]
 [ext_resource path="res://assets/sprites/helmet.png" type="Texture" id=5]
 
@@ -15,9 +15,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 1 )
 script = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Panel" type="Panel" parent="."]
 anchor_top = 0.00124166

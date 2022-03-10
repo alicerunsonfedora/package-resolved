@@ -2,7 +2,7 @@
 
 [ext_resource path="res://assets/default_theme.tres" type="Theme" id=1]
 [ext_resource path="res://assets/fonts/Inter-Bold.otf" type="DynamicFontData" id=2]
-[ext_resource path="res://scripts/MainMenu.gd" type="Script" id=3]
+[ext_resource path="res://scripts/UI/MainMenu.cs" type="Script" id=3]
 [ext_resource path="res://assets/fonts/JetBrainsMono-Regular.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://assets/sprites/base.png" type="Texture" id=5]
 [ext_resource path="res://assets/sprites/helmet.png" type="Texture" id=6]
@@ -29,9 +29,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 1 )
 script = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Background" type="Panel" parent="."]
 anchor_right = 1.0
@@ -57,9 +54,6 @@ anchor_bottom = 1.0
 texture = ExtResource( 6 )
 expand = true
 stretch_mode = 7
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Gradient" type="TextureRect" parent="."]
 anchor_right = 1.0
@@ -75,9 +69,9 @@ margin_left = 16.0
 margin_top = 16.0
 margin_right = 416.0
 margin_bottom = 271.0
-custom_fonts/font = SubResource( 3 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_outline_modulate = Color( 0.894118, 0.341176, 0.0705882, 1 )
+custom_fonts/font = SubResource( 3 )
 text = "Package Resolved"
 autowrap = true
 __meta__ = {
