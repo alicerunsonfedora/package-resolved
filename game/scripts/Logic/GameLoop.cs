@@ -79,6 +79,9 @@ namespace PackageResolved.Logic
         /// </remarks>
         private Timer TimerLevel;
 
+        /// <summary>
+        /// Instantiate the scene after entering the scene tree.
+        /// </summary>
         public override void _Ready()
         {
             InstantiateOnreadyInstances();
@@ -101,6 +104,10 @@ namespace PackageResolved.Logic
             }
         }
 
+        /// <summary>
+        /// Process the physics objects in the scene.
+        /// </summary>
+        /// <param name="delta">The change in time since the previous frame.</param>
         public override void _PhysicsProcess(float delta)
         {
             TeleportDestination.Position = new Vector2(PlayerNode.Position.x, TeleportDestination.Position.y);

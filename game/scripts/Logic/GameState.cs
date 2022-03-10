@@ -71,7 +71,9 @@ namespace PackageResolved.Logic
 
         #endregion
 
-
+        /// <summary>
+        /// Instaniate the game state manager and import the level data from the <c>levels.json</c> file.
+        /// </summary>
         public override void _Ready()
         {
             var jsonFile = new File();
