@@ -12,41 +12,71 @@ using PackageResolved.UI;
 
 namespace PackageResolved.Logic
 {
-    /// <summary> The primary game loop. </summary>
+    /// <summary>
+    /// The primary game loop.
+    /// </summary>
     public class GameLoop : Node2D, ITeardownable
     {
-        /// <summary> The heads-up display that shows over the main level. </summary>
+        /// <summary>
+        /// The heads-up display that shows over the main level.
+        /// </summary>
         private HUD HeadsUpDisplay;
 
-        /// <summary> The packed scene information to construct a hazard. </summary>
+        /// <summary>
+        /// The packed scene information to construct a hazard.
+        /// </summary>
         private readonly PackedScene HazardPacked = GD.Load("res://objects/hazard.tscn") as PackedScene;
 
-        /// <summary> An array of obstacle positions. </summary>
-        /// <remarks> This is typically used to determine what positions pickable items cannot be placed. </remarks>
+        /// <summary>
+        /// An array of obstacle positions.
+        /// </summary>
+        /// <remarks>
+        /// This is typically used to determine what positions pickable items cannot be placed.
+        /// </remarks>
         private readonly Array ObstaclePositions = new Array();
 
-        /// <summary>The packed scene information to construct a pickable item.</summary>
+        /// <summary>
+        /// The packed scene information to construct a pickable item.
+        /// </summary>
         private readonly PackedScene PickablePacked = GD.Load("res://objects/pickable.tscn") as PackedScene;
 
-        /// <summary> The player controller used in the level. </summary>
+        /// <summary>
+        /// The player controller used in the level.
+        /// </summary>
         private Player PlayerNode;
 
-        /// <summary> The number of packages the player still needs to collect. </summary>
+        /// <summary>
+        /// The number of packages the player still needs to collect.
+        /// </summary>
         private int RemainingPackages;
 
-        /// <summary> The Area2D trigger that teleports the player to the top of the map. </summary>
+        /// <summary>
+        /// The Area2D trigger that teleports the player to the top of the map.
+        /// </summary>
         private Area2D TeleportTrigger;
 
-        /// <summary> The Area2D used to define the top of the map. </summary>
-        /// <remarks> This is used in conjunction with <c>TeleportTrigger</c> to teleport the player. </remarks>
+        /// <summary>
+        /// The Area2D used to define the top of the map.
+        /// </summary>
+        /// <remarks>
+        /// This is used in conjunction with <c>TeleportTrigger</c> to teleport the player.
+        /// </remarks>
         private Node2D TeleportDestination;
 
-        /// <summary> The timer used to run code on every second. </summary>
-        /// <remarks> The <c>Tick</c> method will be executed when this timer times out every day. </remarks>
+        /// <summary>
+        /// The timer used to run code on every second.
+        /// </summary>
+        /// <remarks>
+        /// The <c>Tick</c> method will be executed when this timer times out every day.
+        /// </remarks>
         private Timer TimerTick;
 
-        /// <summary> The timer used to run the game loop. </summary>
-        /// <remarks> This timer will correspond to how much time the player has left. </remarks>
+        /// <summary>
+        /// The timer used to run the game loop.
+        /// </summary>
+        /// <remarks>
+        /// This timer will correspond to how much time the player has left.
+        /// </remarks>
         private Timer TimerLevel;
 
         public override void _Ready()
@@ -76,14 +106,20 @@ namespace PackageResolved.Logic
             TeleportDestination.Position = new Vector2(PlayerNode.Position.x, TeleportDestination.Position.y);
         }
 
-        /// <summary> Indicate the game is over and show the game over screen. </summary>
+        /// <summary>
+        /// Indicate the game is over and show the game over screen.
+        /// </summary>
         private void GameOver()
         {
             GetTree().ChangeScene("res://scenes/game_over.tscn");
         }
 
-        /// <summary> Instantiate fields that reference nodes in the scene tree. </summary>
-        /// <remarks> In GDScript, these fields would be marked with <c>onready</c>. </remarks>
+        /// <summary>
+        /// Instantiate fields that reference nodes in the scene tree.
+        /// </summary>
+        /// <remarks>
+        /// In GDScript, these fields would be marked with <c>onready</c>.
+        /// </remarks>
         private void InstantiateOnreadyInstances()
         {
             HeadsUpDisplay = GetNode<HUD>("CanvasLayer/HUD");
@@ -94,8 +130,11 @@ namespace PackageResolved.Logic
             TimerLevel = GetNode<Timer>("Timer");
         }
 
-        /// <summary> Creates a hazard node that will be placed in the scene tree. </summary>
-        /// <return> An instance of <c>Hazard</c>. </return>
+        /// <summary>
+        /// Creates a hazard node that will be placed in the scene tree.
+        /// </summary>
+        /// <return>
+        /// An instance of <c>Hazard</c>. </return>
         /// <seealso> Hazard </seealso>
         private Hazard MakeHazard()
         {
@@ -113,7 +152,9 @@ namespace PackageResolved.Logic
             return hazard;
         }
 
-        /// <summary> Creates a pickable item node that will be placed in the scene tree. </summary>
+        /// <summary>
+        /// Creates a pickable item node that will be placed in the scene tree.
+        /// </summary>
         /// <return> An instance of <c>Pickable</c>. </return>
         /// <seealso> Pickable </seealso>
         private Pickable MakePickable()
@@ -130,9 +171,12 @@ namespace PackageResolved.Logic
             return pickable;
         }
 
-        /// <summary> A callback method that runs when the player enters the teleport trigger. </summary>
+        /// <summary>
+        /// A callback method that runs when the player enters the teleport trigger.
+        /// </summary>
         /// <remarks> This method will teleport the player to the top of the screen and replace items in the
-        /// level. </remarks>
+        /// level.
+        /// </remarks>
         private void OnBodyEntered(Node2D body)
         {
             if (!(body is Player))
@@ -143,10 +187,14 @@ namespace PackageResolved.Logic
             PlacePickables();
         }
 
-        /// <summary> A callback method that runs when the user picks up a pickable item marked as a 
-        /// time modifier. </summary>
-        /// <remarks> This method will reset the timer to add the additional time that the modifier will
-        /// provide. </remarks>
+        /// <summary>
+        /// A callback method that runs when the user picks up a pickable item marked as a 
+        /// time modifier.
+        /// </summary>
+        /// <remarks>
+        /// This method will reset the timer to add the additional time that the modifier will
+        /// provide.
+        /// </remarks>
         private void OnPickedModifier()
         {
             var state = GetNode<GameState>("/root/GameState");
@@ -158,11 +206,15 @@ namespace PackageResolved.Logic
             TimerLevel.Start();
         }
 
-        /// <summary> A callback method that runs when the user picks up a pickable item marked as a package of some
-        /// kind. </summary>
+        /// <summary>
+        /// A callback method that runs when the user picks up a pickable item marked as a package of some
+        /// kind.
+        /// </summary>
         /// <param name="amount"> The number of packages to decrease <c>PackagesRemaining</c> by. </param>
-        /// <remarks> This method will subtract the amount of packages the pickable represents from the number of
-        /// packages remaining. </remarks>
+        /// <remarks>
+        /// This method will subtract the amount of packages the pickable represents from the number of
+        /// packages remaining.
+        /// </remarks>
         private void OnPickedPackage(int amount)
         {
             var state = GetNode<GameState>("/root/GameState");
@@ -177,7 +229,9 @@ namespace PackageResolved.Logic
             HeadsUpDisplay.UpdatePackagesRemaining($"{RemainingPackages}");
         }
 
-        /// <summary> Place the hazards randomly in the level play area. </summary>
+        /// <summary>
+        /// Place the hazards randomly in the level play area.
+        /// </summary>
         private void PlaceHazards()
         {
             var lastVertPosition = 300f;
@@ -195,7 +249,9 @@ namespace PackageResolved.Logic
             }
         }
 
-        /// <summary> Place the pickable items randomly in the level play area. </summary>
+        /// <summary>
+        /// Place the pickable items randomly in the level play area.
+        /// </summary>
         private void PlacePickables()
         {
             var lastVertPosition = -64;
@@ -211,8 +267,12 @@ namespace PackageResolved.Logic
             }
         }
 
-        /// <summary> Tears down the current scene to prepare for reinstantiation. </summary>
-        /// <remarks> This method does <i>not</i> call <c>QueueFree</c>. </remarks>
+        /// <summary>
+        /// Tears down the current scene to prepare for reinstantiation.
+        /// </summary>
+        /// <remarks>
+        /// This method does <i>not</i> call <c>QueueFree</c>.
+        /// </remarks>
         public void Teardown()
         {
             foreach (var child in GetChildren())
@@ -223,8 +283,12 @@ namespace PackageResolved.Logic
             ObstaclePositions.Clear();
         }
 
-        /// <summary> A callback method that runs every second when the <c>TimerTick</c> times out. </summary>
-        /// <remarks> This method primarily updates the heads-up display with the remaining time. </remarks>
+        /// <summary>
+        /// A callback method that runs every second when the <c>TimerTick</c> times out.
+        /// </summary>
+        /// <remarks>
+        /// This method primarily updates the heads-up display with the remaining time.
+        /// </remarks>
         private void Tick()
         {
             int timeLeft = (int)TimerLevel.TimeLeft;

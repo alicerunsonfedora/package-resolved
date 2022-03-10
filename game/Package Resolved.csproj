@@ -3,4 +3,8 @@
     <TargetFramework>net472</TargetFramework>
     <RootNamespace>PackageResolved</RootNamespace>
   </PropertyGroup>
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DocumentationFile>bin\YourApi.XML</DocumentationFile>
+  </PropertyGroup>
 </Project>
