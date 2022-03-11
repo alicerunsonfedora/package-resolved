@@ -3,7 +3,7 @@
 This document will cover additional instructions and tips to build the game for
 various platforms not typically covered by the Godot export template system.
 
-### Ubuntu Touch click packages
+## Ubuntu Touch click packages
 
 > :warning: The following instructions have _not_ been tested with the new codebase
 > written in C#. Additionally, you may need to run additional scripts to ensure you
@@ -28,7 +28,7 @@ over.
 > binary file(s) is/are not necessary for building the click package. Clickable will
 > download a custom Godot binary.
 
-#### Multiple architectures
+### Multiple architectures
 
 Note: To build for different architectures, pass in the `CLICKABLE_ARCH `environment
 variable.
@@ -43,7 +43,7 @@ $ CLICKABLE_ARCH=arm64 clickable build
 > Note: It is recommended that you provide packages for at least the `armhf` and
 > `arm64` architectures.
 
-### Snap packages
+## Snap packages
 
 After exporting the project, create a ZIP file of the exported `linux` directory and
 name it `package-resolved_linux.zip`. Move the ZIP file to the root of the project
