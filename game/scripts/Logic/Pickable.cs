@@ -131,6 +131,7 @@ namespace PackageResolved.Logic
                     EmitSignal("PickedModifier");
                     break;
             }
+            Teardown();
         }
 
         /// <summary>
