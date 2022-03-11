@@ -40,16 +40,28 @@ can get.
 
 For this project, you will need the following tools installed:
 
-- Godot 3.3 or better
+- Godot 3.3 or later
+- .NET SDK 6.0 or later
 
 The following tools are not required to build the game, but are useful for certain
 variants or other source purposes:
 
-- Xcode 12 or better, for signing certificates
+- Xcode 12 or later, for signing certificates
 - iconutil, for creating the Mac icon file
 - Aseprite, for making the sprite files
 - clickable, for making the Ubuntu Touch variant
 - snapcraft, for making the Snapcraft variant
+
+### Additional Setup on Apple Silicon Macs
+
+At the time of writing this documentation, Apple Silicon Macs do not support the Mono
+framework from Homebrew. To ensure the project builds correctly on Apple Silicon
+Macs, the following changes need to be made:
+
+- In the **Editor Settings > Mono > Build Tools**, change the build tool to dotnet
+  CLI.
+- Depending on the IDE you are using to write C# scripts, you may need to run
+  additional configuration changes.
 
 ### Export the project
 
@@ -61,6 +73,11 @@ and then create the export settings for the platforms you want to target.
 > in the "Features" tab to ensure the dialogue appears correctly.
 
 ### Ubuntu Touch click packages
+
+> :warning: The following instructions have _not_ been tested with the new codebase
+> written in C#. Additionally, you may need to run additional scripts to ensure you
+> have a version of Godot with the Mono framework built in for the Ubuntu Touch
+> platform.
 
 Start by building the project as you would for standard, x86-64 Linux\*. Copy the
 resulting .pck file from the `dist/linux` directory (or whereever you specified the
