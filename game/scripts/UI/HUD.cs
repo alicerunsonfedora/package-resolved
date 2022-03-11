@@ -3,13 +3,34 @@ using PackageResolved.Logic;
 
 namespace PackageResolved.UI
 {
+    /// <summary>
+    /// A class that controls the user interface for the heads-up display.
+    /// </summary>
     public class HUD : Control
     {
+        /// <summary>
+        /// A label that displays the number of packages remaining.
+        /// </summary>
         private Label packagesRemaining;
+
+        /// <summary>
+        /// A label that displays the time remaining.
+        /// </summary>
         private Label timeLimit;
+
+        /// <summary>
+        /// A timer used to time how long to display the tutorial screens for.
+        /// </summary>
         private Timer timer;
+
+        /// <summary>
+        /// A tween animation node used to fade out the tutorial screen.
+        /// </summary>
         private Tween tween;
 
+        /// <summary>
+        /// Instantiate the scene after entering the scene tree.
+        /// </summary>
         public override void _Ready()
         {
             InstantiateOnreadyInstances();
@@ -33,16 +54,31 @@ namespace PackageResolved.UI
             }
         }
 
+        /// <summary>
+        /// Update the packages remaining label.
+        /// </summary>
+        /// <param name="text">The number of packages remaining as a string value.</param>
         public void UpdatePackagesRemaining(string text)
         {
             packagesRemaining.Text = text;
         }
 
+        /// <summary>
+        /// Update the time limit label.
+        /// </summary>
+        /// <param name="text">The remaining time as a string value.</param>
         public void UpdateTimeLimit(string text)
         {
             timeLimit.Text = text;
         }
 
+
+        /// <summary>
+        /// Instantiate fields that reference nodes in the scene tree.
+        /// </summary>
+        /// <remarks>
+        /// In GDScript, these fields would be marked with <c>onready</c>.
+        /// </remarks>
         private void InstantiateOnreadyInstances()
         {
             timer = GetNode<Timer>("Timer");

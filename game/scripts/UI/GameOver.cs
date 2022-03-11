@@ -10,12 +10,12 @@ namespace PackageResolved.UI
         /// <summary>
         /// The button that causes the game to restart when clicked.
         /// </summary>
-        public Button BtnRestart;
+        private Button BtnRestart;
 
         /// <summary>
         /// The button that allows the player to return to the main menu.
         /// </summary>
-        public Button BtnQuitToMenu;
+        private Button BtnQuitToMenu;
 
         /// <summary>
         /// Instantiate the scene after entering the scene tree.
