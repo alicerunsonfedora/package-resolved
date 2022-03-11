@@ -36,6 +36,11 @@ namespace PackageResolved.Logic
         private readonly Array ObstaclePositions = new Array();
 
         /// <summary>
+        /// The pause menu that will be displayed when the player presses the pause key.
+        /// </summary>
+        private PauseMenu Pause;
+
+        /// <summary>
         /// The packed scene information to construct a pickable item.
         /// </summary>
         private readonly PackedScene PickablePacked = GD.Load("res://objects/pickable.tscn") as PackedScene;
@@ -114,6 +119,22 @@ namespace PackageResolved.Logic
         }
 
         /// <summary>
+        /// Process keystrokes in the game loop and perform the appropriate action.
+        /// </summary>
+        /// <param name="event">The keystoke event that needs to be processed.</param>
+        /// <remarks>
+        /// This method will listen for the pause key to suspend the current tree state and show the pause menu.
+        /// </remarks>
+        public override void _UnhandledKeyInput(InputEventKey @event)
+        {
+            if (@event.GetActionStrength("ui_pause") > 0)
+            {
+                Pause.Visible = true;
+                GetTree().Paused = true;
+            }
+        }
+
+        /// <summary>
         /// Indicate the game is over and show the game over screen.
         /// </summary>
         private void GameOver()
@@ -130,6 +151,7 @@ namespace PackageResolved.Logic
         private void InstantiateOnreadyInstances()
         {
             HeadsUpDisplay = GetNode<HUD>("CanvasLayer/HUD");
+            Pause = GetNode<PauseMenu>("CanvasLayer/PauseMenu");
             PlayerNode = GetNode<Player>("Player");
             TeleportTrigger = GetNode<Area2D>("TeleportTrigger");
             TeleportDestination = GetNode<Node2D>("TeleportDestination");
