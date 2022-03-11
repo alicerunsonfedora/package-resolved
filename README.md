@@ -1,6 +1,6 @@
 <img src="./game/icon.png" width="128" align="right" alt="Package Resolved icon"/>
 
-# Package Resolved
+# 📦 Package Resolved
 
 It's another day at the Swifty Package Factory, and you have a long list of orders to
 deliver, with no time to spare! Can you collect all of the packages to deliver in the
@@ -15,7 +15,7 @@ time allotted? Watch out for palettes and wet floors, or you'll get really injur
 
 [gamejam-version]: https://github.com/alicerunsonfedora/trijam-132
 
-## How to play
+## 🕹 How to play
 
 Use the arrow keys or the A and D keys to move left and right; for touchscreen
 devices, tap and hold on the left and right edges. Run into packages to collect them,
@@ -34,7 +34,7 @@ can get.
 - Water puddles marked with wet floor signs cause you to speed up.
 - Palettes marked with wet floor signs cause an instant game over on contact.
 
-## Build from source
+## 🛠 Build from source
 
 ### Developer Tools
 
@@ -118,7 +118,13 @@ After exporting the project, create a ZIP file of the exported `linux` directory
 name it `package-resolved_linux.zip`. Move the ZIP file to the root of the project
 and run `snapcraft` to make a snap.
 
-## Credits
+## 💬 Bug reporting and feature requests
+
+If you find any bugs in the game or want to request a feature to make it better,
+please consider filing a report on the project's issue tracker at
+https://youtrack.marquiskurt.net/youtrack/newIssue?project=SPR.
+
+## 📑 Credits
 
 - Swift bird costume sprite based off of character template created by LimeZu.
 - Main menu artwork created by Raseruuu.
