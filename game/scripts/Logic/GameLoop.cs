@@ -139,6 +139,8 @@ namespace PackageResolved.Logic
         /// </summary>
         private void GameOver()
         {
+            var state = GetNode<GameState>("/root/GameState");
+            state.UpdatePreviousRun(state.GetRequiredPackages() - _remainingPackages, (int)_timerLevel.WaitTime);
             GetTree().ChangeScene("res://scenes/game_over.tscn");
         }
 

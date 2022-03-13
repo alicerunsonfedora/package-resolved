@@ -119,6 +119,16 @@ namespace PackageResolved.Logic
         public GameMode GetGameMode() => _currentMode;
 
         /// <summary>
+        /// Gets the score from the previous run.
+        /// </summary>
+        public int GetPreviousScore() => _previousScore;
+
+        /// <summary>
+        /// Gets the time remaining from the previous run.
+        /// </summary>
+        public int GetPreviousTimeLeft() => _previousTime;
+
+        /// <summary>
         /// Gets the number of packages required for the current level.
         /// </summary>
         public int GetRequiredPackages()

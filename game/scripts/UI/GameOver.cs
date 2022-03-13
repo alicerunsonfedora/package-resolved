@@ -7,6 +7,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using Godot;
+using PackageResolved.Logic;
 
 namespace PackageResolved.UI
 {
@@ -15,6 +16,12 @@ namespace PackageResolved.UI
     /// </summary>
     public class GameOver : Control
     {
+
+        /// <summary>
+        /// The body text that is displayed under the "Game Over" screen.
+        /// </summary>
+        private Label _body;
+
         /// <summary>
         /// The button that causes the game to restart when clicked.
         /// </summary>
@@ -30,11 +37,10 @@ namespace PackageResolved.UI
         /// </summary>
         public override void _Ready()
         {
-            _btnRestart = GetNode<Button>("VBoxContainer/Restart");
-            _btnQuitToMenu = GetNode<Button>("VBoxContainer/MainMenu");
-
-            _btnRestart.Connect("button_up", this, "BtnPressRestart");
-            _btnQuitToMenu.Connect("button_up", this, "BtnPressQuitToMenu");
+            InstantiateOnreadyInstances();
+            _ = _btnRestart.Connect("button_up", this, "BtnPressRestart");
+            _ = _btnQuitToMenu.Connect("button_up", this, "BtnPressQuitToMenu");
+            UpdateBody();
         }
 
         /// <summary>
@@ -42,6 +48,8 @@ namespace PackageResolved.UI
         /// </summary>
         private void BtnPressRestart()
         {
+            var state = GetNode<GameState>("/root/GameState");
+            state.Reset(false);
             GetTree().ChangeScene("res://scenes/game_loop.tscn");
         }
 
@@ -51,6 +59,34 @@ namespace PackageResolved.UI
         private void BtnPressQuitToMenu()
         {
             GetTree().ChangeScene("res://scenes/main_menu.tscn");
+        }
+
+        /// <summary>
+        /// Instantiate fields that reference nodes in the scene tree.
+        /// </summary>
+        /// <remarks>
+        /// In GDScript, these fields would be marked with <c>onready</c>.
+        /// </remarks>
+        private void InstantiateOnreadyInstances()
+        {
+            _body = GetNode<Label>("VBoxContainer/Body");
+            _btnRestart = GetNode<Button>("VBoxContainer/Restart");
+            _btnQuitToMenu = GetNode<Button>("VBoxContainer/MainMenu");
+        }
+
+        private void UpdateBody()
+        {
+            string text;
+            var state = GetNode<GameState>("/root/GameState");
+            if (state.GetGameMode() == GameState.GameMode.Endless)
+                text = $"You ran into a palette and tripped!\nScore: {state.GetPreviousScore()} packages";
+            else if (state.GetGameMode() == GameState.GameMode.Arcade && state.GetPreviousTimeLeft() <= 0)
+                text = $"You couldn't collect all of the packages in time!\nScore: {state.GetPreviousScore()} "
+                    + "packages";
+            else
+                text = $"You ran into a palette and tripped!\nScore: {state.GetPreviousScore()} packages\n"
+                    + $"Time: {state.GetPreviousTimeLeft()} seconds";
+            _body.Text = text;
         }
     }
 }
