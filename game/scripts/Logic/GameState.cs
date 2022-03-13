@@ -39,7 +39,6 @@ namespace PackageResolved.Logic
             Endless
         }
 
-        #region Private Fields
         /// <summary>
         /// The current level that the player is playing or will play.
         /// </summary>
@@ -49,11 +48,6 @@ namespace PackageResolved.Logic
         /// The current game mode for the session.
         /// </summary>
         private GameMode _currentMode = GameMode.Arcade;
-
-        /// <summary>
-        /// The maximum number of levels defined in the level data.
-        /// </summary>
-        private int _maxLevels = 0;
 
         /// <summary>
         /// An array containing all of the game's level data.
@@ -68,16 +62,29 @@ namespace PackageResolved.Logic
         private Array _gameLevelData = new Array();
 
         /// <summary>
+        /// The maximum number of levels defined in the level data.
+        /// </summary>
+        private int _maxLevels = 0;
+
+        /// <summary>
         /// Whether the music should play in the background.
         /// </summary>
         private bool _musicEnabled = true;
 
         /// <summary>
+        /// The score from the previous run of the game.
+        /// </summary>
+        private int _previousScore = 0;
+
+        /// <summary>
+        /// The time remaining from the previous run of the game.
+        /// </summary>
+        private int _previousTime = 0;
+
+        /// <summary>
         /// Whether sound effects should play when the player interacts with items in the game.
         /// </summary>
         private bool _sfxEnabled = true;
-
-        #endregion
 
         /// <summary>
         /// Instaniate the game state manager and import the level data from the <c>levels.json</c> file.
@@ -162,6 +169,18 @@ namespace PackageResolved.Logic
         }
 
         /// <summary>
+        /// Reset the scores and times from the previous iteration and, optionally, reset the level progress.
+        /// </summary>
+        /// <param name="resetLevelState">Whether to also reset the level progress back to the first level.</param>
+        public void Reset(bool resetLevelState)
+        {
+            if (resetLevelState)
+                _currentLevel = 0;
+            _previousScore = 0;
+            _previousTime = 0;
+        }
+
+        /// <summary>
         /// Sets the game mode for the session.
         /// </summary>
         /// <param name="mode">The new game mode that will be applied for the current session.</param>
@@ -188,6 +207,17 @@ namespace PackageResolved.Logic
         {
             _sfxEnabled = enabled;
             AudioServer.SetBusMute(AudioServer.GetBusIndex("SFX"), !enabled);
+        }
+
+        /// <summary>
+        /// Update the previous scores and previous time fields to be used in other screens.
+        /// </summary>
+        /// <param name="previousScore">The score the player had before losing the level.</param>
+        /// <param name="previousTime">The time remaining that the player had.</param>
+        public void UpdatePreviousRun(int previousScore, int previousTime)
+        {
+            _previousScore = previousScore;
+            _previousTime = previousTime;
         }
 
         /// <summary>
