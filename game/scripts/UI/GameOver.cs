@@ -18,23 +18,23 @@ namespace PackageResolved.UI
         /// <summary>
         /// The button that causes the game to restart when clicked.
         /// </summary>
-        private Button BtnRestart;
+        private Button _btnRestart;
 
         /// <summary>
         /// The button that allows the player to return to the main menu.
         /// </summary>
-        private Button BtnQuitToMenu;
+        private Button _btnQuitToMenu;
 
         /// <summary>
         /// Instantiate the scene after entering the scene tree.
         /// </summary>
         public override void _Ready()
         {
-            BtnRestart = GetNode<Button>("VBoxContainer/Restart");
-            BtnQuitToMenu = GetNode<Button>("VBoxContainer/MainMenu");
+            _btnRestart = GetNode<Button>("VBoxContainer/Restart");
+            _btnQuitToMenu = GetNode<Button>("VBoxContainer/MainMenu");
 
-            BtnRestart.Connect("button_up", this, "BtnPressRestart");
-            BtnQuitToMenu.Connect("button_up", this, "BtnPressQuitToMenu");
+            _btnRestart.Connect("button_up", this, "BtnPressRestart");
+            _btnQuitToMenu.Connect("button_up", this, "BtnPressQuitToMenu");
         }
 
         /// <summary>

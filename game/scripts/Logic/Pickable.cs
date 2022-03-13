@@ -56,12 +56,12 @@ namespace PackageResolved.Logic
         /// <summary>
         /// The sound effect player that plays a pick up sound.
         /// </summary>
-        private SoundEffectPlayer AudioPickup;
+        private SoundEffectPlayer _audioPickup;
 
         /// <summary>
         /// The sound effect player that plays the "powerup" sound effect.
         /// </summary>
-        private SoundEffectPlayer AudioPowerup;
+        private SoundEffectPlayer _audioPowerup;
 
         /// <summary>
         /// The type of pickable item for the current instance.
@@ -71,12 +71,12 @@ namespace PackageResolved.Logic
         /// <summary>
         /// The animate sprite of the pickable item.
         /// </summary>
-        private AnimatedSprite Sprite;
+        private AnimatedSprite _sprite;
 
         /// <summary>
         /// A tween animation used to fade the item in and out of the scene.
         /// </summary>
-        private Tween ITween;
+        private Tween _tween;
 
         /// <summary>
         /// Instantiate the scene after entering the scene tree.
@@ -85,8 +85,8 @@ namespace PackageResolved.Logic
         {
             InstantiateOnreadyInstances();
             Connect("body_entered", this, "OnBodyEntered");
-            ITween.Connect("tween_all_completed", this, "queue_free");
-            ITween.InterpolateProperty(
+            _tween.Connect("tween_all_completed", this, "queue_free");
+            _tween.InterpolateProperty(
                 this,
                 "modulate",
                 Colors.White,
@@ -106,10 +106,10 @@ namespace PackageResolved.Logic
         /// </remarks>
         private void InstantiateOnreadyInstances()
         {
-            Sprite = GetNode<AnimatedSprite>("Sprite");
-            ITween = GetNode<Tween>("Tween");
-            AudioPickup = GetNode<SoundEffectPlayer>("Pickup");
-            AudioPowerup = GetNode<SoundEffectPlayer>("Powerup");
+            _sprite = GetNode<AnimatedSprite>("Sprite");
+            _tween = GetNode<Tween>("Tween");
+            _audioPickup = GetNode<SoundEffectPlayer>("Pickup");
+            _audioPowerup = GetNode<SoundEffectPlayer>("Powerup");
         }
 
         /// <summary>
@@ -127,15 +127,15 @@ namespace PackageResolved.Logic
             switch (IKind)
             {
                 case Type.Package:
-                    AudioPickup.Play();
+                    _audioPickup.Play();
                     EmitSignal("PickedPackage", 1);
                     break;
                 case Type.PackagePlus:
-                    AudioPickup.Play();
+                    _audioPickup.Play();
                     EmitSignal("PickedPackage", 2);
                     break;
                 case Type.TimeModifier:
-                    AudioPowerup.Play();
+                    _audioPowerup.Play();
                     EmitSignal("PickedModifier");
                     break;
             }
@@ -147,18 +147,18 @@ namespace PackageResolved.Logic
         /// </summary>
         public void RedrawSprite()
         {
-            if (Sprite == null)
+            if (_sprite == null)
                 return;
             switch (IKind)
             {
                 case Type.Package:
-                    Sprite.Animation = "Package";
+                    _sprite.Animation = "Package";
                     break;
                 case Type.PackagePlus:
-                    Sprite.Animation = "PackagePlus";
+                    _sprite.Animation = "PackagePlus";
                     break;
                 case Type.TimeModifier:
-                    Sprite.Animation = "TimeModifier";
+                    _sprite.Animation = "TimeModifier";
                     break;
             }
         }
@@ -171,7 +171,7 @@ namespace PackageResolved.Logic
         /// </remarks>
         public void Teardown()
         {
-            ITween.Start();
+            _tween.Start();
         }
 
         /// <summary>

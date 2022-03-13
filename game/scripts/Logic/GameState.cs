@@ -43,17 +43,17 @@ namespace PackageResolved.Logic
         /// <summary>
         /// The current level that the player is playing or will play.
         /// </summary>
-        private int currentLevel = 0;
+        private int _currentLevel = 0;
 
         /// <summary>
         /// The current game mode for the session.
         /// </summary>
-        private GameMode currentMode = GameMode.Arcade;
+        private GameMode _currentMode = GameMode.Arcade;
 
         /// <summary>
         /// The maximum number of levels defined in the level data.
         /// </summary>
-        private int maxLevels = 0;
+        private int _maxLevels = 0;
 
         /// <summary>
         /// An array containing all of the game's level data.
@@ -65,17 +65,17 @@ namespace PackageResolved.Logic
         /// 
         /// To get the data corresponding to the current level, call <c>GetCurrentLevelData</c>.
         /// </remarks>
-        private Array gameLevelData = new Array();
+        private Array _gameLevelData = new Array();
 
         /// <summary>
         /// Whether the music should play in the background.
         /// </summary>
-        private bool musicEnabled = true;
+        private bool _musicEnabled = true;
 
         /// <summary>
         /// Whether sound effects should play when the player interacts with items in the game.
         /// </summary>
-        private bool sfxEnabled = true;
+        private bool _sfxEnabled = true;
 
         #endregion
 
@@ -97,26 +97,26 @@ namespace PackageResolved.Logic
             if (jsonData.Error != Error.Ok)
                 return;
 
-            gameLevelData = jsonData.Result as Array;
-            maxLevels = gameLevelData.Count;
+            _gameLevelData = jsonData.Result as Array;
+            _maxLevels = _gameLevelData.Count;
         }
 
         /// <summary>
         /// Gets the current level that the player is playing or will play.
         /// </summary>
-        public int GetCurrentLevel() => currentLevel;
+        public int GetCurrentLevel() => _currentLevel;
 
         /// <summary>
         /// Gets the current game mode for the session.
         /// </summary>
-        public GameMode GetGameMode() => currentMode;
+        public GameMode GetGameMode() => _currentMode;
 
         /// <summary>
         /// Gets the number of packages required for the current level.
         /// </summary>
         public int GetRequiredPackages()
         {
-            if (currentLevel > gameLevelData.Count)
+            if (_currentLevel > _gameLevelData.Count)
                 return -99;
 
             return System.Convert.ToInt32(GetCurrentLevelData()["requiredPackages"]);
@@ -127,7 +127,7 @@ namespace PackageResolved.Logic
         /// </summary>
         public int GetTimeLimit()
         {
-            if (currentLevel > gameLevelData.Count)
+            if (_currentLevel > _gameLevelData.Count)
                 return -99;
             return System.Convert.ToInt32(GetCurrentLevelData()["timeLimit"]);
         }
@@ -137,28 +137,28 @@ namespace PackageResolved.Logic
         /// </summary>
         public bool IsComplete()
         {
-            if (currentMode == GameMode.Endless)
+            if (_currentMode == GameMode.Endless)
                 return false;
-            return currentLevel > maxLevels;
+            return _currentLevel > _maxLevels;
         }
 
         /// <summary>
         /// Returns whether music should be playing in the background.
         /// </summary>
         /// <returns></returns>
-        public bool IsMusicEnabled() => musicEnabled;
+        public bool IsMusicEnabled() => _musicEnabled;
 
         /// <summary>
         /// Returns whether sound effects should play in the background as the player interacts with items in the game.
         /// </summary>
-        public bool IsSoundEffectsEnabled() => sfxEnabled;
+        public bool IsSoundEffectsEnabled() => _sfxEnabled;
 
         /// <summary>
         /// Progress to the next level.
         /// </summary>
         public void Progress()
         {
-            currentLevel += 1;
+            _currentLevel += 1;
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace PackageResolved.Logic
         /// <param name="mode">The new game mode that will be applied for the current session.</param>
         public void SetGameMode(GameMode mode)
         {
-            currentMode = mode;
+            _currentMode = mode;
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace PackageResolved.Logic
         /// <param name="enabled">Whether the music should be played in the background.</param>
         public void SetMusicEnabled(bool enabled)
         {
-            musicEnabled = enabled;
+            _musicEnabled = enabled;
             AudioServer.SetBusMute(AudioServer.GetBusIndex("Music"), !enabled);
         }
 
@@ -186,7 +186,7 @@ namespace PackageResolved.Logic
         /// <param name="enabled">Whether the sound effects should play when the player interacts with items.</param>
         public void SetSoundEffectsEnabled(bool enabled)
         {
-            sfxEnabled = enabled;
+            _sfxEnabled = enabled;
             AudioServer.SetBusMute(AudioServer.GetBusIndex("SFX"), !enabled);
         }
 
@@ -196,7 +196,7 @@ namespace PackageResolved.Logic
         /// <returns>A <c>Dictionary</c> containing the data about the current level.</returns>
         private Dictionary GetCurrentLevelData()
         {
-            var currentLevelData = gameLevelData[GetCurrentLevel()];
+            var currentLevelData = _gameLevelData[GetCurrentLevel()];
             return currentLevelData as Dictionary;
         }
     }

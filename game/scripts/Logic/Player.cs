@@ -18,32 +18,32 @@ namespace PackageResolved.Logic
         /// <summary>
         /// The player's mass, which is used in physics calculations.
         /// </summary>
-        private const int Mass = 100;
+        private const int _mass = 100;
 
         /// <summary>
         /// A vector that described the player's current movement.
         /// </summary>
-        private Vector2 MovementVector;
+        private Vector2 _movementVector;
 
         /// <summary>
         /// The rate at which the player can accelerate by.
         /// </summary>
-        private int Acceleration = 100;
+        private int _acceleration = 100;
 
         /// <summary>
         /// The force of friction when running.
         /// </summary>
-        private int Friction = 100;
+        private int _friction = 100;
 
         /// <summary>
         /// The maximum speed that the player can run at.
         /// </summary>
-        private int MaxSpeed = 200;
+        private readonly int _maxSpeed = 200;
 
         /// <summary>
         /// The player's current speed.
         /// </summary>
-        private int Speed = 150;
+        private readonly int _speed = 150;
 
         /// <summary>
         /// Resets the acceleration and friction to their default values.
@@ -53,8 +53,8 @@ namespace PackageResolved.Logic
         /// </remarks>
         public void SlowDown()
         {
-            Acceleration = 100;
-            Friction = 100;
+            _acceleration = 100;
+            _friction = 100;
         }
 
         /// <summary>
@@ -65,8 +65,8 @@ namespace PackageResolved.Logic
         /// </remarks>
         public void SpeedUp()
         {
-            Acceleration = 150;
-            Friction = 50;
+            _acceleration = 150;
+            _friction = 50;
         }
 
         /// <summary>
@@ -79,14 +79,14 @@ namespace PackageResolved.Logic
             var movement = GetMovementVector();
             if (movement == Vector2.Zero)
             {
-                MovementVector = MovementVector.MoveToward(Vector2.Zero, Friction * delta);
+                _movementVector = _movementVector.MoveToward(Vector2.Zero, _friction * delta);
             }
             else
             {
-                MovementVector = movement * Acceleration * delta * Mass;
-                MovementVector = MovementVector.Clamped(MaxSpeed * Mass * delta);
+                _movementVector = movement * _acceleration * delta * _mass;
+                _movementVector = _movementVector.Clamped(_maxSpeed * _mass * delta);
             }
-            MoveAndSlide(MovementVector * delta * Speed);
+            MoveAndSlide(_movementVector * delta * _speed);
         }
 
         /// <summary>

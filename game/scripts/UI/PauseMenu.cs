@@ -18,17 +18,17 @@ namespace PackageResolved.UI
         /// <summary>
         /// A button that allows the player to resume execution of the current game loop.
         /// </summary>
-        private Button BtnResume;
+        private Button _btnResume;
 
         /// <summary>
         /// A button that allows the player to restart the current level.
         /// </summary>
-        private Button BtnRestart;
+        private Button _btnRestart;
 
         /// <summary>
         /// A button that allows the player to go back to the main menu.
         /// </summary>
-        private Button BtnMainMenu;
+        private Button _btnMainMenu;
 
         /// <summary>
         /// Instantiate the scene after entering the scene tree.
@@ -36,9 +36,9 @@ namespace PackageResolved.UI
         public override void _Ready()
         {
             InstantiateOnreadyInstances();
-            BtnResume.Connect("button_up", this, nameof(BtnResumePress));
-            BtnRestart.Connect("button_up", this, nameof(BtnRestartPress));
-            BtnMainMenu.Connect("button_up", this, nameof(BtnMainMenuPress));
+            _btnResume.Connect("button_up", this, nameof(BtnResumePress));
+            _btnRestart.Connect("button_up", this, nameof(BtnRestartPress));
+            _btnMainMenu.Connect("button_up", this, nameof(BtnMainMenuPress));
         }
 
         /// <summary>
@@ -76,9 +76,9 @@ namespace PackageResolved.UI
         /// </remarks>
         private void InstantiateOnreadyInstances()
         {
-            BtnResume = GetNode<Button>("VBoxContainer/Resume");
-            BtnRestart = GetNode<Button>("VBoxContainer/Restart");
-            BtnMainMenu = GetNode<Button>("VBoxContainer/MainMenu");
+            _btnResume = GetNode<Button>("VBoxContainer/Resume");
+            _btnRestart = GetNode<Button>("VBoxContainer/Restart");
+            _btnMainMenu = GetNode<Button>("VBoxContainer/MainMenu");
         }
     }
 }

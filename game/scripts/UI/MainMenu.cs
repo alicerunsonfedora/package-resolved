@@ -19,27 +19,27 @@ namespace PackageResolved.UI
         /// <summary>
         /// A button that allows the player to start the game in arcade mode.
         /// </summary>
-        private Button BtnStartArcade;
+        private Button _btnStartArcade;
 
         /// <summary>
         /// A button that allows the player to start the game in endless mode.
         /// </summary>
-        private Button BtnStartEndless;
+        private Button _btnStartEndless;
 
         /// <summary>
         /// A checkbox toggle that allows the player to turn the music on or off.
         /// </summary>
-        private CheckButton ChkMusic;
+        private CheckButton _chkMusic;
 
         /// <summary>
         /// A checkbox toggle that allows the player to turn the sound effects on or off.
         /// </summary>
-        private CheckButton ChkSfx;
+        private CheckButton _chkSfx;
 
         /// <summary>
         /// The texture rectangle that contains the sprite image for the bird helmet.
         /// </summary>
-        private TextureRect Helmet;
+        private TextureRect _helmet;
 
         /// <summary>
         /// Instantiate the scene after entering the scene tree.
@@ -50,11 +50,11 @@ namespace PackageResolved.UI
             ConnectSignals();
             var state = GetNode<GameState>("/root/GameState");
 
-            ChkMusic.Pressed = state.IsMusicEnabled();
-            ChkSfx.Pressed = state.IsSoundEffectsEnabled();
+            _chkMusic.Pressed = state.IsMusicEnabled();
+            _chkSfx.Pressed = state.IsSoundEffectsEnabled();
 
             if (state.IsComplete())
-                Helmet.Visible = false;
+                _helmet.Visible = false;
         }
 
         /// <summary>
@@ -109,10 +109,10 @@ namespace PackageResolved.UI
         /// </summary>
         private void ConnectSignals()
         {
-            BtnStartArcade.Connect("button_up", this, "BtnPressStartArcade");
-            BtnStartEndless.Connect("button_up", this, "BtnPressStartEndless");
-            ChkMusic.Connect("toggled", this, "ChkMusicToggle");
-            ChkSfx.Connect("toggled", this, "ChkSfxToggle");
+            _btnStartArcade.Connect("button_up", this, "BtnPressStartArcade");
+            _btnStartEndless.Connect("button_up", this, "BtnPressStartEndless");
+            _chkMusic.Connect("toggled", this, "ChkMusicToggle");
+            _chkSfx.Connect("toggled", this, "ChkSfxToggle");
         }
 
         /// <summary>
@@ -123,11 +123,11 @@ namespace PackageResolved.UI
         /// </remarks>
         private void InstantiateOnreadyInstances()
         {
-            BtnStartArcade = GetNode<Button>("VBoxContainer/Start");
-            BtnStartEndless = GetNode<Button>("VBoxContainer/Endless");
-            ChkMusic = GetNode<CheckButton>("VBoxContainer/Music");
-            ChkSfx = GetNode<CheckButton>("VBoxContainer/SFX");
-            Helmet = GetNode<TextureRect>("Base/Helmet");
+            _btnStartArcade = GetNode<Button>("VBoxContainer/Start");
+            _btnStartEndless = GetNode<Button>("VBoxContainer/Endless");
+            _chkMusic = GetNode<CheckButton>("VBoxContainer/Music");
+            _chkSfx = GetNode<CheckButton>("VBoxContainer/SFX");
+            _helmet = GetNode<TextureRect>("Base/Helmet");
         }
     }
 }

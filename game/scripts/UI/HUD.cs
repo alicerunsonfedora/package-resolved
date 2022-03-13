@@ -19,22 +19,22 @@ namespace PackageResolved.UI
         /// <summary>
         /// A label that displays the number of packages remaining.
         /// </summary>
-        private Label packagesRemaining;
+        private Label _packagesRemaining;
 
         /// <summary>
         /// A label that displays the time remaining.
         /// </summary>
-        private Label timeLimit;
+        private Label _timeLimit;
 
         /// <summary>
         /// A timer used to time how long to display the tutorial screens for.
         /// </summary>
-        private Timer timer;
+        private Timer _timer;
 
         /// <summary>
         /// A tween animation node used to fade out the tutorial screen.
         /// </summary>
-        private Tween tween;
+        private Tween _tween;
 
         /// <summary>
         /// Instantiate the scene after entering the scene tree.
@@ -48,7 +48,7 @@ namespace PackageResolved.UI
                 introLabel.Visible = false;
             else
             {
-                tween.InterpolateProperty(
+                _tween.InterpolateProperty(
                     introLabel,
                     "modulate",
                     Colors.White,
@@ -57,8 +57,8 @@ namespace PackageResolved.UI
                     Tween.TransitionType.Linear,
                     Tween.EaseType.InOut
                 );
-                timer.Connect("timeout", tween, "start");
-                timer.Start();
+                _timer.Connect("timeout", _tween, "start");
+                _timer.Start();
             }
         }
 
@@ -68,7 +68,7 @@ namespace PackageResolved.UI
         /// <param name="text">The number of packages remaining as a string value.</param>
         public void UpdatePackagesRemaining(string text)
         {
-            packagesRemaining.Text = text;
+            _packagesRemaining.Text = text;
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace PackageResolved.UI
         /// <param name="text">The remaining time as a string value.</param>
         public void UpdateTimeLimit(string text)
         {
-            timeLimit.Text = text;
+            _timeLimit.Text = text;
         }
 
 
@@ -89,10 +89,10 @@ namespace PackageResolved.UI
         /// </remarks>
         private void InstantiateOnreadyInstances()
         {
-            timer = GetNode<Timer>("Timer");
-            tween = GetNode<Tween>("Tween");
-            packagesRemaining = GetNode<Label>("PackagesRemaining/Label");
-            timeLimit = GetNode<Label>("TimeLimit/Label");
+            _timer = GetNode<Timer>("Timer");
+            _tween = GetNode<Tween>("Tween");
+            _packagesRemaining = GetNode<Label>("PackagesRemaining/Label");
+            _timeLimit = GetNode<Label>("TimeLimit/Label");
         }
     }
 }

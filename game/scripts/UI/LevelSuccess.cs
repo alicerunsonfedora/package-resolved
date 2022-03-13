@@ -19,17 +19,17 @@ namespace PackageResolved.UI
         /// <summary>
         /// A button that allows the player to restart the game or advance to the next level.
         /// </summary>
-        private Button BtnAdvance;
+        private Button _btnAdvance;
 
         /// <summary>
         /// A button that allows the player to go to the main menu.
         /// </summary>
-        private Button BtnQuitToMenu;
+        private Button _btnQuitToMenu;
 
         /// <summary>
         /// The texture rectangle that contains the sprite image for the bird helmet.
         /// </summary>
-        private TextureRect Helmet;
+        private TextureRect _helmet;
 
         /// <summary>
         /// Instantiate the scene after entering the scene tree.
@@ -37,8 +37,8 @@ namespace PackageResolved.UI
         public override void _Ready()
         {
             InstantiateOnreadyInstances();
-            BtnAdvance.Connect("button_up", this, "BtnPressRestart");
-            BtnQuitToMenu.Connect("button_up", this, "BtnPressQuitToMenu");
+            _btnAdvance.Connect("button_up", this, "BtnPressRestart");
+            _btnQuitToMenu.Connect("button_up", this, "BtnPressQuitToMenu");
             HideHelmetAndAdvanceButton();
         }
 
@@ -70,8 +70,8 @@ namespace PackageResolved.UI
             state.Progress();
             if (!state.IsComplete())
                 return;
-            BtnAdvance.Visible = false;
-            Helmet.Visible = false;
+            _btnAdvance.Visible = false;
+            _helmet.Visible = false;
         }
 
         /// <summary>
@@ -82,9 +82,9 @@ namespace PackageResolved.UI
         /// </remarks>
         private void InstantiateOnreadyInstances()
         {
-            BtnAdvance = GetNode<Button>("VBoxContainer/Restart");
-            BtnQuitToMenu = GetNode<Button>("VBoxContainer/MainMenu");
-            Helmet = GetNode<TextureRect>("Panel/Base/Helmet");
+            _btnAdvance = GetNode<Button>("VBoxContainer/Restart");
+            _btnQuitToMenu = GetNode<Button>("VBoxContainer/MainMenu");
+            _helmet = GetNode<TextureRect>("Panel/Base/Helmet");
         }
 
     }

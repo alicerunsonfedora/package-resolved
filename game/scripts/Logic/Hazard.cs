@@ -42,17 +42,17 @@ namespace PackageResolved.Logic
         /// <summary>
         /// The collision shape that represents the palette.
         /// </summary>
-        private CollisionShape2D ShapePalette;
+        private CollisionShape2D _shapePalette;
 
         /// <summary>
         /// The collision shape that represents the wet floor.
         /// </summary>
-        private CollisionShape2D ShapeWetFloor;
+        private CollisionShape2D _shapeWetFloor;
 
         /// <summary>
         /// The sound effect player that will play a sound when the player enters contact with the hazard.
         /// </summary>
-        private SoundEffectPlayer AudioEffect;
+        private SoundEffectPlayer _audioEffect;
 
         /// <summary>
         /// Instantiate the scene after entering the scene tree.
@@ -71,9 +71,9 @@ namespace PackageResolved.Logic
         /// <returns>A <c>RectangleShape2D</c> that describes the shape of the hazard.</returns>
         public RectangleShape2D GetRect()
         {
-            if (ShapePalette == null || ShapeWetFloor == null)
+            if (_shapePalette == null || _shapeWetFloor == null)
                 return new RectangleShape2D();
-            return (Kind == Type.Palette ? ShapePalette.Shape : ShapeWetFloor.Shape) as RectangleShape2D;
+            return (Kind == Type.Palette ? _shapePalette.Shape : _shapeWetFloor.Shape) as RectangleShape2D;
         }
 
         /// <summary>
@@ -84,9 +84,9 @@ namespace PackageResolved.Logic
         /// </remarks>
         private void InstantiateOnreadyInstances()
         {
-            ShapePalette = GetNode<CollisionShape2D>("Palette");
-            ShapeWetFloor = GetNode<CollisionShape2D>("WetFloor");
-            AudioEffect = GetNode<SoundEffectPlayer>("Effect");
+            _shapePalette = GetNode<CollisionShape2D>("Palette");
+            _shapeWetFloor = GetNode<CollisionShape2D>("WetFloor");
+            _audioEffect = GetNode<SoundEffectPlayer>("Effect");
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace PackageResolved.Logic
         {
             if (!(body is Player))
                 return;
-            AudioEffect.Play();
+            _audioEffect.Play();
             EmitSignal("StartedContact");
         }
 
@@ -117,7 +117,7 @@ namespace PackageResolved.Logic
         {
             if (!(body is Player))
                 return;
-            AudioEffect.Play();
+            _audioEffect.Play();
             EmitSignal("StoppedContact");
         }
 
@@ -126,16 +126,16 @@ namespace PackageResolved.Logic
         /// </summary>
         public void SetupHazard()
         {
-            if (ShapeWetFloor != null)
+            if (_shapeWetFloor != null)
             {
-                ShapeWetFloor.Disabled = Kind == Type.Palette;
-                ShapeWetFloor.Visible = Kind != Type.Palette;
+                _shapeWetFloor.Disabled = Kind == Type.Palette;
+                _shapeWetFloor.Visible = Kind != Type.Palette;
             }
 
-            if (ShapePalette != null)
+            if (_shapePalette != null)
             {
-                ShapePalette.Disabled = Kind == Type.WetFloor;
-                ShapePalette.Visible = Kind != Type.WetFloor;
+                _shapePalette.Disabled = Kind == Type.WetFloor;
+                _shapePalette.Visible = Kind != Type.WetFloor;
             }
         }
 

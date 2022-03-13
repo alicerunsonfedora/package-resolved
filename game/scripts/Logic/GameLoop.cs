@@ -20,12 +20,12 @@ namespace PackageResolved.Logic
         /// <summary>
         /// The heads-up display that shows over the main level.
         /// </summary>
-        private HUD HeadsUpDisplay;
+        private HUD _headsUpDisplay;
 
         /// <summary>
         /// The packed scene information to construct a hazard.
         /// </summary>
-        private readonly PackedScene HazardPacked = GD.Load("res://objects/hazard.tscn") as PackedScene;
+        private readonly PackedScene _hazardPackedScene = GD.Load("res://objects/hazard.tscn") as PackedScene;
 
         /// <summary>
         /// An array of obstacle positions.
@@ -33,32 +33,32 @@ namespace PackageResolved.Logic
         /// <remarks>
         /// This is typically used to determine what positions pickable items cannot be placed.
         /// </remarks>
-        private readonly Array ObstaclePositions = new Array();
+        private readonly Array _obstaclePositions = new Array();
 
         /// <summary>
         /// The pause menu that will be displayed when the player presses the pause key.
         /// </summary>
-        private PauseMenu Pause;
+        private PauseMenu _pauseMenu;
 
         /// <summary>
         /// The packed scene information to construct a pickable item.
         /// </summary>
-        private readonly PackedScene PickablePacked = GD.Load("res://objects/pickable.tscn") as PackedScene;
+        private readonly PackedScene _pickablePacked = GD.Load("res://objects/pickable.tscn") as PackedScene;
 
         /// <summary>
         /// The player controller used in the level.
         /// </summary>
-        private Player PlayerNode;
+        private Player _playerNode;
 
         /// <summary>
         /// The number of packages the player still needs to collect.
         /// </summary>
-        private int RemainingPackages;
+        private int _remainingPackages;
 
         /// <summary>
         /// The Area2D trigger that teleports the player to the top of the map.
         /// </summary>
-        private Area2D TeleportTrigger;
+        private Area2D _teleportTrigger;
 
         /// <summary>
         /// The Area2D used to define the top of the map.
@@ -66,7 +66,7 @@ namespace PackageResolved.Logic
         /// <remarks>
         /// This is used in conjunction with <c>TeleportTrigger</c> to teleport the player.
         /// </remarks>
-        private Node2D TeleportDestination;
+        private Node2D _teleportDestination;
 
         /// <summary>
         /// The timer used to run code on every second.
@@ -74,7 +74,7 @@ namespace PackageResolved.Logic
         /// <remarks>
         /// The <c>Tick</c> method will be executed when this timer times out every day.
         /// </remarks>
-        private Timer TimerTick;
+        private Timer _timerTick;
 
         /// <summary>
         /// The timer used to run the game loop.
@@ -82,7 +82,7 @@ namespace PackageResolved.Logic
         /// <remarks>
         /// This timer will correspond to how much time the player has left.
         /// </remarks>
-        private Timer TimerLevel;
+        private Timer _timerLevel;
 
         /// <summary>
         /// Instantiate the scene after entering the scene tree.
@@ -90,9 +90,9 @@ namespace PackageResolved.Logic
         public override void _Ready()
         {
             InstantiateOnreadyInstances();
-            TeleportTrigger.Connect("body_entered", this, "OnBodyEntered");
-            TimerTick.Connect("timeout", this, "Tick");
-            TimerLevel.Connect("timeout", this, "GameOver");
+            _teleportTrigger.Connect("body_entered", this, "OnBodyEntered");
+            _timerTick.Connect("timeout", this, "Tick");
+            _timerLevel.Connect("timeout", this, "GameOver");
 
             GD.Randomize();
             PlaceHazards();
@@ -101,11 +101,11 @@ namespace PackageResolved.Logic
             var state = GetNode<GameState>("/root/GameState");
             if (state.GetGameMode() == GameState.GameMode.Arcade)
             {
-                RemainingPackages = state.GetRequiredPackages();
-                TimerLevel.WaitTime = state.GetTimeLimit();
-                HeadsUpDisplay.UpdatePackagesRemaining($"{RemainingPackages}");
+                _remainingPackages = state.GetRequiredPackages();
+                _timerLevel.WaitTime = state.GetTimeLimit();
+                _headsUpDisplay.UpdatePackagesRemaining($"{_remainingPackages}");
                 Tick();
-                TimerLevel.Start();
+                _timerLevel.Start();
             }
         }
 
@@ -115,7 +115,7 @@ namespace PackageResolved.Logic
         /// <param name="delta">The change in time since the previous frame.</param>
         public override void _PhysicsProcess(float delta)
         {
-            TeleportDestination.Position = new Vector2(PlayerNode.Position.x, TeleportDestination.Position.y);
+            _teleportDestination.Position = new Vector2(_playerNode.Position.x, _teleportDestination.Position.y);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace PackageResolved.Logic
         {
             if (@event.GetActionStrength("ui_pause") > 0)
             {
-                Pause.Visible = true;
+                _pauseMenu.Visible = true;
                 GetTree().Paused = true;
             }
         }
@@ -150,13 +150,13 @@ namespace PackageResolved.Logic
         /// </remarks>
         private void InstantiateOnreadyInstances()
         {
-            HeadsUpDisplay = GetNode<HUD>("CanvasLayer/HUD");
-            Pause = GetNode<PauseMenu>("CanvasLayer/PauseMenu");
-            PlayerNode = GetNode<Player>("Player");
-            TeleportTrigger = GetNode<Area2D>("TeleportTrigger");
-            TeleportDestination = GetNode<Node2D>("TeleportDestination");
-            TimerTick = GetNode<Timer>("Tick");
-            TimerLevel = GetNode<Timer>("Timer");
+            _headsUpDisplay = GetNode<HUD>("CanvasLayer/HUD");
+            _pauseMenu = GetNode<PauseMenu>("CanvasLayer/PauseMenu");
+            _playerNode = GetNode<Player>("Player");
+            _teleportTrigger = GetNode<Area2D>("TeleportTrigger");
+            _teleportDestination = GetNode<Node2D>("TeleportDestination");
+            _timerTick = GetNode<Timer>("Tick");
+            _timerLevel = GetNode<Timer>("Timer");
         }
 
         /// <summary>
@@ -167,15 +167,15 @@ namespace PackageResolved.Logic
         /// <seealso> Hazard </seealso>
         private Hazard MakeHazard()
         {
-            Hazard hazard = HazardPacked.Instance() as Hazard;
+            Hazard hazard = _hazardPackedScene.Instance() as Hazard;
             var hazardSeed = GD.RandRange(1, 20);
             if (hazardSeed < 15)
                 hazard.Connect("StartedContact", this, "GameOver");
             else
             {
                 hazard.Kind = Hazard.Type.WetFloor;
-                hazard.Connect("StartedContact", PlayerNode, "SpeedUp");
-                hazard.Connect("StoppedContact", PlayerNode, "SlowDown");
+                hazard.Connect("StartedContact", _playerNode, "SpeedUp");
+                hazard.Connect("StoppedContact", _playerNode, "SlowDown");
             }
             hazard.SetupHazard();
             return hazard;
@@ -188,7 +188,7 @@ namespace PackageResolved.Logic
         /// <seealso> Pickable </seealso>
         private Pickable MakePickable()
         {
-            Pickable pickable = PickablePacked.Instance() as Pickable;
+            Pickable pickable = _pickablePacked.Instance() as Pickable;
             var pickableSeed = GD.RandRange(0, 50);
             if (pickableSeed > 40)
                 pickable.Kind = Pickable.Type.PackagePlus;
@@ -210,7 +210,7 @@ namespace PackageResolved.Logic
         {
             if (!(body is Player))
                 return;
-            body.Position = TeleportDestination.Position;
+            body.Position = _teleportDestination.Position;
             Teardown();
             PlaceHazards();
             PlacePickables();
@@ -229,10 +229,10 @@ namespace PackageResolved.Logic
             var state = GetNode<GameState>("/root/GameState");
             if (state.GetGameMode() == GameState.GameMode.Endless)
                 return;
-            var elapsedTime = TimerLevel.TimeLeft;
-            TimerLevel.Stop();
-            TimerLevel.WaitTime = elapsedTime + 7;
-            TimerLevel.Start();
+            var elapsedTime = _timerLevel.TimeLeft;
+            _timerLevel.Stop();
+            _timerLevel.WaitTime = elapsedTime + 7;
+            _timerLevel.Start();
         }
 
         /// <summary>
@@ -248,14 +248,14 @@ namespace PackageResolved.Logic
         {
             var state = GetNode<GameState>("/root/GameState");
             if (state.GetGameMode() == GameState.GameMode.Endless)
-                RemainingPackages += 1;
+                _remainingPackages += 1;
             else
             {
-                RemainingPackages -= 1;
-                if (RemainingPackages <= 0)
+                _remainingPackages -= 1;
+                if (_remainingPackages <= 0)
                     GetTree().ChangeScene("res://scenes/level_success.tscn");
             }
-            HeadsUpDisplay.UpdatePackagesRemaining($"{RemainingPackages}");
+            _headsUpDisplay.UpdatePackagesRemaining($"{_remainingPackages}");
         }
 
         /// <summary>
@@ -271,7 +271,7 @@ namespace PackageResolved.Logic
                     randomXPosition += GD.Randf() > 0 ? 3 : -3;
                 Hazard hazard = MakeHazard();
                 hazard.Position = new Vector2(randomXPosition * 48 * 2, lastVertPosition);
-                ObstaclePositions.Add(hazard.Position);
+                _obstaclePositions.Add(hazard.Position);
                 CallDeferred("add_child", hazard);
                 lastVertPosition += hazard.GetRect().Extents.y * 2;
                 lastVertPosition += hazard.GetRect().Extents.y / 3;
@@ -289,7 +289,7 @@ namespace PackageResolved.Logic
                 float randomXPosition = (float)GD.RandRange(-5, 7);
                 var pickableObject = MakePickable();
                 pickableObject.Position = new Vector2(randomXPosition * 48 * 2, lastVertPosition);
-                if (ObstaclePositions.Contains(pickableObject.Position))
+                if (_obstaclePositions.Contains(pickableObject.Position))
                     pickableObject.Position -= new Vector2(0, 48);
                 CallDeferred("add_child", pickableObject);
                 lastVertPosition += 50 * 2;
@@ -309,7 +309,7 @@ namespace PackageResolved.Logic
                 if (child is ITeardownable)
                     (child as ITeardownable).Teardown();
             }
-            ObstaclePositions.Clear();
+            _obstaclePositions.Clear();
         }
 
         /// <summary>
@@ -320,8 +320,8 @@ namespace PackageResolved.Logic
         /// </remarks>
         private void Tick()
         {
-            int timeLeft = (int)TimerLevel.TimeLeft;
-            HeadsUpDisplay.UpdateTimeLimit($"{timeLeft}");
+            int timeLeft = (int)_timerLevel.TimeLeft;
+            _headsUpDisplay.UpdateTimeLimit($"{timeLeft}");
         }
     }
 }
