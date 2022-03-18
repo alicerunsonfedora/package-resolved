@@ -62,8 +62,8 @@ namespace PackageResolved.Objects
         {
             InstantiateOnreadyInstances();
             SetupHazard();
-            Connect("body_entered", this, "OnBodyEntered");
-            Connect("body_exited", this, "OnBodyExited");
+            Connect("body_entered", this, nameof(OnBodyEntered));
+            Connect("body_exited", this, nameof(OnBodyExited));
         }
 
         /// <summary>

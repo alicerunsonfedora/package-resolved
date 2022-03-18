@@ -37,8 +37,8 @@ namespace PackageResolved.UI
         public override void _Ready()
         {
             InstantiateOnreadyInstances();
-            _btnAdvance.Connect("button_up", this, "BtnPressRestart");
-            _btnQuitToMenu.Connect("button_up", this, "BtnPressQuitToMenu");
+            _btnAdvance.Connect("button_up", this, nameof(BtnPressRestart));
+            _btnQuitToMenu.Connect("button_up", this, nameof(BtnPressQuitToMenu));
             HideHelmetAndAdvanceButton();
         }
 

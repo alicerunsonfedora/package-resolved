@@ -109,10 +109,10 @@ namespace PackageResolved.UI
         /// </summary>
         private void ConnectSignals()
         {
-            _btnStartArcade.Connect("button_up", this, "BtnPressStartArcade");
-            _btnStartEndless.Connect("button_up", this, "BtnPressStartEndless");
-            _chkMusic.Connect("toggled", this, "ChkMusicToggle");
-            _chkSfx.Connect("toggled", this, "ChkSfxToggle");
+            _btnStartArcade.Connect("button_up", this, nameof(BtnPressStartArcade));
+            _btnStartEndless.Connect("button_up", this, nameof(BtnPressStartEndless));
+            _chkMusic.Connect("toggled", this, nameof(ChkMusicToggle));
+            _chkSfx.Connect("toggled", this, nameof(ChkSfxToggle));
         }
 
         /// <summary>

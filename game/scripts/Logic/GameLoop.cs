@@ -91,9 +91,9 @@ namespace PackageResolved.Logic
         public override void _Ready()
         {
             InstantiateOnreadyInstances();
-            _teleportTrigger.Connect("body_entered", this, "OnBodyEntered");
-            _timerTick.Connect("timeout", this, "Tick");
-            _timerLevel.Connect("timeout", this, "GameOver");
+            _teleportTrigger.Connect("body_entered", this, nameof(OnBodyEntered));
+            _timerTick.Connect("timeout", this, nameof(Tick));
+            _timerLevel.Connect("timeout", this, nameof(GameOver));
 
             GD.Randomize();
             PlaceHazards();
@@ -251,10 +251,10 @@ namespace PackageResolved.Logic
         {
             var state = GetNode<GameState>("/root/GameState");
             if (state.GetGameMode() == GameState.GameMode.Endless)
-                _remainingPackages += 1;
+                _remainingPackages += amount;
             else
             {
-                _remainingPackages -= 1;
+                _remainingPackages -= amount;
                 if (_remainingPackages <= 0)
                     GetTree().ChangeScene("res://scenes/level_success.tscn");
             }

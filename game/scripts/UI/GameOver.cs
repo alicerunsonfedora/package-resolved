@@ -38,8 +38,8 @@ namespace PackageResolved.UI
         public override void _Ready()
         {
             InstantiateOnreadyInstances();
-            _ = _btnRestart.Connect("button_up", this, "BtnPressRestart");
-            _ = _btnQuitToMenu.Connect("button_up", this, "BtnPressQuitToMenu");
+            _ = _btnRestart.Connect("button_up", this, nameof(BtnPressRestart));
+            _ = _btnQuitToMenu.Connect("button_up", this, nameof(BtnPressQuitToMenu));
             UpdateBody();
         }
 
