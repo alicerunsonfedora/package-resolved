@@ -7,8 +7,9 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using Godot;
+using PackageResolved.Logic;
 
-namespace PackageResolved.Logic
+namespace PackageResolved.Objects
 {
     using SoundEffectPlayer = AudioStreamPlayer2D;
 

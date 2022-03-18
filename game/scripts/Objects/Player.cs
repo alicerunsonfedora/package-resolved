@@ -8,7 +8,7 @@
 
 using Godot;
 
-namespace PackageResolved.Logic
+namespace PackageResolved.Objects
 {
     /// <summary>
     /// A class used to represent the player controller.

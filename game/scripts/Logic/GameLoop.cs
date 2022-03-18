@@ -8,6 +8,7 @@
 
 using Godot;
 using Godot.Collections;
+using PackageResolved.Objects;
 using PackageResolved.UI;
 
 namespace PackageResolved.Logic
