@@ -6,6 +6,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System.Collections.Generic;
 using Godot;
 using Godot.Collections;
 
@@ -59,7 +60,7 @@ namespace PackageResolved.Logic
         /// 
         /// To get the data corresponding to the current level, call <c>GetCurrentLevelData</c>.
         /// </remarks>
-        private Array _gameLevelData = new Array();
+        private List<GameLevelData> _gameLevelData = new List<GameLevelData>();
 
         /// <summary>
         /// The maximum number of levels defined in the level data.
@@ -104,8 +105,18 @@ namespace PackageResolved.Logic
             if (jsonData.Error != Error.Ok)
                 return;
 
-            _gameLevelData = jsonData.Result as Array;
-            _maxLevels = _gameLevelData.Count;
+
+            var dataStream = jsonData.Result as Array;
+            _gameLevelData = new List<GameLevelData>();
+            foreach (Dictionary level in dataStream)
+            {
+                var packages = System.Convert.ToInt32(level["requiredPackages"]);
+                var time = System.Convert.ToInt32(level["timeLimit"]);
+                _gameLevelData.Add(
+                    new GameLevelData { RequiredPackages = packages, TimeLimit = time }
+                );
+            }
+            _maxLevels = dataStream.Count;
         }
 
         /// <summary>
@@ -136,7 +147,7 @@ namespace PackageResolved.Logic
             if (_currentLevel > _gameLevelData.Count)
                 return -99;
 
-            return System.Convert.ToInt32(GetCurrentLevelData()["requiredPackages"]);
+            return GetCurrentLevelData().RequiredPackages;
         }
 
         /// <summary>
@@ -146,7 +157,7 @@ namespace PackageResolved.Logic
         {
             if (_currentLevel > _gameLevelData.Count)
                 return -99;
-            return System.Convert.ToInt32(GetCurrentLevelData()["timeLimit"]);
+            return GetCurrentLevelData().TimeLimit;
         }
 
         /// <summary>
@@ -233,11 +244,7 @@ namespace PackageResolved.Logic
         /// <summary>
         /// Gets the data for the current level.
         /// </summary>
-        /// <returns>A <c>Dictionary</c> containing the data about the current level.</returns>
-        private Dictionary GetCurrentLevelData()
-        {
-            var currentLevelData = _gameLevelData[GetCurrentLevel()];
-            return currentLevelData as Dictionary;
-        }
+        /// <returns>A <c>GameLevelData</c> containing the data about the current level.</returns>
+        private GameLevelData GetCurrentLevelData() => _gameLevelData[GetCurrentLevel()];
     }
 }

@@ -86,7 +86,7 @@ namespace PackageResolved.Objects
         {
             InstantiateOnreadyInstances();
             Connect("body_entered", this, nameof(OnBodyEntered));
-            _tween.Connect("tween_all_completed", this, nameof(QueueFree));
+            _tween.Connect("tween_all_completed", this, "queue_free");
             _tween.InterpolateProperty(
                 this,
                 "modulate",

@@ -1,6 +1,6 @@
 [gd_scene load_steps=14 format=2]
 
-[ext_resource path="res://scripts/Logic/Pickable.cs" type="Script" id=1]
+[ext_resource path="res://scripts/Objects/Pickable.cs" type="Script" id=1]
 [ext_resource path="res://assets/sprites/tileset.png" type="Texture" id=2]
 [ext_resource path="res://assets/audio/powerup.wav" type="AudioStream" id=3]
 [ext_resource path="res://assets/audio/pickup.wav" type="AudioStream" id=4]
