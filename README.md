@@ -110,6 +110,7 @@ or at https://mozilla.org/MPL/2.0/.
 - Music and SFX created with JSFXr and BeepBox.
 - Inter font created by Rasmus Andersson.
 - JetBrains Mono font created by JetBrains s.r.o.
+- Salmon font family created by Phildjii.
 
 This project is neither affiliated with nor endorsed by Apple Inc. Swift (programming
 language) is a trademark of Apple Inc.
