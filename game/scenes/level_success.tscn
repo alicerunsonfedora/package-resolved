@@ -75,7 +75,7 @@ align = 1
 margin_top = 225.0
 margin_right = 410.0
 margin_bottom = 295.0
-text = "You delivered the package and its dependencies."
+text = "You successfully completed the delivery request!"
 align = 1
 autowrap = true
 

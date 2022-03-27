@@ -1,0 +1,165 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://assets/fonts/Inter-Bold.otf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/fonts/s_bold.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/default_theme.tres" type="Theme" id=3]
+[ext_resource path="res://assets/fonts/JetBrainsMono-Regular.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://assets/fonts/s_mono.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://assets/fonts/mono.tres" type="DynamicFont" id=6]
+[ext_resource path="res://assets/fonts/bold.tres" type="DynamicFont" id=7]
+[ext_resource path="res://scripts/UI/Preflight.cs" type="Script" id=8]
+
+[sub_resource type="DynamicFont" id=2]
+size = 9
+font_data = ExtResource( 5 )
+fallback/0 = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=1]
+size = 36
+font_data = ExtResource( 2 )
+fallback/0 = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 9
+font_data = ExtResource( 5 )
+fallback/0 = ExtResource( 4 )
+
+[sub_resource type="InputEventAction" id=4]
+action = "ui_accept"
+
+[sub_resource type="ShortCut" id=5]
+shortcut = SubResource( 4 )
+
+[node name="Preflight" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 3 )
+script = ExtResource( 8 )
+
+[node name="Panel" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="HStack" type="HBoxContainer" parent="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 48.0
+margin_top = 48.0
+margin_right = -48.0
+margin_bottom = -48.0
+
+[node name="VStack" type="VBoxContainer" parent="Panel/HStack"]
+margin_right = 710.0
+margin_bottom = 504.0
+size_flags_horizontal = 3
+
+[node name="Label2" type="Label" parent="Panel/HStack/VStack"]
+margin_right = 710.0
+margin_bottom = 46.0
+custom_fonts/font = SubResource( 2 )
+text = "Swifty Package Factory
+Request Fulfillment Form (#31C14a)"
+autowrap = true
+
+[node name="Title" type="Label" parent="Panel/HStack/VStack"]
+margin_top = 54.0
+margin_right = 710.0
+margin_bottom = 118.0
+custom_fonts/font = SubResource( 1 )
+text = "Order Request #999"
+
+[node name="AsigneeHStack" type="HBoxContainer" parent="Panel/HStack/VStack"]
+margin_top = 126.0
+margin_right = 710.0
+margin_bottom = 166.0
+
+[node name="Label" type="Label" parent="Panel/HStack/VStack/AsigneeHStack"]
+margin_right = 566.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+text = "Request Assignee"
+
+[node name="RequiredPackages" type="Label" parent="Panel/HStack/VStack/AsigneeHStack"]
+margin_left = 574.0
+margin_right = 710.0
+margin_bottom = 40.0
+custom_fonts/font = ExtResource( 6 )
+text = "[REDACTED]"
+
+[node name="PackageHStack" type="HBoxContainer" parent="Panel/HStack/VStack"]
+margin_top = 174.0
+margin_right = 710.0
+margin_bottom = 214.0
+
+[node name="Label" type="Label" parent="Panel/HStack/VStack/PackageHStack"]
+margin_right = 658.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+text = "Packages Requested for Delivery"
+
+[node name="RequiredPackages" type="Label" parent="Panel/HStack/VStack/PackageHStack"]
+margin_left = 666.0
+margin_right = 710.0
+margin_bottom = 40.0
+custom_fonts/font = ExtResource( 7 )
+text = "99"
+
+[node name="TimeHStack" type="HBoxContainer" parent="Panel/HStack/VStack"]
+margin_top = 222.0
+margin_right = 710.0
+margin_bottom = 262.0
+
+[node name="Label2" type="Label" parent="Panel/HStack/VStack/TimeHStack"]
+margin_right = 658.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+text = "Request Time Limit (in seconds)"
+
+[node name="TimeLimit" type="Label" parent="Panel/HStack/VStack/TimeHStack"]
+margin_left = 666.0
+margin_right = 710.0
+margin_bottom = 40.0
+custom_fonts/font = ExtResource( 7 )
+text = "99"
+
+[node name="HSeparator2" type="HSeparator" parent="Panel/HStack/VStack"]
+modulate = Color( 1, 1, 1, 0 )
+margin_top = 270.0
+margin_right = 710.0
+margin_bottom = 414.0
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="Panel/HStack/VStack"]
+margin_top = 422.0
+margin_right = 710.0
+margin_bottom = 468.0
+custom_fonts/font = SubResource( 3 )
+text = "Failing to complete this request in a timely manner will result in your pay being docked. Consult your supervisor and/or the Employee Handbook for further information."
+autowrap = true
+
+[node name="Label3" type="Label" parent="Panel/HStack/VStack"]
+margin_top = 476.0
+margin_right = 710.0
+margin_bottom = 504.0
+custom_fonts/font = SubResource( 2 )
+text = "(C) 2010-20XX Swifty Package Factory. Do not reproduce."
+autowrap = true
+
+[node name="VStack2" type="VBoxContainer" parent="Panel/HStack"]
+margin_left = 718.0
+margin_right = 928.0
+margin_bottom = 504.0
+
+[node name="HSeparator" type="HSeparator" parent="Panel/HStack/VStack2"]
+modulate = Color( 1, 1, 1, 0 )
+margin_right = 210.0
+margin_bottom = 450.0
+size_flags_vertical = 3
+
+[node name="Button" type="Button" parent="Panel/HStack/VStack2"]
+margin_top = 458.0
+margin_right = 210.0
+margin_bottom = 504.0
+shortcut_in_tooltip = false
+shortcut = SubResource( 5 )
+text = "Start Job Request"

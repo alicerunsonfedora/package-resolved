@@ -47,7 +47,7 @@ namespace PackageResolved.UI
         /// </summary>
         private void BtnPressRestart()
         {
-            GetTree().ChangeScene("res://scenes/game_loop.tscn");
+            GetTree().ChangeScene("res://scenes/preflight.tscn");
         }
 
         /// <summary>
