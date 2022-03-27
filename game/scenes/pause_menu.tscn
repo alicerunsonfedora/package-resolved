@@ -1,12 +1,14 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://assets/default_theme.tres" type="Theme" id=1]
 [ext_resource path="res://assets/fonts/Inter-Bold.otf" type="DynamicFontData" id=2]
 [ext_resource path="res://scripts/UI/PauseMenu.cs" type="Script" id=3]
+[ext_resource path="res://assets/fonts/s_bold.ttf" type="DynamicFontData" id=4]
 
 [sub_resource type="DynamicFont" id=1]
-size = 32
-font_data = ExtResource( 2 )
+size = 27
+font_data = ExtResource( 4 )
+fallback/0 = ExtResource( 2 )
 
 [node name="PauseMenu" type="Control"]
 anchor_right = 1.0
@@ -30,31 +32,31 @@ alignment = 1
 
 [node name="TitleText" type="Label" parent="VBoxContainer"]
 margin_right = 410.0
-margin_bottom = 55.0
+margin_bottom = 52.0
 custom_fonts/font = SubResource( 1 )
 text = "On Break"
 
 [node name="HSeparator3" type="HSeparator" parent="VBoxContainer"]
 modulate = Color( 1, 1, 1, 0 )
-margin_top = 63.0
+margin_top = 60.0
 margin_right = 410.0
-margin_bottom = 403.0
+margin_bottom = 406.0
 size_flags_vertical = 3
 
 [node name="Resume" type="Button" parent="VBoxContainer"]
-margin_top = 411.0
+margin_top = 414.0
 margin_right = 410.0
-margin_bottom = 458.0
+margin_bottom = 460.0
 text = "Resume"
 
 [node name="Restart" type="Button" parent="VBoxContainer"]
-margin_top = 466.0
+margin_top = 468.0
 margin_right = 410.0
-margin_bottom = 513.0
+margin_bottom = 514.0
 text = "Restart Level"
 
 [node name="MainMenu" type="Button" parent="VBoxContainer"]
-margin_top = 521.0
+margin_top = 522.0
 margin_right = 410.0
 margin_bottom = 568.0
 text = "Back to Main Menu"

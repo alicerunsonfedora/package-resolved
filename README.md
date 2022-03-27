@@ -51,6 +51,10 @@ variants or other source purposes:
 - Aseprite, for making the sprite files
 - clickable, for making the Ubuntu Touch variant
 - snapcraft, for making the Snapcraft variant
+- Salmon font family, for achieving the font look\*
+
+> \*The game will render just fine without these fonts and use the fallbacks present
+> in the original game. 
 
 ### Additional Setup on Apple Silicon Macs
 
@@ -62,6 +66,18 @@ Macs, the following changes need to be made:
   CLI.
 - Depending on the IDE you are using to write C# scripts, you may need to run
   additional configuration changes.
+
+### Using the Salmon font family
+
+Package Resolved uses the Salmon font family but can use the original Inter and
+JetBrains Mono fonts from the original game jam version.
+
+If you have a copy of the Salmon font family that you have purchased and want to
+use it in this game, place the following fonts into their respective paths:
+
+- **Salmon 9 Sans Regular**: `game/assets/fonts/s_regular.ttf`
+- **Salmon 9 Sans Bold**: `game/assets/fonts/s_bold.ttf`
+- **Salmon 9 Mono Regular**: `game/assets/fonts/s_mono.ttf`
 
 ### Export the project
 

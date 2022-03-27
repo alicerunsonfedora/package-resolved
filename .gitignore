@@ -395,3 +395,6 @@ dist/
 .vscode
 **/.mono/
 build/
+
+# Salmon fonts
+game/assets/fonts/s_**.ttf
