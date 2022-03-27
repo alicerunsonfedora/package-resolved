@@ -54,7 +54,7 @@ variants or other source purposes:
 - Salmon font family, for achieving the font look\*
 
 > \*The game will render just fine without these fonts and use the fallbacks present
-> in the original game. 
+> in the original game.
 
 ### Additional Setup on Apple Silicon Macs
 
@@ -78,6 +78,7 @@ use it in this game, place the following fonts into their respective paths:
 - **Salmon 9 Sans Regular**: `game/assets/fonts/s_regular.ttf`
 - **Salmon 9 Sans Bold**: `game/assets/fonts/s_bold.ttf`
 - **Salmon 9 Mono Regular**: `game/assets/fonts/s_mono.ttf`
+- **Salmon Typewriter**: `game/assets/fonts/s_typewriter.ttf`
 
 ### Export the project
 

@@ -1,28 +1,30 @@
 [gd_scene load_steps=14 format=2]
 
-[ext_resource path="res://assets/fonts/Inter-Bold.otf" type="DynamicFontData" id=1]
-[ext_resource path="res://assets/fonts/s_bold.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/fonts/typewriter.tres" type="DynamicFont" id=1]
 [ext_resource path="res://assets/default_theme.tres" type="Theme" id=3]
-[ext_resource path="res://assets/fonts/JetBrainsMono-Regular.ttf" type="DynamicFontData" id=4]
-[ext_resource path="res://assets/fonts/s_mono.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://assets/fonts/mono.tres" type="DynamicFont" id=6]
 [ext_resource path="res://assets/fonts/bold.tres" type="DynamicFont" id=7]
 [ext_resource path="res://scripts/UI/Preflight.cs" type="Script" id=8]
+[ext_resource path="res://assets/fonts/dse-typewriter-font-lh.ttf" type="DynamicFontData" id=9]
+[ext_resource path="res://assets/fonts/s_typewriter.ttf" type="DynamicFontData" id=10]
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="StyleBoxFlat" id=6]
+bg_color = Color( 0.972549, 0.952941, 0.870588, 1 )
+
+[sub_resource type="DynamicFont" id=7]
 size = 9
-font_data = ExtResource( 5 )
-fallback/0 = ExtResource( 4 )
+font_data = ExtResource( 10 )
+fallback/0 = ExtResource( 9 )
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=8]
 size = 36
-font_data = ExtResource( 2 )
-fallback/0 = ExtResource( 1 )
+font_data = ExtResource( 10 )
+fallback/0 = ExtResource( 9 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=9]
 size = 9
-font_data = ExtResource( 5 )
-fallback/0 = ExtResource( 4 )
+font_data = ExtResource( 10 )
+fallback/0 = ExtResource( 9 )
 
 [sub_resource type="InputEventAction" id=4]
 action = "ui_accept"
@@ -36,130 +38,144 @@ anchor_bottom = 1.0
 theme = ExtResource( 3 )
 script = ExtResource( 8 )
 
+[node name="Background" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
 [node name="Panel" type="Panel" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 190.0
+margin_right = -190.0
+custom_styles/panel = SubResource( 6 )
 
-[node name="HStack" type="HBoxContainer" parent="Panel"]
-anchor_right = 1.0
+[node name="VStack" type="VBoxContainer" parent="Panel"]
+anchor_left = 0.5
+anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = 48.0
-margin_top = 48.0
-margin_right = -48.0
-margin_bottom = -48.0
-
-[node name="VStack" type="VBoxContainer" parent="Panel/HStack"]
-margin_right = 710.0
-margin_bottom = 504.0
+margin_left = -282.0
+margin_top = 16.0
+margin_right = 292.0
+margin_bottom = -16.0
 size_flags_horizontal = 3
 
-[node name="Label2" type="Label" parent="Panel/HStack/VStack"]
-margin_right = 710.0
+[node name="Copyright" type="Label" parent="Panel/VStack"]
+margin_right = 574.0
 margin_bottom = 46.0
-custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.505882, 0.505882, 0.505882, 1 )
+custom_fonts/font = SubResource( 7 )
 text = "Swifty Package Factory
 Request Fulfillment Form (#31C14a)"
 autowrap = true
+uppercase = true
 
-[node name="Title" type="Label" parent="Panel/HStack/VStack"]
+[node name="Title" type="Label" parent="Panel/VStack"]
 margin_top = 54.0
-margin_right = 710.0
+margin_right = 574.0
 margin_bottom = 118.0
-custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 8 )
 text = "Order Request #999"
+align = 1
+uppercase = true
 
-[node name="AsigneeHStack" type="HBoxContainer" parent="Panel/HStack/VStack"]
+[node name="FormNote" type="Label" parent="Panel/VStack"]
 margin_top = 126.0
-margin_right = 710.0
-margin_bottom = 166.0
+margin_right = 574.0
+margin_bottom = 172.0
+custom_colors/font_color = Color( 0.470588, 0.470588, 0.470588, 1 )
+custom_fonts/font = SubResource( 9 )
+text = "This form is to be used for fulfilling expedited rdelivery requests. For all other requests, use fulfillment form 32C42e."
+autowrap = true
+uppercase = true
 
-[node name="Label" type="Label" parent="Panel/HStack/VStack/AsigneeHStack"]
-margin_right = 566.0
+[node name="AsigneeHStack" type="HBoxContainer" parent="Panel/VStack"]
+margin_top = 180.0
+margin_right = 574.0
+margin_bottom = 220.0
+
+[node name="Label" type="Label" parent="Panel/VStack/AsigneeHStack"]
+margin_right = 430.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 1 )
 text = "Request Assignee"
 
-[node name="RequiredPackages" type="Label" parent="Panel/HStack/VStack/AsigneeHStack"]
-margin_left = 574.0
-margin_right = 710.0
+[node name="RequiredPackages" type="Label" parent="Panel/VStack/AsigneeHStack"]
+margin_left = 438.0
+margin_right = 574.0
 margin_bottom = 40.0
+custom_colors/font_color = Color( 0.47451, 0.47451, 0.47451, 1 )
 custom_fonts/font = ExtResource( 6 )
 text = "[REDACTED]"
 
-[node name="PackageHStack" type="HBoxContainer" parent="Panel/HStack/VStack"]
-margin_top = 174.0
-margin_right = 710.0
-margin_bottom = 214.0
+[node name="PackageHStack" type="HBoxContainer" parent="Panel/VStack"]
+margin_top = 228.0
+margin_right = 574.0
+margin_bottom = 268.0
 
-[node name="Label" type="Label" parent="Panel/HStack/VStack/PackageHStack"]
-margin_right = 658.0
+[node name="Label" type="Label" parent="Panel/VStack/PackageHStack"]
+margin_right = 522.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 1 )
 text = "Packages Requested for Delivery"
 
-[node name="RequiredPackages" type="Label" parent="Panel/HStack/VStack/PackageHStack"]
-margin_left = 666.0
-margin_right = 710.0
+[node name="RequiredPackages" type="Label" parent="Panel/VStack/PackageHStack"]
+margin_left = 530.0
+margin_right = 574.0
 margin_bottom = 40.0
+custom_colors/font_color = Color( 0.47451, 0.47451, 0.47451, 1 )
 custom_fonts/font = ExtResource( 7 )
 text = "99"
 
-[node name="TimeHStack" type="HBoxContainer" parent="Panel/HStack/VStack"]
-margin_top = 222.0
-margin_right = 710.0
-margin_bottom = 262.0
+[node name="TimeHStack" type="HBoxContainer" parent="Panel/VStack"]
+margin_top = 276.0
+margin_right = 574.0
+margin_bottom = 316.0
 
-[node name="Label2" type="Label" parent="Panel/HStack/VStack/TimeHStack"]
-margin_right = 658.0
+[node name="Label2" type="Label" parent="Panel/VStack/TimeHStack"]
+margin_right = 522.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
-text = "Request Time Limit (in seconds)"
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "Initial Time Limit (s)"
 
-[node name="TimeLimit" type="Label" parent="Panel/HStack/VStack/TimeHStack"]
-margin_left = 666.0
-margin_right = 710.0
+[node name="TimeLimit" type="Label" parent="Panel/VStack/TimeHStack"]
+margin_left = 530.0
+margin_right = 574.0
 margin_bottom = 40.0
+custom_colors/font_color = Color( 0.47451, 0.47451, 0.47451, 1 )
 custom_fonts/font = ExtResource( 7 )
 text = "99"
 
-[node name="HSeparator2" type="HSeparator" parent="Panel/HStack/VStack"]
+[node name="Spacer" type="HSeparator" parent="Panel/VStack"]
 modulate = Color( 1, 1, 1, 0 )
-margin_top = 270.0
-margin_right = 710.0
-margin_bottom = 414.0
+margin_top = 324.0
+margin_right = 574.0
+margin_bottom = 442.0
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Panel/HStack/VStack"]
-margin_top = 422.0
-margin_right = 710.0
-margin_bottom = 468.0
-custom_fonts/font = SubResource( 3 )
-text = "Failing to complete this request in a timely manner will result in your pay being docked. Consult your supervisor and/or the Employee Handbook for further information."
-autowrap = true
-
-[node name="Label3" type="Label" parent="Panel/HStack/VStack"]
-margin_top = 476.0
-margin_right = 710.0
-margin_bottom = 504.0
-custom_fonts/font = SubResource( 2 )
-text = "(C) 2010-20XX Swifty Package Factory. Do not reproduce."
-autowrap = true
-
-[node name="VStack2" type="VBoxContainer" parent="Panel/HStack"]
-margin_left = 718.0
-margin_right = 928.0
-margin_bottom = 504.0
-
-[node name="HSeparator" type="HSeparator" parent="Panel/HStack/VStack2"]
-modulate = Color( 1, 1, 1, 0 )
-margin_right = 210.0
-margin_bottom = 450.0
-size_flags_vertical = 3
-
-[node name="Button" type="Button" parent="Panel/HStack/VStack2"]
-margin_top = 458.0
-margin_right = 210.0
-margin_bottom = 504.0
+[node name="Button" type="Button" parent="Panel/VStack"]
+margin_top = 450.0
+margin_right = 574.0
+margin_bottom = 496.0
+custom_colors/font_color = Color( 0.788235, 0.486275, 0.227451, 1 )
+custom_fonts/font = ExtResource( 1 )
 shortcut_in_tooltip = false
 shortcut = SubResource( 5 )
-text = "Start Job Request"
+text = "FULFILL REQUEST"
+flat = true
+
+[node name="Footer" type="Label" parent="Panel/VStack"]
+margin_top = 504.0
+margin_right = 574.0
+margin_bottom = 568.0
+custom_colors/font_color = Color( 0.470588, 0.470588, 0.470588, 1 )
+custom_fonts/font = SubResource( 9 )
+text = "To Assignee: Click or tap on \"Fulfill Request\" to begin. Failing to complete this request in a timely manner will result in your pay being docked or being fired."
+autowrap = true
+uppercase = true

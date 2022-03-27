@@ -1,0 +1,9 @@
+[gd_resource type="DynamicFont" load_steps=3 format=2]
+
+[ext_resource path="res://assets/fonts/dse-typewriter-font-lh.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/fonts/s_typewriter.ttf" type="DynamicFontData" id=2]
+
+[resource]
+size = 18
+font_data = ExtResource( 2 )
+fallback/0 = ExtResource( 1 )

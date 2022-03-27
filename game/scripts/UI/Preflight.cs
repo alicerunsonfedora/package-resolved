@@ -59,7 +59,7 @@ namespace PackageResolved.UI
         /// <param name="timeLimit">The time limit (in seconds) the player has to complete the level.</param>
         public void SetRequest(int orderNumber, int requiredPackages, int timeLimit)
         {
-            _lblLevel.Text = $"Order Request #{orderNumber}";
+            _lblLevel.Text = $"Order Request #{orderNumber:D3}";
             _lblPackages.Text = requiredPackages.ToString();
             _lblTime.Text = timeLimit.ToString();
         }
@@ -72,10 +72,10 @@ namespace PackageResolved.UI
         /// </remarks>
         private void InstantiateOnreadyInstances()
         {
-            _btnStart = GetNode<Button>("Panel/HStack/VStack2/Button");
-            _lblLevel = GetNode<Label>("Panel/HStack/VStack/Title");
-            _lblPackages = GetNode<Label>("Panel/HStack/VStack/PackageHStack/RequiredPackages");
-            _lblTime = GetNode<Label>("Panel/HStack/VStack/TimeHStack/TimeLimit");
+            _btnStart = GetNode<Button>("Panel/VStack/Button");
+            _lblLevel = GetNode<Label>("Panel/VStack/Title");
+            _lblPackages = GetNode<Label>("Panel/VStack/PackageHStack/RequiredPackages");
+            _lblTime = GetNode<Label>("Panel/VStack/TimeHStack/TimeLimit");
         }
 
         /// <summary>
