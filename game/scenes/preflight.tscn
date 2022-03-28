@@ -39,11 +39,11 @@ size = 9
 font_data = ExtResource( 10 )
 fallback/0 = ExtResource( 9 )
 
-[sub_resource type="InputEventAction" id=4]
+[sub_resource type="InputEventAction" id=13]
 action = "ui_accept"
 
 [sub_resource type="ShortCut" id=5]
-shortcut = SubResource( 4 )
+shortcut = SubResource( 13 )
 
 [node name="Preflight" type="Control"]
 anchor_right = 1.0
@@ -209,6 +209,7 @@ margin_top = 450.0
 margin_right = 574.0
 margin_bottom = 496.0
 custom_colors/font_color = Color( 0.788235, 0.486275, 0.227451, 1 )
+custom_colors/font_color_hover = Color( 0.4, 0.270588, 0.117647, 1 )
 custom_fonts/font = ExtResource( 1 )
 shortcut_in_tooltip = false
 shortcut = SubResource( 5 )

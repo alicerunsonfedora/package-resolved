@@ -1,14 +1,48 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://assets/default_theme.tres" type="Theme" id=1]
-[ext_resource path="res://assets/fonts/Inter-Bold.otf" type="DynamicFontData" id=2]
 [ext_resource path="res://scripts/UI/GameOver.cs" type="Script" id=3]
-[ext_resource path="res://assets/fonts/s_bold.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://assets/sprites/tileset.png" type="Texture" id=6]
+[ext_resource path="res://assets/fonts/typewriter.tres" type="DynamicFont" id=7]
+[ext_resource path="res://assets/fonts/s_typewriter.ttf" type="DynamicFontData" id=8]
+[ext_resource path="res://assets/fonts/dse-typewriter-font-lh.ttf" type="DynamicFontData" id=9]
+[ext_resource path="res://assets/fonts/bold.tres" type="DynamicFont" id=10]
 
-[sub_resource type="DynamicFont" id=1]
-size = 27
-font_data = ExtResource( 4 )
-fallback/0 = ExtResource( 2 )
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0.972549, 0.870588, 0.94902, 1 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 6 )
+region = Rect2( 144, 192, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 6 )
+region = Rect2( 0, 240, 48, 48 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 9
+font_data = ExtResource( 8 )
+fallback/0 = ExtResource( 9 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 6 )
+region = Rect2( 96, 192, 48, 48 )
+
+[sub_resource type="DynamicFont" id=10]
+size = 36
+font_data = ExtResource( 8 )
+fallback/0 = ExtResource( 9 )
+
+[sub_resource type="DynamicFont" id=11]
+size = 9
+font_data = ExtResource( 8 )
+fallback/0 = ExtResource( 9 )
+
+[sub_resource type="InputEventAction" id=4]
+action = "ui_accept"
+
+[sub_resource type="ShortCut" id=12]
+shortcut = SubResource( 4 )
 
 [node name="GameOver" type="Control"]
 anchor_right = 1.0
@@ -16,57 +50,199 @@ anchor_bottom = 1.0
 theme = ExtResource( 1 )
 script = ExtResource( 3 )
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Background" type="Panel" parent="."]
 anchor_top = 0.00124166
 anchor_right = 1.0
 anchor_bottom = 1.00124
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="Panel" type="Panel" parent="Background"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 190.0
+margin_right = -190.0
+custom_styles/panel = SubResource( 5 )
+
+[node name="CoffeeStain1" type="TextureRect" parent="Background/Panel"]
+modulate = Color( 1, 1, 1, 0.0666667 )
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -256.0
+margin_right = 256.0
+rect_min_size = Vector2( 256, 256 )
+texture = SubResource( 6 )
+expand = true
+
+[node name="CoffeeStain2" type="TextureRect" parent="Background/Panel"]
+modulate = Color( 1, 1, 1, 0.164706 )
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -256.0
+margin_bottom = 256.0
+rect_min_size = Vector2( 256, 256 )
+texture = SubResource( 7 )
+expand = true
+
+[node name="VStack" type="VBoxContainer" parent="Background/Panel"]
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = -231.0
-margin_right = 231.0
-alignment = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_left = -282.0
+margin_top = 16.0
+margin_right = 292.0
+margin_bottom = -16.0
+size_flags_horizontal = 3
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
-modulate = Color( 1, 1, 1, 0 )
-margin_right = 462.0
-margin_bottom = 188.0
-size_flags_vertical = 3
+[node name="HBoxContainer" type="HBoxContainer" parent="Background/Panel/VStack"]
+margin_right = 574.0
+margin_bottom = 48.0
 
-[node name="TitleText" type="Label" parent="VBoxContainer"]
-margin_top = 196.0
-margin_right = 462.0
-margin_bottom = 248.0
-custom_fonts/font = SubResource( 1 )
-text = "Game Over!"
-align = 1
-
-[node name="Body" type="Label" parent="VBoxContainer"]
-margin_top = 256.0
-margin_right = 462.0
-margin_bottom = 296.0
+[node name="Copyright" type="Label" parent="Background/Panel/VStack/HBoxContainer"]
+margin_top = 1.0
+margin_right = 518.0
+margin_bottom = 47.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0.698039, 0.592157, 0.494118, 1 )
+custom_fonts/font = SubResource( 8 )
+text = "Swifty Package Factory
+Infraction Notice #14G11a"
 autowrap = true
+uppercase = true
 
-[node name="Restart" type="Button" parent="VBoxContainer"]
-margin_top = 304.0
-margin_right = 462.0
-margin_bottom = 350.0
-text = "Restart"
+[node name="TextureRect" type="TextureRect" parent="Background/Panel/VStack/HBoxContainer"]
+margin_left = 526.0
+margin_right = 574.0
+margin_bottom = 48.0
+texture = SubResource( 9 )
 
-[node name="MainMenu" type="Button" parent="VBoxContainer"]
-margin_top = 358.0
-margin_right = 462.0
-margin_bottom = 404.0
-text = "Back to Main Menu"
+[node name="Title" type="Label" parent="Background/Panel/VStack"]
+margin_top = 56.0
+margin_right = 574.0
+margin_bottom = 120.0
+custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_fonts/font = SubResource( 10 )
+text = "Request Failure"
+align = 1
+uppercase = true
 
-[node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
+[node name="FormNote" type="Label" parent="Background/Panel/VStack"]
+margin_top = 128.0
+margin_right = 574.0
+margin_bottom = 192.0
+custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_fonts/font = SubResource( 11 )
+text = "The following notice informs you that have committed an infraction that does not comply with Swifty Package Factory's Policies. Your supervisor has been informed, and your pay will be docked accordingly."
+autowrap = true
+uppercase = true
+
+[node name="HSeparator" type="HSeparator" parent="Background/Panel/VStack"]
+modulate = Color( 0.4, 0.270588, 0.117647, 1 )
+margin_top = 200.0
+margin_right = 574.0
+margin_bottom = 204.0
+
+[node name="Body" type="Label" parent="Background/Panel/VStack"]
+margin_top = 212.0
+margin_right = 574.0
+margin_bottom = 252.0
+custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_fonts/font = ExtResource( 7 )
+text = "INFRACTION GOES HERE"
+align = 1
+autowrap = true
+uppercase = true
+
+[node name="HSeparator2" type="HSeparator" parent="Background/Panel/VStack"]
+modulate = Color( 0.4, 0.270588, 0.117647, 1 )
+margin_top = 260.0
+margin_right = 574.0
+margin_bottom = 264.0
+
+[node name="PackageHStack" type="HBoxContainer" parent="Background/Panel/VStack"]
+margin_top = 272.0
+margin_right = 574.0
+margin_bottom = 312.0
+
+[node name="Label" type="Label" parent="Background/Panel/VStack/PackageHStack"]
+margin_right = 522.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_fonts/font = ExtResource( 7 )
+text = "Packages Collected"
+
+[node name="RequiredPackages" type="Label" parent="Background/Panel/VStack/PackageHStack"]
+margin_left = 530.0
+margin_right = 574.0
+margin_bottom = 40.0
+custom_colors/font_color = Color( 0.4, 0.270588, 0.117647, 1 )
+custom_fonts/font = ExtResource( 10 )
+text = "99"
+
+[node name="TimeHStack" type="HBoxContainer" parent="Background/Panel/VStack"]
+margin_top = 320.0
+margin_right = 574.0
+margin_bottom = 360.0
+
+[node name="Label2" type="Label" parent="Background/Panel/VStack/TimeHStack"]
+margin_right = 522.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_fonts/font = ExtResource( 7 )
+text = "Time Remaining (s)"
+
+[node name="TimeLimit" type="Label" parent="Background/Panel/VStack/TimeHStack"]
+margin_left = 530.0
+margin_right = 574.0
+margin_bottom = 40.0
+custom_colors/font_color = Color( 0.4, 0.270588, 0.117647, 1 )
+custom_fonts/font = ExtResource( 10 )
+text = "99"
+
+[node name="Spacer" type="HSeparator" parent="Background/Panel/VStack"]
 modulate = Color( 1, 1, 1, 0 )
-margin_top = 412.0
-margin_right = 462.0
-margin_bottom = 600.0
+margin_top = 368.0
+margin_right = 574.0
+margin_bottom = 459.0
 size_flags_vertical = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Background/Panel/VStack"]
+margin_top = 467.0
+margin_right = 574.0
+margin_bottom = 513.0
+custom_constants/separation = 32
+alignment = 1
+
+[node name="Restart" type="Button" parent="Background/Panel/VStack/HBoxContainer2"]
+margin_left = 143.0
+margin_right = 243.0
+margin_bottom = 46.0
+custom_colors/font_color = Color( 0.788235, 0.486275, 0.227451, 1 )
+custom_colors/font_color_hover = Color( 0.4, 0.270588, 0.117647, 1 )
+custom_fonts/font = ExtResource( 7 )
+shortcut_in_tooltip = false
+shortcut = SubResource( 12 )
+text = "RETRY"
+flat = true
+
+[node name="MainMenu" type="Button" parent="Background/Panel/VStack/HBoxContainer2"]
+margin_left = 275.0
+margin_right = 431.0
+margin_bottom = 46.0
+custom_colors/font_color = Color( 0.788235, 0.486275, 0.227451, 1 )
+custom_colors/font_color_hover = Color( 0.4, 0.270588, 0.117647, 1 )
+custom_fonts/font = ExtResource( 7 )
+shortcut_in_tooltip = false
+shortcut = SubResource( 12 )
+text = "MAIN MENU"
+flat = true
+
+[node name="Footer" type="Label" parent="Background/Panel/VStack"]
+margin_top = 521.0
+margin_right = 574.0
+margin_bottom = 567.0
+custom_colors/font_color = Color( 0.7, 0.595117, 0.497, 1 )
+custom_fonts/font = SubResource( 11 )
+text = "To Assignee: Repeated infractions will result in your pay being docked or being fired. You retain the right to have questions or concerns about this policy."
+autowrap = true
+uppercase = true

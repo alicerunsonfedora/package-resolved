@@ -33,6 +33,21 @@ namespace PackageResolved.UI
         private Button _btnQuitToMenu;
 
         /// <summary>
+        /// The label displaying the number of packages that were collected.
+        /// </summary>
+        private Label _packagesCollected;
+
+        /// <summary>
+        /// The label displaying the time remaining.
+        /// </summary>
+        private Label _timeRemaining;
+
+        /// <summary>
+        /// The horizontal stack containing the time remaining text.
+        /// </summary>
+        private HBoxContainer _timeRemainingStack;
+
+        /// <summary>
         /// Instantiate the scene after entering the scene tree.
         /// </summary>
         public override void _Ready()
@@ -71,9 +86,12 @@ namespace PackageResolved.UI
         /// </remarks>
         private void InstantiateOnreadyInstances()
         {
-            _body = GetNode<Label>("VBoxContainer/Body");
-            _btnRestart = GetNode<Button>("VBoxContainer/Restart");
-            _btnQuitToMenu = GetNode<Button>("VBoxContainer/MainMenu");
+            _body = GetNode<Label>("Background/Panel/VStack/Body");
+            _btnRestart = GetNode<Button>("Background/Panel/VStack/HBoxContainer2/Restart");
+            _btnQuitToMenu = GetNode<Button>("Background/Panel/VStack/HBoxContainer2/MainMenu");
+            _packagesCollected = GetNode<Label>("Background/Panel/VStack/PackageHStack/RequiredPackages");
+            _timeRemaining = GetNode<Label>("Background/Panel/VStack/TimeHStack/TimeLimit");
+            _timeRemainingStack = GetNode<HBoxContainer>("Background/Panel/VStack/TimeHStack");
         }
 
         private void UpdateBody()
@@ -81,13 +99,23 @@ namespace PackageResolved.UI
             string text;
             var state = GetNode<GameState>("/root/GameState");
             if (state.GetGameMode() == GameState.GameMode.Endless)
-                text = $"You ran into a palette and tripped!\nScore: {state.GetPreviousScore()} packages";
+            {
+                text = "Tripped over a palette and damaged company property.";
+                _packagesCollected.Text = state.GetPreviousScore().ToString();
+                _timeRemainingStack.Visible = false;
+            }
             else if (state.GetGameMode() == GameState.GameMode.Arcade && state.GetPreviousTimeLeft() <= 0)
-                text = $"You couldn't collect all of the packages in time!\nScore: {state.GetPreviousScore()} "
-                    + "packages";
+            {
+                text = "Failed to fulfill request in alotted time.";
+                _packagesCollected.Text = state.GetPreviousScore().ToString();
+                _timeRemaining.Text = "0";
+            }
             else
-                text = $"You ran into a palette and tripped!\nScore: {state.GetPreviousScore()} packages\n"
-                    + $"Time: {state.GetPreviousTimeLeft()} seconds";
+            {
+                text = "Tripped over a palette and damaged company property.";
+                _packagesCollected.Text = state.GetPreviousScore().ToString();
+                _timeRemaining.Text = state.GetPreviousTimeLeft().ToString();
+            }
             _body.Text = text;
         }
     }
