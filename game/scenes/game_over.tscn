@@ -39,11 +39,11 @@ size = 9
 font_data = ExtResource( 8 )
 fallback/0 = ExtResource( 9 )
 
-[sub_resource type="InputEventAction" id=4]
+[sub_resource type="InputEventAction" id=13]
 action = "ui_accept"
 
 [sub_resource type="ShortCut" id=12]
-shortcut = SubResource( 4 )
+shortcut = SubResource( 13 )
 
 [node name="GameOver" type="Control"]
 anchor_right = 1.0

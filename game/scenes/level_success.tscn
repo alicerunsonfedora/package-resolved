@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://assets/default_theme.tres" type="Theme" id=1]
 [ext_resource path="res://assets/fonts/Inter-Bold.otf" type="DynamicFontData" id=2]
@@ -6,11 +6,53 @@
 [ext_resource path="res://assets/sprites/base.png" type="Texture" id=4]
 [ext_resource path="res://assets/sprites/helmet.png" type="Texture" id=5]
 [ext_resource path="res://assets/fonts/s_bold.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://assets/fonts/s_typewriter.ttf" type="DynamicFontData" id=7]
+[ext_resource path="res://assets/sprites/tileset.png" type="Texture" id=8]
+[ext_resource path="res://assets/fonts/typewriter.tres" type="DynamicFont" id=9]
+[ext_resource path="res://assets/fonts/dse-typewriter-font-lh.ttf" type="DynamicFontData" id=10]
+[ext_resource path="res://assets/fonts/mono.tres" type="DynamicFont" id=11]
+[ext_resource path="res://assets/fonts/bold.tres" type="DynamicFont" id=12]
 
 [sub_resource type="DynamicFont" id=1]
 size = 27
 font_data = ExtResource( 6 )
 fallback/0 = ExtResource( 2 )
+
+[sub_resource type="StyleBoxFlat" id=14]
+bg_color = Color( 0.968627, 0.968627, 0.968627, 1 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 8 )
+region = Rect2( 144, 192, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 8 )
+region = Rect2( 0, 240, 48, 48 )
+
+[sub_resource type="DynamicFont" id=17]
+size = 9
+font_data = ExtResource( 7 )
+fallback/0 = ExtResource( 10 )
+
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 8 )
+region = Rect2( 96, 192, 48, 48 )
+
+[sub_resource type="DynamicFont" id=19]
+size = 27
+font_data = ExtResource( 7 )
+fallback/0 = ExtResource( 10 )
+
+[sub_resource type="DynamicFont" id=20]
+size = 9
+font_data = ExtResource( 7 )
+fallback/0 = ExtResource( 10 )
+
+[sub_resource type="InputEventAction" id=21]
+action = "ui_accept"
+
+[sub_resource type="ShortCut" id=22]
+shortcut = SubResource( 21 )
 
 [node name="LevelSuccess" type="Control"]
 anchor_right = 1.0
@@ -18,18 +60,16 @@ anchor_bottom = 1.0
 theme = ExtResource( 1 )
 script = ExtResource( 3 )
 
-[node name="Panel" type="Panel" parent="."]
+[node name="BackgroundPanel" type="Panel" parent="."]
 anchor_top = 0.00124166
 anchor_right = 1.0
 anchor_bottom = 1.00124
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="Base" type="TextureRect" parent="Panel"]
+[node name="Base" type="TextureRect" parent="BackgroundPanel"]
 modulate = Color( 0.411765, 0.384314, 0.368627, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 493.0
 margin_top = -0.744996
 margin_bottom = -0.744995
 texture = ExtResource( 4 )
@@ -39,7 +79,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Helmet" type="TextureRect" parent="Panel/Base"]
+[node name="Helmet" type="TextureRect" parent="BackgroundPanel/Base"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 5 )
@@ -97,3 +137,193 @@ margin_top = 411.0
 margin_right = 410.0
 margin_bottom = 568.0
 size_flags_vertical = 3
+
+[node name="Panel" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 32.0
+margin_right = -348.0
+custom_styles/panel = SubResource( 14 )
+
+[node name="CoffeeStain1" type="TextureRect" parent="Panel"]
+modulate = Color( 1, 1, 1, 0.0666667 )
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -256.0
+margin_right = 256.0
+rect_min_size = Vector2( 256, 256 )
+texture = SubResource( 15 )
+expand = true
+
+[node name="CoffeeStain2" type="TextureRect" parent="Panel"]
+modulate = Color( 1, 1, 1, 0.164706 )
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -256.0
+margin_bottom = 256.0
+rect_min_size = Vector2( 256, 256 )
+texture = SubResource( 16 )
+expand = true
+
+[node name="VStack" type="VBoxContainer" parent="Panel"]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -282.0
+margin_top = 16.0
+margin_right = 292.0
+margin_bottom = -16.0
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VStack"]
+margin_right = 574.0
+margin_bottom = 48.0
+
+[node name="Copyright" type="Label" parent="Panel/VStack/HBoxContainer"]
+margin_top = 1.0
+margin_right = 518.0
+margin_bottom = 47.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0.698039, 0.592157, 0.494118, 1 )
+custom_fonts/font = SubResource( 17 )
+text = "Swifty Package Factory
+Request Fulfillment Acknowledgement (#31C16f)"
+autowrap = true
+uppercase = true
+
+[node name="TextureRect" type="TextureRect" parent="Panel/VStack/HBoxContainer"]
+margin_left = 526.0
+margin_right = 574.0
+margin_bottom = 48.0
+texture = SubResource( 18 )
+
+[node name="Title" type="Label" parent="Panel/VStack"]
+margin_top = 56.0
+margin_right = 574.0
+margin_bottom = 108.0
+custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_fonts/font = SubResource( 19 )
+text = "Order #999 Delivered"
+align = 1
+uppercase = true
+
+[node name="FormNote" type="Label" parent="Panel/VStack"]
+margin_top = 116.0
+margin_right = 574.0
+margin_bottom = 162.0
+custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_fonts/font = SubResource( 20 )
+text = "This notice officially acknowledges that the following package order has been successfully delivered to the recipient."
+autowrap = true
+uppercase = true
+
+[node name="AsigneeHStack" type="HBoxContainer" parent="Panel/VStack"]
+margin_top = 170.0
+margin_right = 574.0
+margin_bottom = 210.0
+
+[node name="Label" type="Label" parent="Panel/VStack/AsigneeHStack"]
+margin_right = 430.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_fonts/font = ExtResource( 9 )
+text = "Request Assignee"
+
+[node name="RequiredPackages" type="Label" parent="Panel/VStack/AsigneeHStack"]
+margin_left = 438.0
+margin_right = 574.0
+margin_bottom = 40.0
+custom_colors/font_color = Color( 0.4, 0.270588, 0.117647, 1 )
+custom_fonts/font = ExtResource( 11 )
+text = "[REDACTED]"
+
+[node name="PackageHStack" type="HBoxContainer" parent="Panel/VStack"]
+margin_top = 218.0
+margin_right = 574.0
+margin_bottom = 258.0
+
+[node name="Label" type="Label" parent="Panel/VStack/PackageHStack"]
+margin_right = 522.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_fonts/font = ExtResource( 9 )
+text = "Packages Requested for Delivery"
+
+[node name="RequiredPackages" type="Label" parent="Panel/VStack/PackageHStack"]
+margin_left = 530.0
+margin_right = 574.0
+margin_bottom = 40.0
+custom_colors/font_color = Color( 0.4, 0.270588, 0.117647, 1 )
+custom_fonts/font = ExtResource( 12 )
+text = "99"
+
+[node name="TimeHStack" type="HBoxContainer" parent="Panel/VStack"]
+margin_top = 266.0
+margin_right = 574.0
+margin_bottom = 306.0
+
+[node name="Label2" type="Label" parent="Panel/VStack/TimeHStack"]
+margin_right = 522.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_fonts/font = ExtResource( 9 )
+text = "Initial Time Limit (s)"
+
+[node name="TimeLimit" type="Label" parent="Panel/VStack/TimeHStack"]
+margin_left = 530.0
+margin_right = 574.0
+margin_bottom = 40.0
+custom_colors/font_color = Color( 0.4, 0.270588, 0.117647, 1 )
+custom_fonts/font = ExtResource( 12 )
+text = "99"
+
+[node name="Spacer" type="HSeparator" parent="Panel/VStack"]
+modulate = Color( 1, 1, 1, 0 )
+margin_top = 314.0
+margin_right = 574.0
+margin_bottom = 424.0
+size_flags_vertical = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/VStack"]
+margin_top = 432.0
+margin_right = 574.0
+margin_bottom = 478.0
+custom_constants/separation = 32
+alignment = 1
+
+[node name="Restart" type="Button" parent="Panel/VStack/HBoxContainer2"]
+margin_left = 150.0
+margin_right = 236.0
+margin_bottom = 46.0
+custom_colors/font_color = Color( 0.788235, 0.486275, 0.227451, 1 )
+custom_colors/font_color_hover = Color( 0.4, 0.270588, 0.117647, 1 )
+custom_fonts/font = ExtResource( 9 )
+shortcut_in_tooltip = false
+shortcut = SubResource( 22 )
+text = "NEXT"
+flat = true
+
+[node name="MainMenu" type="Button" parent="Panel/VStack/HBoxContainer2"]
+margin_left = 268.0
+margin_right = 424.0
+margin_bottom = 46.0
+custom_colors/font_color = Color( 0.788235, 0.486275, 0.227451, 1 )
+custom_colors/font_color_hover = Color( 0.4, 0.270588, 0.117647, 1 )
+custom_fonts/font = ExtResource( 9 )
+shortcut_in_tooltip = false
+shortcut = SubResource( 22 )
+text = "MAIN MENU"
+flat = true
+
+[node name="Footer" type="Label" parent="Panel/VStack"]
+margin_top = 486.0
+margin_right = 574.0
+margin_bottom = 568.0
+custom_colors/font_color = Color( 0.7, 0.595117, 0.497, 1 )
+custom_fonts/font = SubResource( 20 )
+text = "To Customer: If you believe this notice has been delivered in error, please contact a customer service representative as possible. They will verify the receipt and then disregard any of your comments. You retain the right to have questions or concerns about this policy."
+autowrap = true
+uppercase = true

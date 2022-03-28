@@ -32,6 +32,21 @@ namespace PackageResolved.UI
         private TextureRect _helmet;
 
         /// <summary>
+        /// The label that displays the number of packages the player needed to collect.
+        /// </summary>
+        private Label _lblPackagesRequired;
+
+        /// <summary>
+        /// The label that displays the time limit the player had.
+        /// </summary>
+        private Label _lblTimeLimit;
+
+        /// <summary>
+        /// The label that displays the level number in the form of "Order #Num Delivered".
+        /// </summary>
+        private Label _lblLevelNumber;
+
+        /// <summary>
         /// Instantiate the scene after entering the scene tree.
         /// </summary>
         public override void _Ready()
@@ -39,6 +54,12 @@ namespace PackageResolved.UI
             InstantiateOnreadyInstances();
             _btnAdvance.Connect("button_up", this, nameof(BtnPressRestart));
             _btnQuitToMenu.Connect("button_up", this, nameof(BtnPressQuitToMenu));
+
+            var state = GetNode<GameState>("/root/GameState");
+            _lblLevelNumber.Text = $"Order #{state.GetCurrentLevel() + 1:D3} Delivered";
+            _lblPackagesRequired.Text = state.GetRequiredPackages().ToString();
+            _lblTimeLimit.Text = state.GetTimeLimit().ToString();
+
             HideHelmetAndAdvanceButton();
         }
 
@@ -82,9 +103,12 @@ namespace PackageResolved.UI
         /// </remarks>
         private void InstantiateOnreadyInstances()
         {
-            _btnAdvance = GetNode<Button>("VBoxContainer/Restart");
-            _btnQuitToMenu = GetNode<Button>("VBoxContainer/MainMenu");
-            _helmet = GetNode<TextureRect>("Panel/Base/Helmet");
+            _btnAdvance = GetNode<Button>("Panel/VStack/HBoxContainer2/Restart");
+            _btnQuitToMenu = GetNode<Button>("Panel/VStack/HBoxContainer2/MainMenu");
+            _helmet = GetNode<TextureRect>("BackgroundPanel/Base/Helmet");
+            _lblLevelNumber = GetNode<Label>("Panel/VStack/Title");
+            _lblPackagesRequired = GetNode<Label>("Panel/VStack/PackageHStack/RequiredPackages");
+            _lblTimeLimit = GetNode<Label>("Panel/VStack/TimeHStack/TimeLimit");
         }
 
     }
