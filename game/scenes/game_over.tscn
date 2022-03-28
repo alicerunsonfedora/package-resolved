@@ -234,7 +234,6 @@ custom_colors/font_color = Color( 0.788235, 0.486275, 0.227451, 1 )
 custom_colors/font_color_hover = Color( 0.4, 0.270588, 0.117647, 1 )
 custom_fonts/font = ExtResource( 7 )
 shortcut_in_tooltip = false
-shortcut = SubResource( 12 )
 text = "MAIN MENU"
 flat = true
 

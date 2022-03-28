@@ -48,11 +48,11 @@ size = 9
 font_data = ExtResource( 7 )
 fallback/0 = ExtResource( 10 )
 
-[sub_resource type="InputEventAction" id=21]
+[sub_resource type="InputEventAction" id=23]
 action = "ui_accept"
 
 [sub_resource type="ShortCut" id=22]
-shortcut = SubResource( 21 )
+shortcut = SubResource( 23 )
 
 [node name="LevelSuccess" type="Control"]
 anchor_right = 1.0
@@ -314,7 +314,6 @@ custom_colors/font_color = Color( 0.788235, 0.486275, 0.227451, 1 )
 custom_colors/font_color_hover = Color( 0.4, 0.270588, 0.117647, 1 )
 custom_fonts/font = ExtResource( 9 )
 shortcut_in_tooltip = false
-shortcut = SubResource( 22 )
 text = "MAIN MENU"
 flat = true
 

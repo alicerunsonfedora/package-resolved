@@ -123,10 +123,10 @@ namespace PackageResolved.UI
         /// </remarks>
         private void InstantiateOnreadyInstances()
         {
-            _btnStartArcade = GetNode<Button>("VBoxContainer/Start");
-            _btnStartEndless = GetNode<Button>("VBoxContainer/Endless");
-            _chkMusic = GetNode<CheckButton>("VBoxContainer/Music");
-            _chkSfx = GetNode<CheckButton>("VBoxContainer/SFX");
+            _btnStartArcade = GetNode<Button>("Panel/VStack/Start");
+            _btnStartEndless = GetNode<Button>("Panel/VStack/Endless");
+            _chkMusic = GetNode<CheckButton>("Panel/VStack/Music");
+            _chkSfx = GetNode<CheckButton>("Panel/VStack/SFX");
             _helmet = GetNode<TextureRect>("Base/Helmet");
         }
     }

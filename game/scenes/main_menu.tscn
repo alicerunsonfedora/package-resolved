@@ -1,34 +1,64 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://assets/default_theme.tres" type="Theme" id=1]
-[ext_resource path="res://assets/fonts/Inter-Bold.otf" type="DynamicFontData" id=2]
 [ext_resource path="res://scripts/UI/MainMenu.cs" type="Script" id=3]
-[ext_resource path="res://assets/fonts/JetBrainsMono-Regular.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://assets/sprites/base.png" type="Texture" id=5]
 [ext_resource path="res://assets/sprites/helmet.png" type="Texture" id=6]
 [ext_resource path="res://assets/audio/theme.ogg" type="AudioStream" id=7]
-[ext_resource path="res://assets/fonts/s_bold.ttf" type="DynamicFontData" id=8]
-[ext_resource path="res://assets/fonts/s_mono.ttf" type="DynamicFontData" id=9]
+[ext_resource path="res://assets/fonts/typewriter.tres" type="DynamicFont" id=10]
+[ext_resource path="res://assets/fonts/dse-typewriter-font-lh.ttf" type="DynamicFontData" id=13]
+[ext_resource path="res://assets/fonts/s_typewriter.ttf" type="DynamicFontData" id=14]
+[ext_resource path="res://assets/sprites/tileset.png" type="Texture" id=15]
 
-[sub_resource type="Gradient" id=1]
-offsets = PoolRealArray( 0.168571, 0.54 )
-colors = PoolColorArray( 0, 0, 0, 0.443137, 0, 0, 0, 0 )
+[sub_resource type="StyleBoxFlat" id=22]
+bg_color = Color( 0.968627, 0.909804, 0.843137, 1 )
 
-[sub_resource type="GradientTexture" id=2]
-gradient = SubResource( 1 )
-width = 1024
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 15 )
+region = Rect2( 144, 192, 48, 48 )
 
-[sub_resource type="DynamicFont" id=3]
-size = 66
-outline_size = 1
-font_data = ExtResource( 8 )
-fallback/0 = ExtResource( 2 )
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 15 )
+region = Rect2( 0, 240, 48, 48 )
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=25]
 size = 9
-extra_spacing_char = 1
-font_data = ExtResource( 9 )
-fallback/0 = ExtResource( 4 )
+font_data = ExtResource( 14 )
+fallback/0 = ExtResource( 13 )
+
+[sub_resource type="AtlasTexture" id=26]
+atlas = ExtResource( 15 )
+region = Rect2( 96, 192, 48, 48 )
+
+[sub_resource type="DynamicFont" id=27]
+size = 45
+font_data = ExtResource( 14 )
+fallback/0 = ExtResource( 13 )
+
+[sub_resource type="DynamicFont" id=30]
+size = 27
+font_data = ExtResource( 14 )
+fallback/0 = ExtResource( 13 )
+
+[sub_resource type="InputEventAction" id=21]
+action = "ui_accept"
+
+[sub_resource type="ShortCut" id=29]
+shortcut = SubResource( 21 )
+
+[sub_resource type="DynamicFont" id=31]
+size = 27
+font_data = ExtResource( 14 )
+fallback/0 = ExtResource( 13 )
+
+[sub_resource type="StyleBoxEmpty" id=34]
+
+[sub_resource type="StyleBoxEmpty" id=33]
+
+[sub_resource type="DynamicFont" id=28]
+size = 9
+font_data = ExtResource( 14 )
+fallback/0 = ExtResource( 13 )
 
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
@@ -47,12 +77,10 @@ __meta__ = {
 modulate = Color( 1, 0.937255, 0.901961, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 543.0
 texture = ExtResource( 5 )
 expand = true
 stretch_mode = 7
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Helmet" type="TextureRect" parent="Base"]
 anchor_right = 1.0
@@ -61,75 +89,176 @@ texture = ExtResource( 6 )
 expand = true
 stretch_mode = 7
 
-[node name="Gradient" type="TextureRect" parent="."]
+[node name="Panel" type="Panel" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-texture = SubResource( 2 )
+margin_left = 9.0
+margin_right = -371.0
+custom_styles/panel = SubResource( 22 )
+
+[node name="CoffeeStain1" type="TextureRect" parent="Panel"]
+modulate = Color( 1, 1, 1, 0.0666667 )
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -256.0
+margin_right = 256.0
+rect_min_size = Vector2( 256, 256 )
+texture = SubResource( 23 )
 expand = true
 
-[node name="Title" type="Label" parent="."]
-margin_left = 16.0
-margin_top = 16.0
-margin_right = 416.0
-margin_bottom = 271.0
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_colors/font_outline_modulate = Color( 0.894118, 0.341176, 0.0705882, 1 )
-custom_fonts/font = SubResource( 3 )
-text = "Package Resolved"
-autowrap = true
+[node name="CoffeeStain2" type="TextureRect" parent="Panel"]
+modulate = Color( 1, 1, 1, 0.164706 )
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -256.0
+margin_bottom = 256.0
+rect_min_size = Vector2( 256, 256 )
+texture = SubResource( 24 )
+expand = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-anchor_top = 0.46
+[node name="VStack" type="VBoxContainer" parent="Panel"]
+anchor_left = 0.5
+anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = 16.0
-margin_right = 421.0
+margin_left = -282.0
+margin_top = 16.0
+margin_right = 292.0
 margin_bottom = -16.0
-alignment = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
+size_flags_horizontal = 3
 
-[node name="Start" type="Button" parent="VBoxContainer"]
-margin_top = 18.0
-margin_right = 405.0
-margin_bottom = 64.0
-text = "Start Game"
-flat = true
-align = 0
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VStack"]
+margin_right = 576.0
+margin_bottom = 48.0
 
-[node name="Endless" type="Button" parent="VBoxContainer"]
-margin_top = 72.0
-margin_right = 405.0
-margin_bottom = 118.0
-text = "Play Endless"
-flat = true
-align = 0
+[node name="Copyright" type="Label" parent="Panel/VStack/HBoxContainer"]
+margin_top = 1.0
+margin_right = 520.0
+margin_bottom = 47.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0.698039, 0.592157, 0.494118, 1 )
+custom_fonts/font = SubResource( 25 )
+text = "Swifty Package Factory
+MEMORANDUM"
+autowrap = true
+uppercase = true
 
-[node name="Music" type="CheckButton" parent="VBoxContainer"]
-margin_top = 126.0
-margin_right = 405.0
-margin_bottom = 180.0
-text = "Music"
+[node name="TextureRect" type="TextureRect" parent="Panel/VStack/HBoxContainer"]
+margin_left = 528.0
+margin_right = 576.0
+margin_bottom = 48.0
+texture = SubResource( 26 )
 
-[node name="SFX" type="CheckButton" parent="VBoxContainer"]
-margin_top = 188.0
-margin_right = 405.0
-margin_bottom = 242.0
-text = "SFX"
-
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+[node name="Spacer" type="HSeparator" parent="Panel/VStack"]
 modulate = Color( 1, 1, 1, 0 )
-margin_top = 250.0
-margin_right = 405.0
-margin_bottom = 254.0
+margin_top = 56.0
+margin_right = 576.0
+margin_bottom = 73.0
+size_flags_vertical = 3
 
-[node name="Attribute" type="Label" parent="VBoxContainer"]
-margin_top = 262.0
-margin_right = 405.0
-margin_bottom = 308.0
-custom_fonts/font = SubResource( 4 )
-text = "(C) 2021-2022 Marquis Kurt and Raseruuu.
-All rights reserved."
+[node name="Title" type="Label" parent="Panel/VStack"]
+margin_top = 81.0
+margin_right = 576.0
+margin_bottom = 157.0
+custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_fonts/font = SubResource( 27 )
+text = "PACKAGE RESOLVED"
+align = 1
+uppercase = true
+
+[node name="Spacer2" type="HSeparator" parent="Panel/VStack"]
+modulate = Color( 1, 1, 1, 0 )
+margin_top = 165.0
+margin_right = 576.0
+margin_bottom = 183.0
+size_flags_vertical = 3
+
+[node name="Start" type="Button" parent="Panel/VStack"]
+margin_top = 191.0
+margin_right = 576.0
+margin_bottom = 255.0
+rect_min_size = Vector2( 0, 64 )
+custom_colors/font_color = Color( 0.788235, 0.486275, 0.227451, 1 )
+custom_colors/font_color_hover = Color( 0.4, 0.270588, 0.117647, 1 )
+custom_constants/hseparation = 0
+custom_fonts/font = SubResource( 30 )
+shortcut_in_tooltip = false
+shortcut = SubResource( 29 )
+text = "START GAME"
+flat = true
+
+[node name="Endless" type="Button" parent="Panel/VStack"]
+margin_top = 263.0
+margin_right = 576.0
+margin_bottom = 327.0
+rect_min_size = Vector2( 0, 64 )
+custom_colors/font_color = Color( 0.788235, 0.486275, 0.227451, 1 )
+custom_colors/font_color_hover = Color( 0.4, 0.270588, 0.117647, 1 )
+custom_constants/hseparation = 0
+custom_fonts/font = SubResource( 31 )
+shortcut_in_tooltip = false
+text = "PLAY ENDLESS"
+flat = true
+
+[node name="Spacer4" type="HSeparator" parent="Panel/VStack"]
+modulate = Color( 1, 1, 1, 0 )
+margin_top = 335.0
+margin_right = 576.0
+margin_bottom = 352.0
+size_flags_vertical = 3
+
+[node name="HSeparator" type="HSeparator" parent="Panel/VStack"]
+modulate = Color( 0.4, 0.270588, 0.117647, 1 )
+margin_top = 360.0
+margin_right = 576.0
+margin_bottom = 364.0
+
+[node name="Music" type="CheckButton" parent="Panel/VStack"]
+margin_top = 372.0
+margin_right = 576.0
+margin_bottom = 426.0
+custom_colors/font_color_disabled = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_colors/font_color_focus = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_colors/font_color_hover_pressed = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_colors/font_color_hover = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_colors/font_color_pressed = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_fonts/font = ExtResource( 10 )
+custom_styles/focus = SubResource( 34 )
+text = "MUSIC"
+flat = true
+
+[node name="SFX" type="CheckButton" parent="Panel/VStack"]
+margin_top = 434.0
+margin_right = 576.0
+margin_bottom = 488.0
+custom_colors/font_color_disabled = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_colors/font_color_focus = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_colors/font_color_hover_pressed = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_colors/font_color_hover = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_colors/font_color_pressed = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_fonts/font = ExtResource( 10 )
+custom_styles/focus = SubResource( 33 )
+text = "SFX"
+flat = true
+
+[node name="Spacer3" type="HSeparator" parent="Panel/VStack"]
+modulate = Color( 1, 1, 1, 0 )
+margin_top = 496.0
+margin_right = 576.0
+margin_bottom = 514.0
+size_flags_vertical = 3
+
+[node name="Footer" type="Label" parent="Panel/VStack"]
+margin_top = 522.0
+margin_right = 576.0
+margin_bottom = 568.0
+custom_colors/font_color = Color( 0.7, 0.595117, 0.497, 1 )
+custom_fonts/font = SubResource( 28 )
+text = "(C) 2021-2022 Marquis Kurt and Raseruuu. All rights reserved.
+Originally designed for the 132nd Trijam."
+autowrap = true
+uppercase = true
 
 [node name="Theme" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 7 )
