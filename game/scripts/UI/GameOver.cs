@@ -101,22 +101,20 @@ namespace PackageResolved.UI
             if (state.GetGameMode() == GameState.GameMode.Endless)
             {
                 text = "Tripped over a palette and damaged company property.";
-                _packagesCollected.Text = state.GetPreviousScore().ToString();
                 _timeRemainingStack.Visible = false;
             }
             else if (state.GetGameMode() == GameState.GameMode.Arcade && state.GetPreviousTimeLeft() <= 0)
             {
                 text = "Failed to fulfill request in alotted time.";
-                _packagesCollected.Text = state.GetPreviousScore().ToString();
                 _timeRemaining.Text = "0";
             }
             else
             {
                 text = "Tripped over a palette and damaged company property.";
-                _packagesCollected.Text = state.GetPreviousScore().ToString();
                 _timeRemaining.Text = state.GetPreviousTimeLeft().ToString();
             }
             _body.Text = text;
+            _packagesCollected.Text = state.GetPreviousScore().ToString();
         }
     }
 }
