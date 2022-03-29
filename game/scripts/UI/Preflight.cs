@@ -7,6 +7,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using Godot;
+using PackageResolved.Extensions;
 using PackageResolved.Logic;
 
 namespace PackageResolved.UI
@@ -47,7 +48,7 @@ namespace PackageResolved.UI
             InstantiateOnreadyInstances();
             _btnStart.Connect("button_up", this, nameof(StartRequest));
 
-            var state = GetNode<GameState>("/root/GameState");
+            var state = this.GetCurrentState();
             SetRequest(state.GetCurrentLevel() + 1, state.GetRequiredPackages(), state.GetTimeLimit());
         }
 

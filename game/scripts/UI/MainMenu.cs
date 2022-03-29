@@ -7,6 +7,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using Godot;
+using PackageResolved.Extensions;
 using PackageResolved.Logic;
 
 namespace PackageResolved.UI
@@ -48,7 +49,7 @@ namespace PackageResolved.UI
         {
             InstantiateOnreadyInstances();
             ConnectSignals();
-            var state = GetNode<GameState>("/root/GameState");
+            var state = this.GetCurrentState();
 
             _chkMusic.Pressed = state.IsMusicEnabled();
             _chkSfx.Pressed = state.IsSoundEffectsEnabled();
@@ -62,8 +63,7 @@ namespace PackageResolved.UI
         /// </summary>
         private void BtnPressStartArcade()
         {
-            var state = GetNode<GameState>("/root/GameState");
-            state.SetGameMode(GameState.GameMode.Arcade);
+            this.GetCurrentState().SetGameMode(GameState.GameMode.Arcade);
             GetTree().ChangeScene("res://scenes/screens/preflight.tscn");
         }
 
@@ -72,8 +72,7 @@ namespace PackageResolved.UI
         /// </summary>
         private void BtnPressStartEndless()
         {
-            var state = GetNode<GameState>("/root/GameState");
-            state.SetGameMode(GameState.GameMode.Endless);
+            this.GetCurrentState().SetGameMode(GameState.GameMode.Endless);
             GetTree().ChangeScene("res://scenes/game_loop.tscn");
         }
 
@@ -86,8 +85,7 @@ namespace PackageResolved.UI
         /// </remarks>
         private void ChkMusicToggle(bool value)
         {
-            var state = GetNode<GameState>("/root/GameState");
-            state.SetMusicEnabled(value);
+            this.GetCurrentState().SetMusicEnabled(value);
         }
 
         /// <summary>
@@ -99,8 +97,7 @@ namespace PackageResolved.UI
         /// </remarks>
         private void ChkSfxToggle(bool value)
         {
-            var state = GetNode<GameState>("/root/GameState");
-            state.SetSoundEffectsEnabled(value);
+            this.GetCurrentState().SetSoundEffectsEnabled(value);
         }
 
         /// <summary>

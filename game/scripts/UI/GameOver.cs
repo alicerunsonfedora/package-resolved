@@ -7,6 +7,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using Godot;
+using PackageResolved.Extensions;
 using PackageResolved.Logic;
 
 namespace PackageResolved.UI
@@ -63,8 +64,7 @@ namespace PackageResolved.UI
         /// </summary>
         private void BtnPressRestart()
         {
-            var state = GetNode<GameState>("/root/GameState");
-            state.Reset(false);
+            this.GetCurrentState().Reset(false);
             GetTree().ChangeScene("res://scenes/game_loop.tscn");
         }
 
@@ -73,8 +73,7 @@ namespace PackageResolved.UI
         /// </summary>
         private void BtnPressQuitToMenu()
         {
-            var state = GetNode<GameState>("/root/GameState");
-            state.Reset(false);
+            this.GetCurrentState().Reset(false);
             GetTree().ChangeScene("res://scenes/screens/main_menu.tscn");
         }
 
@@ -97,7 +96,7 @@ namespace PackageResolved.UI
         private void UpdateBody()
         {
             string text;
-            var state = GetNode<GameState>("/root/GameState");
+            var state = this.GetCurrentState();
             if (state.GetGameMode() == GameState.GameMode.Endless)
             {
                 text = "Tripped over a palette and damaged company property.";

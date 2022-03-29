@@ -8,6 +8,7 @@
 
 using Godot;
 using Godot.Collections;
+using PackageResolved.Extensions;
 using PackageResolved.Logic;
 using PackageResolved.Objects;
 using PackageResolved.UI;
@@ -104,10 +105,11 @@ namespace PackageResolved.scripts.Logic
             _playerNode.BlockMovement();
 
             GD.Randomize();
-            PlaceHazards();
+            if (this.GetCurrentState().GetCurrentLevel() > 0)
+                PlaceHazards();
             PlacePickables();
 
-            GameState state = GetNode<GameState>("/root/GameState");
+            GameState state = this.GetCurrentState();
             if (state.GetGameMode() == GameState.GameMode.Arcade)
             {
                 _remainingPackages = state.GetRequiredPackages();
@@ -159,7 +161,7 @@ namespace PackageResolved.scripts.Logic
         /// </summary>
         private void GameOver()
         {
-            GameState state = GetNode<GameState>("/root/GameState");
+            GameState state = this.GetCurrentState();
             state.UpdatePreviousRun(state.GetRequiredPackages() - _remainingPackages, (int)_timerLevel.WaitTime);
             _ = GetTree().ChangeScene("res://scenes/screens/game_over.tscn");
         }
@@ -245,7 +247,8 @@ namespace PackageResolved.scripts.Logic
 
             body.Position = _teleportDestination.Position;
             Teardown();
-            PlaceHazards();
+            if (this.GetCurrentState().GetCurrentLevel() > 0)
+                PlaceHazards();
             PlacePickables();
         }
 
@@ -259,11 +262,9 @@ namespace PackageResolved.scripts.Logic
         /// </remarks>
         private void OnPickedModifier()
         {
-            GameState state = GetNode<GameState>("/root/GameState");
+            GameState state = this.GetCurrentState();
             if (state.GetGameMode() == GameState.GameMode.Endless)
-            {
                 return;
-            }
 
             float elapsedTime = _timerLevel.TimeLeft;
             _timerLevel.Stop();
@@ -282,18 +283,14 @@ namespace PackageResolved.scripts.Logic
         /// </remarks>
         private void OnPickedPackage(int amount)
         {
-            GameState state = GetNode<GameState>("/root/GameState");
+            GameState state = this.GetCurrentState();
             if (state.GetGameMode() == GameState.GameMode.Endless)
-            {
                 _remainingPackages += amount;
-            }
             else
             {
                 _remainingPackages -= amount;
                 if (_remainingPackages <= 0)
-                {
                     _ = GetTree().ChangeScene("res://scenes/screens/level_success.tscn");
-                }
             }
             _headsUpDisplay.UpdatePackagesRemaining($"{_remainingPackages}");
         }
@@ -353,9 +350,7 @@ namespace PackageResolved.scripts.Logic
             foreach (object child in GetChildren())
             {
                 if (child is ITeardownable)
-                {
                     (child as ITeardownable).Teardown();
-                }
             }
             _obstaclePositions.Clear();
         }

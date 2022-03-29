@@ -7,6 +7,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using Godot;
+using PackageResolved.Extensions;
 using PackageResolved.Logic;
 
 namespace PackageResolved.UI
@@ -53,7 +54,7 @@ namespace PackageResolved.UI
         {
             InstantiateOnreadyInstances();
             var introLabel = GetNode<Control>("IntroLabel");
-            var state = GetNode<GameState>("/root/GameState");
+            var state = this.GetCurrentState();
             if (state.GetCurrentLevel() > 0 || state.GetGameMode() == GameState.GameMode.Endless)
                 introLabel.Visible = false;
             else

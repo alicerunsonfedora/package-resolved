@@ -18,7 +18,8 @@ namespace PackageResolved.Logic
     /// <example>
     /// To reference the game state node in any scene: 
     /// <code>
-    /// var state = GetNode&lt;GameState&gt;("/root/GameState");
+    /// using PackageResolved.Extensions;
+    /// var state = this.GetCurrentState();
     /// </code>
     /// </example>
     /// </remarks>
