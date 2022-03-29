@@ -12,14 +12,12 @@
 [ext_resource path="res://assets/fonts/dse-typewriter-font-lh.ttf" type="DynamicFontData" id=10]
 [ext_resource path="res://assets/fonts/mono.tres" type="DynamicFont" id=11]
 [ext_resource path="res://assets/fonts/bold.tres" type="DynamicFont" id=12]
+[ext_resource path="res://assets/papers/white.tres" type="StyleBox" id=13]
 
 [sub_resource type="DynamicFont" id=1]
 size = 27
 font_data = ExtResource( 6 )
 fallback/0 = ExtResource( 2 )
-
-[sub_resource type="StyleBoxFlat" id=14]
-bg_color = Color( 0.968627, 0.968627, 0.968627, 1 )
 
 [sub_resource type="AtlasTexture" id=15]
 atlas = ExtResource( 8 )
@@ -143,7 +141,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 32.0
 margin_right = -348.0
-custom_styles/panel = SubResource( 14 )
+custom_styles/panel = ExtResource( 13 )
 
 [node name="CoffeeStain1" type="TextureRect" parent="Panel"]
 modulate = Color( 1, 1, 1, 0.0666667 )

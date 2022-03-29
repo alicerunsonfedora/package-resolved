@@ -9,9 +9,7 @@
 [ext_resource path="res://assets/fonts/s_typewriter.ttf" type="DynamicFontData" id=7]
 [ext_resource path="res://assets/fonts/typewriter.tres" type="DynamicFont" id=8]
 [ext_resource path="res://assets/sprites/tileset.png" type="Texture" id=9]
-
-[sub_resource type="StyleBoxFlat" id=22]
-bg_color = Color( 0.968627, 0.909804, 0.843137, 1 )
+[ext_resource path="res://assets/papers/orange.tres" type="StyleBox" id=10]
 
 [sub_resource type="AtlasTexture" id=23]
 atlas = ExtResource( 9 )
@@ -94,7 +92,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 9.0
 margin_right = -371.0
-custom_styles/panel = SubResource( 22 )
+custom_styles/panel = ExtResource( 10 )
 
 [node name="CoffeeStain1" type="TextureRect" parent="Panel"]
 modulate = Color( 1, 1, 1, 0.0666667 )

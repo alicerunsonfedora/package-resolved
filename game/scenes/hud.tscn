@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://assets/sprites/tileset.png" type="Texture" id=1]
 [ext_resource path="res://scripts/UI/HUD.cs" type="Script" id=2]
@@ -8,6 +8,8 @@
 [ext_resource path="res://assets/fonts/s_mono.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://assets/fonts/dse-typewriter-font-lh.ttf" type="DynamicFontData" id=7]
 [ext_resource path="res://assets/fonts/s_typewriter.ttf" type="DynamicFontData" id=8]
+[ext_resource path="res://assets/fonts/typewriter.tres" type="DynamicFont" id=9]
+[ext_resource path="res://assets/papers/orange.tres" type="StyleBox" id=10]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 1 )
@@ -35,9 +37,9 @@ fallback/0 = ExtResource( 7 )
 [node name="HUD" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 0.813484
+margin_left = 0.0285109
 margin_top = 0.941315
-margin_right = 0.813477
+margin_right = 0.0285645
 margin_bottom = 0.941284
 theme = ExtResource( 3 )
 script = ExtResource( 2 )
@@ -120,18 +122,21 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_left = -256.5
-margin_top = -69.0
+margin_top = -96.0
 margin_right = 256.5
-__meta__ = {
-"_edit_use_anchors_": false
-}
+rect_min_size = Vector2( 0, 96 )
+custom_styles/panel = ExtResource( 10 )
 
 [node name="Text" type="Label" parent="IntroLabel/Bottom"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_bottom = 31.0
+custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_fonts/font = ExtResource( 9 )
 text = "Collect as many packages as you can before time runs out. Avoid palettes."
 align = 1
 autowrap = true
+uppercase = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -142,16 +147,19 @@ anchor_right = 0.5
 margin_left = -256.5
 margin_right = 256.5
 margin_bottom = 69.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+rect_min_size = Vector2( 0, 96 )
+custom_styles/panel = ExtResource( 10 )
 
 [node name="Text" type="Label" parent="IntroLabel/Top"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_bottom = 31.0
+custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_fonts/font = ExtResource( 9 )
 text = "Press the arrow keys or tap the left/right edges of the screen to move."
 align = 1
 autowrap = true
+uppercase = true
 __meta__ = {
 "_edit_use_anchors_": false
 }

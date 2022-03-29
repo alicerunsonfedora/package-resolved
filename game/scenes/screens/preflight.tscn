@@ -4,14 +4,12 @@
 [ext_resource path="res://assets/sprites/tileset.png" type="Texture" id=2]
 [ext_resource path="res://assets/default_theme.tres" type="Theme" id=3]
 [ext_resource path="res://assets/audio/pageturn.ogg" type="AudioStream" id=4]
+[ext_resource path="res://assets/papers/yellow.tres" type="StyleBox" id=5]
 [ext_resource path="res://assets/fonts/mono.tres" type="DynamicFont" id=6]
 [ext_resource path="res://assets/fonts/bold.tres" type="DynamicFont" id=7]
 [ext_resource path="res://scripts/UI/Preflight.cs" type="Script" id=8]
 [ext_resource path="res://assets/fonts/dse-typewriter-font-lh.ttf" type="DynamicFontData" id=9]
 [ext_resource path="res://assets/fonts/s_typewriter.ttf" type="DynamicFontData" id=10]
-
-[sub_resource type="StyleBoxFlat" id=6]
-bg_color = Color( 0.972549, 0.952941, 0.870588, 1 )
 
 [sub_resource type="AtlasTexture" id=11]
 atlas = ExtResource( 2 )
@@ -61,7 +59,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 190.0
 margin_right = -190.0
-custom_styles/panel = SubResource( 6 )
+custom_styles/panel = ExtResource( 5 )
 
 [node name="CoffeeStain1" type="TextureRect" parent="Panel"]
 modulate = Color( 1, 1, 1, 0.0666667 )
@@ -129,7 +127,7 @@ uppercase = true
 margin_top = 128.0
 margin_right = 574.0
 margin_bottom = 174.0
-custom_colors/font_color = Color( 0.7, 0.595117, 0.497, 1 )
+custom_colors/font_color = Color( 0.701961, 0.596078, 0.498039, 1 )
 custom_fonts/font = SubResource( 9 )
 text = "This form is to be used for fulfilling expedited rdelivery requests. For all other requests, use fulfillment form 32C42e."
 autowrap = true

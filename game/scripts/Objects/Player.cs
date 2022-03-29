@@ -51,7 +51,7 @@ namespace PackageResolved.Objects
         private bool _shouldBlockMovement = false;
 
         /// <summary>
-        /// Prevent the player from moving on the vertical axis.
+        /// Prevent the player from moving.
         /// </summary>
         public void BlockMovement()
         {
@@ -59,7 +59,7 @@ namespace PackageResolved.Objects
         }
 
         /// <summary>
-        /// Get whether the player is blocked from moving on the vertical axis.
+        /// Get whether the player is blocked from moving.
         /// </summary>
         public bool IsBlocked() => _shouldBlockMovement;
 
@@ -104,9 +104,7 @@ namespace PackageResolved.Objects
         {
             var movement = GetMovementVector();
             if (movement == Vector2.Zero)
-            {
                 _movementVector = _movementVector.MoveToward(Vector2.Zero, _friction * delta);
-            }
             else
             {
                 _movementVector = movement * _acceleration * delta * _mass;
@@ -123,10 +121,10 @@ namespace PackageResolved.Objects
         /// </returns>
         private Vector2 GetMovementVector()
         {
+            if (_shouldBlockMovement)
+                return Vector2.Zero;
             var newVector = Vector2.One;
             newVector.x = Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left");
-            if (_shouldBlockMovement)
-                newVector.y = 0;
             return newVector.Normalized();
         }
 
