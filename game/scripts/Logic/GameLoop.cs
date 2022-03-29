@@ -105,18 +105,11 @@ namespace PackageResolved.scripts.Logic
             _playerNode.BlockMovement();
 
             GD.Randomize();
-            if (this.GetCurrentState().GetCurrentLevel() > 0)
+            if (this.GetCurrentState().GetCurrentLevel() > 1)
                 PlaceHazards();
             PlacePickables();
 
-            GameState state = this.GetCurrentState();
-            if (state.GetGameMode() == GameState.GameMode.Arcade)
-            {
-                _remainingPackages = state.GetRequiredPackages();
-                _timerLevel.WaitTime = state.GetTimeLimit();
-                _headsUpDisplay.UpdatePackagesRemaining($"{_remainingPackages}");
-                Tick();
-            }
+            ConfigureHeadsUpDisplay();
         }
 
         /// <summary>
@@ -141,6 +134,36 @@ namespace PackageResolved.scripts.Logic
             {
                 _pauseMenu.Visible = true;
                 GetTree().Paused = true;
+            }
+        }
+
+        /// <summary>
+        /// Configures the heads-up display with the level requirements and any tutorials.
+        /// </summary>
+        private void ConfigureHeadsUpDisplay()
+        {
+            GameState state = this.GetCurrentState();
+            if (state.GetGameMode() == GameState.GameMode.Arcade)
+            {
+                _remainingPackages = state.GetRequiredPackages();
+                _timerLevel.WaitTime = state.GetTimeLimit();
+                _headsUpDisplay.UpdatePackagesRemaining($"{_remainingPackages}");
+                Tick();
+            }
+
+            switch (state.GetCurrentLevel())
+            {
+                case 0:
+                    _headsUpDisplay.SetTutorialText(HUD.TutorialText.Movement);
+                    break;
+                case 1:
+                    _headsUpDisplay.SetTutorialText(HUD.TutorialText.ExtraTime);
+                    break;
+                case 2:
+                    _headsUpDisplay.SetTutorialText(HUD.TutorialText.Hazards);
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -221,7 +244,7 @@ namespace PackageResolved.scripts.Logic
             {
                 pickable.Kind = Pickable.Type.PackagePlus;
             }
-            else if (pickableSeed > 30 && pickableSeed <= 39)
+            else if (pickableSeed > 30 && pickableSeed <= 39 && this.GetCurrentState().GetCurrentLevel() > 0)
             {
                 pickable.Kind = Pickable.Type.TimeModifier;
             }
@@ -247,7 +270,7 @@ namespace PackageResolved.scripts.Logic
 
             body.Position = _teleportDestination.Position;
             Teardown();
-            if (this.GetCurrentState().GetCurrentLevel() > 0)
+            if (this.GetCurrentState().GetCurrentLevel() > 1)
                 PlaceHazards();
             PlacePickables();
         }

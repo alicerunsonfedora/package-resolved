@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://assets/sprites/tileset.png" type="Texture" id=1]
 [ext_resource path="res://scripts/UI/HUD.cs" type="Script" id=2]
@@ -29,8 +29,23 @@ fallback/0 = ExtResource( 4 )
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 128, 300 )
 
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 240, 48, 48 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 9
+font_data = ExtResource( 8 )
+fallback/0 = ExtResource( 7 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 1 )
+region = Rect2( 96, 192, 48, 48 )
+
 [sub_resource type="DynamicFont" id=7]
 size = 72
+outline_size = 2
+outline_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
 font_data = ExtResource( 8 )
 fallback/0 = ExtResource( 7 )
 
@@ -111,58 +126,68 @@ action = "move_right"
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = -252.0
-margin_top = 16.0
-margin_right = 253.0
-margin_bottom = -15.9999
-
-[node name="Bottom" type="Panel" parent="IntroLabel"]
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-margin_left = -256.5
-margin_top = -96.0
-margin_right = 256.5
-rect_min_size = Vector2( 0, 96 )
-custom_styles/panel = ExtResource( 10 )
-
-[node name="Text" type="Label" parent="IntroLabel/Bottom"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_bottom = 31.0
-custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
-custom_fonts/font = ExtResource( 9 )
-text = "Collect as many packages as you can before time runs out. Avoid palettes."
-align = 1
-autowrap = true
-uppercase = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_left = -348.0
+margin_right = 347.0
+margin_bottom = 6.10352e-05
 
 [node name="Top" type="Panel" parent="IntroLabel"]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -256.5
-margin_right = 256.5
-margin_bottom = 69.0
+anchor_right = 1.0
+margin_left = -3.0
+margin_bottom = 147.0
 rect_min_size = Vector2( 0, 96 )
+rect_pivot_offset = Vector2( -291.409, 150.842 )
 custom_styles/panel = ExtResource( 10 )
 
-[node name="Text" type="Label" parent="IntroLabel/Top"]
+[node name="CoffeeStain2" type="TextureRect" parent="IntroLabel/Top"]
+modulate = Color( 1, 1, 1, 0.164706 )
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -112.0
+margin_bottom = 112.0
+rect_min_size = Vector2( 112, 112 )
+texture = SubResource( 10 )
+expand = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="IntroLabel/Top"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_bottom = 31.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -8.0
+custom_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="IntroLabel/Top/VBoxContainer"]
+margin_right = 682.0
+margin_bottom = 48.0
+
+[node name="Copyright" type="Label" parent="IntroLabel/Top/VBoxContainer/HBoxContainer"]
+margin_top = 1.0
+margin_right = 626.0
+margin_bottom = 47.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0.698039, 0.592157, 0.494118, 1 )
+custom_fonts/font = SubResource( 8 )
+text = "Swifty Package Factory
+Short Memorandum"
+autowrap = true
+uppercase = true
+
+[node name="TextureRect" type="TextureRect" parent="IntroLabel/Top/VBoxContainer/HBoxContainer"]
+margin_left = 634.0
+margin_right = 682.0
+margin_bottom = 48.0
+texture = SubResource( 9 )
+
+[node name="Text" type="Label" parent="IntroLabel/Top/VBoxContainer"]
+margin_top = 48.0
+margin_right = 682.0
+margin_bottom = 118.0
 custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
 custom_fonts/font = ExtResource( 9 )
 text = "Press the arrow keys or tap the left/right edges of the screen to move."
-align = 1
 autowrap = true
 uppercase = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 5.0
@@ -178,6 +203,7 @@ margin_left = -254.0
 margin_top = -56.0
 margin_right = 259.0
 margin_bottom = 56.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_fonts/font = SubResource( 7 )
 text = "GO"
 align = 1

@@ -17,6 +17,28 @@ namespace PackageResolved.UI
     /// </summary>
     public class HUD : Control
     {
+
+        /// <summary>
+        /// An enumeration representing the different tutorial text types.
+        /// </summary>
+        public enum TutorialText
+        {
+            /// <summary>
+            /// The tutorial texts for basic movement.
+            /// </summary>
+            Movement,
+
+            /// <summary>
+            /// The tutorial texts describing how to extend a run.
+            /// </summary>
+            ExtraTime,
+
+            /// <summary>
+            /// The tutorial texts describing what hazards to be aware of.
+            /// </summary>
+            Hazards
+        }
+
         /// <summary>
         /// A label that displays the number of packages remaining.
         /// </summary>
@@ -55,7 +77,7 @@ namespace PackageResolved.UI
             InstantiateOnreadyInstances();
             var introLabel = GetNode<Control>("IntroLabel");
             var state = this.GetCurrentState();
-            if (state.GetCurrentLevel() > 0 || state.GetGameMode() == GameState.GameMode.Endless)
+            if (state.GetCurrentLevel() > 2 || state.GetGameMode() == GameState.GameMode.Endless)
                 introLabel.Visible = false;
             else
             {
@@ -70,6 +92,30 @@ namespace PackageResolved.UI
                 );
                 _timer.Connect("timeout", _tween, "start");
                 _timer.Start();
+            }
+        }
+
+        /// <summary>
+        /// Sets the tutorial text on the HUD for the player to read.
+        /// </summary>
+        /// <param name="text">The kind of tutorial text to display.</param>
+        public void SetTutorialText(TutorialText text)
+        {
+            Label lbl = GetNode<Label>("IntroLabel/Top/VBoxContainer/Text");
+            switch (text)
+            {
+                case TutorialText.Movement:
+                    if (OS.HasTouchscreenUiHint())
+                        lbl.Text = "Tap the left or right edges of the screen to move on the factory floor.";
+                    else
+                        lbl.Text = "Press the left or right arrow keys to move on the factory floor.";
+                    break;
+                case TutorialText.ExtraTime:
+                    lbl.Text = "Collect timepieces to extend your time needed to fulfill requests.";
+                    break;
+                case TutorialText.Hazards:
+                    lbl.Text = "Watch out for wet floors, and don't run into palettes.";
+                    break;
             }
         }
 

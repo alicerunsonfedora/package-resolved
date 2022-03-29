@@ -63,7 +63,10 @@ namespace PackageResolved.UI
         /// </summary>
         private void BtnPressStartArcade()
         {
-            this.GetCurrentState().SetGameMode(GameState.GameMode.Arcade);
+            var state = this.GetCurrentState();
+            if (state.GetCurrentLevel() > 0)
+                state.Reset(true);
+            state.SetGameMode(GameState.GameMode.Arcade);
             GetTree().ChangeScene("res://scenes/screens/preflight.tscn");
         }
 
