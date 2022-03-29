@@ -86,17 +86,38 @@ namespace PackageResolved.Objects
         {
             InstantiateOnreadyInstances();
             Connect("body_entered", this, nameof(OnBodyEntered));
+
             _tween.Connect("tween_all_completed", this, "queue_free");
-            _tween.InterpolateProperty(
-                this,
-                "modulate",
-                Colors.White,
-                Colors.Transparent,
-                0.25f,
-                Tween.TransitionType.Cubic,
-                Tween.EaseType.InOut
-            );
+            AnimatePickable();
+            AnimatePowerupText();
+
             RedrawSprite();
+        }
+
+        /// <summary>
+        /// Animate the pickable's fade out and the lighting.
+        /// </summary>
+        private void AnimatePickable()
+        {
+            var trans = Tween.TransitionType.Cubic;
+            var ease = Tween.EaseType.InOut;
+            _tween.InterpolateProperty(_sprite, "modulate", Colors.White, Colors.Transparent, 0.25f, trans, ease);
+            _tween.InterpolateProperty(GetNode("Sprite/Light"), "energy", 0.7, 0, 0.25f, trans, ease);
+        }
+
+        /// <summary>
+        /// Animates the powerup modifier text so that it appears.
+        /// </summary>
+        private void AnimatePowerupText()
+        {
+            var hint = GetNode<Control>("Hint");
+            var origin = hint.RectPosition;
+            var hintPositionOffset = hint.RectPosition + (Vector2.Up * 16);
+            var trans = Tween.TransitionType.Cubic;
+            var ease = Tween.EaseType.InOut;
+
+            _tween.InterpolateProperty(hint, "rect_position", origin, hintPositionOffset, 1.25f, trans, ease);
+            _tween.InterpolateProperty(hint, "modulate", Colors.White, Colors.Transparent, 1.25f, trans, ease);
         }
 
         /// <summary>
@@ -125,14 +146,18 @@ namespace PackageResolved.Objects
         {
             if (!(body is Player))
                 return;
+
+            var hint = GetNode<Control>("Hint");
             switch (IKind)
             {
                 case Type.Package:
                     _audioPickup.Play();
+                    hint.Visible = true;
                     EmitSignal("PickedPackage", 1);
                     break;
                 case Type.PackagePlus:
                     _audioPickup.Play();
+                    hint.Visible = true;
                     EmitSignal("PickedPackage", 2);
                     break;
                 case Type.TimeModifier:
@@ -150,13 +175,16 @@ namespace PackageResolved.Objects
         {
             if (_sprite == null)
                 return;
+            var hintLbl = GetNode<Label>("Hint/Label");
             switch (IKind)
             {
                 case Type.Package:
                     _sprite.Animation = "Package";
+                    hintLbl.Text = "+1";
                     break;
                 case Type.PackagePlus:
                     _sprite.Animation = "PackagePlus";
+                    hintLbl.Text = "+2";
                     break;
                 case Type.TimeModifier:
                     _sprite.Animation = "TimeModifier";
