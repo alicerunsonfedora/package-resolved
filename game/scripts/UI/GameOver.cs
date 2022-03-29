@@ -75,7 +75,7 @@ namespace PackageResolved.UI
         {
             var state = GetNode<GameState>("/root/GameState");
             state.Reset(false);
-            GetTree().ChangeScene("res://scenes/main_menu.tscn");
+            GetTree().ChangeScene("res://scenes/screens/main_menu.tscn");
         }
 
         /// <summary>

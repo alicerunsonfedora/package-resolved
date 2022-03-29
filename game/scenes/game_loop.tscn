@@ -6,13 +6,30 @@
 [ext_resource path="res://scenes/hud.tscn" type="PackedScene" id=4]
 [ext_resource path="res://assets/audio/theme.ogg" type="AudioStream" id=5]
 [ext_resource path="res://assets/sprites/light.png" type="Texture" id=6]
-[ext_resource path="res://scenes/pause_menu.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scenes/screens/pause_menu.tscn" type="PackedScene" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 524.585, 44.2334 )
 
 [node name="World" type="Node2D"]
 script = ExtResource( 3 )
+
+[node name="Tick" type="Timer" parent="."]
+autostart = true
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="StartTimer" type="Timer" parent="."]
+wait_time = 3.5
+one_shot = true
+autostart = true
+
+[node name="Theme" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+volume_db = -0.7
+autoplay = true
+bus = "Music"
 
 [node name="Darken" type="CanvasModulate" parent="."]
 color = Color( 0.388235, 0.364706, 0.356863, 1 )
@@ -39,7 +56,7 @@ format = 1
 tile_data = PoolIntArray( -1835019, 7, 0, -1900534, 7, 0, -1769483, 7, 0, -1834998, 7, 0, -1703947, 7, 0, -1769462, 7, 0, -1638411, 7, 0, -1703926, 7, 0, -1572875, 7, 0, -1638390, 7, 0, -1507339, 7, 0, -1572854, 7, 0, -1441803, 7, 0, -1507318, 7, 0, -1376267, 7, 0, -1441782, 7, 0, -1310731, 7, 0, -1376246, 7, 0, -1245195, 7, 0, -1310710, 7, 0, -1179659, 7, 0, -1245174, 7, 0, -1114123, 7, 0, -1179638, 7, 0, -1048587, 7, 0, -1114102, 7, 0, -983051, 7, 0, -1048566, 7, 0, -917515, 7, 0, -983030, 7, 0, -851979, 7, 0, -917494, 7, 0, -786443, 7, 0, -851958, 7, 0, -720907, 7, 0, -786422, 7, 0, -655371, 7, 0, -720886, 7, 0, -589835, 7, 0, -655350, 7, 0, -524299, 7, 0, -589814, 7, 0, -458763, 7, 0, -524278, 7, 0, -393227, 7, 0, -458742, 7, 0, -327691, 7, 0, -393206, 7, 0, -262155, 7, 0, -327670, 7, 0, -196619, 7, 0, -262134, 7, 0, -131083, 7, 0, -196598, 7, 0, -65547, 7, 0, -131062, 7, 0, -11, 7, 0, -65526, 7, 0, 65525, 7, 0, 10, 7, 0, 131061, 7, 0, 65546, 7, 0, 196597, 7, 0, 131082, 7, 0, 262133, 7, 0, 196618, 7, 0, 327669, 7, 0, 262154, 7, 0, 393205, 7, 0, 327690, 7, 0, 458741, 7, 0, 393226, 7, 0, 524277, 7, 0, 458762, 7, 0, 589813, 7, 0, 524298, 7, 0, 655349, 7, 0, 589834, 7, 0, 720885, 7, 0, 655370, 7, 0, 786421, 7, 0, 720906, 7, 0, 851957, 7, 0, 786442, 7, 0, 917493, 7, 0, 851978, 7, 0, 983029, 7, 0, 917514, 7, 0, 1048565, 7, 0, 983050, 7, 0, 1114101, 7, 0, 1048586, 7, 0, 1179637, 7, 0, 1114122, 7, 0, 1245173, 7, 0, 1179658, 7, 0, 1310709, 7, 0, 1245194, 7, 0, 1376245, 7, 0, 1310730, 7, 0, 1441781, 7, 0, 1376266, 7, 0 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 0, -1065.46 )
+position = Vector2( 0, -1092.65 )
 z_index = 5
 
 [node name="TeleportTrigger" type="Area2D" parent="."]
@@ -50,18 +67,6 @@ shape = SubResource( 1 )
 
 [node name="TeleportDestination" type="Node2D" parent="."]
 position = Vector2( 0, -1067 )
-
-[node name="Tick" type="Timer" parent="."]
-autostart = true
-
-[node name="Timer" type="Timer" parent="."]
-one_shot = true
-
-[node name="Theme" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 5 )
-volume_db = -0.7
-autoplay = true
-bus = "Music"
 
 [node name="LeftEdgeLight" type="Light2D" parent="."]
 position = Vector2( -512, -300 )

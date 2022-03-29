@@ -68,7 +68,7 @@ namespace PackageResolved.UI
         /// </summary>
         private void BtnPressRestart()
         {
-            GetTree().ChangeScene("res://scenes/preflight.tscn");
+            GetTree().ChangeScene("res://scenes/screens/preflight.tscn");
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace PackageResolved.UI
         /// </summary>
         private void BtnPressQuitToMenu()
         {
-            GetTree().ChangeScene("res://scenes/main_menu.tscn");
+            GetTree().ChangeScene("res://scenes/screens/main_menu.tscn");
         }
 
         /// <summary>

@@ -64,7 +64,7 @@ namespace PackageResolved.UI
         {
             var state = GetNode<GameState>("/root/GameState");
             state.SetGameMode(GameState.GameMode.Arcade);
-            GetTree().ChangeScene("res://scenes/preflight.tscn");
+            GetTree().ChangeScene("res://scenes/screens/preflight.tscn");
         }
 
         /// <summary>

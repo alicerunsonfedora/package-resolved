@@ -1,44 +1,44 @@
 [gd_scene load_steps=23 format=2]
 
-[ext_resource path="res://assets/default_theme.tres" type="Theme" id=1]
-[ext_resource path="res://scripts/UI/MainMenu.cs" type="Script" id=3]
-[ext_resource path="res://assets/sprites/base.png" type="Texture" id=5]
-[ext_resource path="res://assets/sprites/helmet.png" type="Texture" id=6]
-[ext_resource path="res://assets/audio/theme.ogg" type="AudioStream" id=7]
-[ext_resource path="res://assets/fonts/typewriter.tres" type="DynamicFont" id=10]
-[ext_resource path="res://assets/fonts/dse-typewriter-font-lh.ttf" type="DynamicFontData" id=13]
-[ext_resource path="res://assets/fonts/s_typewriter.ttf" type="DynamicFontData" id=14]
-[ext_resource path="res://assets/sprites/tileset.png" type="Texture" id=15]
+[ext_resource path="res://scripts/UI/MainMenu.cs" type="Script" id=1]
+[ext_resource path="res://assets/default_theme.tres" type="Theme" id=2]
+[ext_resource path="res://assets/sprites/base.png" type="Texture" id=3]
+[ext_resource path="res://assets/sprites/helmet.png" type="Texture" id=4]
+[ext_resource path="res://assets/audio/theme.ogg" type="AudioStream" id=5]
+[ext_resource path="res://assets/fonts/dse-typewriter-font-lh.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://assets/fonts/s_typewriter.ttf" type="DynamicFontData" id=7]
+[ext_resource path="res://assets/fonts/typewriter.tres" type="DynamicFont" id=8]
+[ext_resource path="res://assets/sprites/tileset.png" type="Texture" id=9]
 
 [sub_resource type="StyleBoxFlat" id=22]
 bg_color = Color( 0.968627, 0.909804, 0.843137, 1 )
 
 [sub_resource type="AtlasTexture" id=23]
-atlas = ExtResource( 15 )
+atlas = ExtResource( 9 )
 region = Rect2( 144, 192, 48, 48 )
 
 [sub_resource type="AtlasTexture" id=24]
-atlas = ExtResource( 15 )
+atlas = ExtResource( 9 )
 region = Rect2( 0, 240, 48, 48 )
 
 [sub_resource type="DynamicFont" id=25]
 size = 9
-font_data = ExtResource( 14 )
-fallback/0 = ExtResource( 13 )
+font_data = ExtResource( 7 )
+fallback/0 = ExtResource( 6 )
 
 [sub_resource type="AtlasTexture" id=26]
-atlas = ExtResource( 15 )
+atlas = ExtResource( 9 )
 region = Rect2( 96, 192, 48, 48 )
 
 [sub_resource type="DynamicFont" id=27]
 size = 45
-font_data = ExtResource( 14 )
-fallback/0 = ExtResource( 13 )
+font_data = ExtResource( 7 )
+fallback/0 = ExtResource( 6 )
 
 [sub_resource type="DynamicFont" id=30]
 size = 27
-font_data = ExtResource( 14 )
-fallback/0 = ExtResource( 13 )
+font_data = ExtResource( 7 )
+fallback/0 = ExtResource( 6 )
 
 [sub_resource type="InputEventAction" id=21]
 action = "ui_accept"
@@ -48,8 +48,8 @@ shortcut = SubResource( 21 )
 
 [sub_resource type="DynamicFont" id=31]
 size = 27
-font_data = ExtResource( 14 )
-fallback/0 = ExtResource( 13 )
+font_data = ExtResource( 7 )
+fallback/0 = ExtResource( 6 )
 
 [sub_resource type="StyleBoxEmpty" id=34]
 
@@ -57,14 +57,14 @@ fallback/0 = ExtResource( 13 )
 
 [sub_resource type="DynamicFont" id=28]
 size = 9
-font_data = ExtResource( 14 )
-fallback/0 = ExtResource( 13 )
+font_data = ExtResource( 7 )
+fallback/0 = ExtResource( 6 )
 
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = ExtResource( 1 )
-script = ExtResource( 3 )
+theme = ExtResource( 2 )
+script = ExtResource( 1 )
 
 [node name="Background" type="Panel" parent="."]
 anchor_right = 1.0
@@ -78,14 +78,14 @@ modulate = Color( 1, 0.937255, 0.901961, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 543.0
-texture = ExtResource( 5 )
+texture = ExtResource( 3 )
 expand = true
 stretch_mode = 7
 
 [node name="Helmet" type="TextureRect" parent="Base"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-texture = ExtResource( 6 )
+texture = ExtResource( 4 )
 expand = true
 stretch_mode = 7
 
@@ -222,7 +222,7 @@ custom_colors/font_color_hover_pressed = Color( 0.219608, 0.101961, 0.0313726, 1
 custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
 custom_colors/font_color_hover = Color( 0.219608, 0.101961, 0.0313726, 1 )
 custom_colors/font_color_pressed = Color( 0.219608, 0.101961, 0.0313726, 1 )
-custom_fonts/font = ExtResource( 10 )
+custom_fonts/font = ExtResource( 8 )
 custom_styles/focus = SubResource( 34 )
 text = "MUSIC"
 flat = true
@@ -237,7 +237,7 @@ custom_colors/font_color_hover_pressed = Color( 0.219608, 0.101961, 0.0313726, 1
 custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
 custom_colors/font_color_hover = Color( 0.219608, 0.101961, 0.0313726, 1 )
 custom_colors/font_color_pressed = Color( 0.219608, 0.101961, 0.0313726, 1 )
-custom_fonts/font = ExtResource( 10 )
+custom_fonts/font = ExtResource( 8 )
 custom_styles/focus = SubResource( 33 )
 text = "SFX"
 flat = true
@@ -261,7 +261,7 @@ autowrap = true
 uppercase = true
 
 [node name="Theme" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 7 )
+stream = ExtResource( 5 )
 volume_db = -0.7
 autoplay = true
 bus = "Music"

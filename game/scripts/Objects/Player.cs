@@ -46,6 +46,32 @@ namespace PackageResolved.Objects
         private readonly int _speed = 150;
 
         /// <summary>
+        /// Whether the player should not be able to move.
+        /// </summary>
+        private bool _shouldBlockMovement = false;
+
+        /// <summary>
+        /// Prevent the player from moving on the vertical axis.
+        /// </summary>
+        public void BlockMovement()
+        {
+            _shouldBlockMovement = true;
+        }
+
+        /// <summary>
+        /// Get whether the player is blocked from moving on the vertical axis.
+        /// </summary>
+        public bool IsBlocked() => _shouldBlockMovement;
+
+        /// <summary>
+        /// Reset the movement capabilities from the player.
+        /// </summary>
+        public void UnblockMovement()
+        {
+            _shouldBlockMovement = false;
+        }
+
+        /// <summary>
         /// Resets the acceleration and friction to their default values.
         /// </summary>
         /// <remarks>
@@ -99,6 +125,8 @@ namespace PackageResolved.Objects
         {
             var newVector = Vector2.One;
             newVector.x = Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left");
+            if (_shouldBlockMovement)
+                newVector.y = 0;
             return newVector.Normalized();
         }
 

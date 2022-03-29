@@ -8,10 +8,11 @@
 
 using Godot;
 using Godot.Collections;
+using PackageResolved.Logic;
 using PackageResolved.Objects;
 using PackageResolved.UI;
 
-namespace PackageResolved.Logic
+namespace PackageResolved.scripts.Logic
 {
     /// <summary>
     /// The primary game loop.
@@ -70,6 +71,14 @@ namespace PackageResolved.Logic
         private Node2D _teleportDestination;
 
         /// <summary>
+        /// The timer used to halt the player for a few seconds before starting the level.
+        /// </summary>
+        /// <remarks>
+        /// This is done to give the player enough time to prepare.
+        /// </remarks>
+        private Timer _timerStart;
+
+        /// <summary>
         /// The timer used to run code on every second.
         /// </summary>
         /// <remarks>
@@ -91,22 +100,20 @@ namespace PackageResolved.Logic
         public override void _Ready()
         {
             InstantiateOnreadyInstances();
-            _teleportTrigger.Connect("body_entered", this, nameof(OnBodyEntered));
-            _timerTick.Connect("timeout", this, nameof(Tick));
-            _timerLevel.Connect("timeout", this, nameof(GameOver));
+            ConnectInstances();
+            _playerNode.BlockMovement();
 
             GD.Randomize();
             PlaceHazards();
             PlacePickables();
 
-            var state = GetNode<GameState>("/root/GameState");
+            GameState state = GetNode<GameState>("/root/GameState");
             if (state.GetGameMode() == GameState.GameMode.Arcade)
             {
                 _remainingPackages = state.GetRequiredPackages();
                 _timerLevel.WaitTime = state.GetTimeLimit();
                 _headsUpDisplay.UpdatePackagesRemaining($"{_remainingPackages}");
                 Tick();
-                _timerLevel.Start();
             }
         }
 
@@ -136,13 +143,25 @@ namespace PackageResolved.Logic
         }
 
         /// <summary>
+        /// Hooks up instanced objects to their corresponding callback methods.
+        /// </summary>
+        private void ConnectInstances()
+        {
+            _ = _teleportTrigger.Connect("body_entered", this, nameof(OnBodyEntered));
+            _ = _timerStart.Connect("timeout", _timerLevel, "start");
+            _ = _timerStart.Connect("timeout", _playerNode, nameof(_playerNode.UnblockMovement));
+            _ = _timerTick.Connect("timeout", this, nameof(Tick));
+            _ = _timerLevel.Connect("timeout", this, nameof(GameOver));
+        }
+
+        /// <summary>
         /// Indicate the game is over and show the game over screen.
         /// </summary>
         private void GameOver()
         {
-            var state = GetNode<GameState>("/root/GameState");
+            GameState state = GetNode<GameState>("/root/GameState");
             state.UpdatePreviousRun(state.GetRequiredPackages() - _remainingPackages, (int)_timerLevel.WaitTime);
-            GetTree().ChangeScene("res://scenes/game_over.tscn");
+            _ = GetTree().ChangeScene("res://scenes/screens/game_over.tscn");
         }
 
         /// <summary>
@@ -158,6 +177,7 @@ namespace PackageResolved.Logic
             _playerNode = GetNode<Player>("Player");
             _teleportTrigger = GetNode<Area2D>("TeleportTrigger");
             _teleportDestination = GetNode<Node2D>("TeleportDestination");
+            _timerStart = GetNode<Timer>("StartTimer");
             _timerTick = GetNode<Timer>("Tick");
             _timerLevel = GetNode<Timer>("Timer");
         }
@@ -171,14 +191,16 @@ namespace PackageResolved.Logic
         private Hazard MakeHazard()
         {
             Hazard hazard = _hazardPackedScene.Instance() as Hazard;
-            var hazardSeed = GD.RandRange(1, 20);
+            double hazardSeed = GD.RandRange(1, 20);
             if (hazardSeed < 15)
-                hazard.Connect("StartedContact", this, "GameOver");
+            {
+                _ = hazard.Connect("StartedContact", this, "GameOver");
+            }
             else
             {
                 hazard.Kind = Hazard.Type.WetFloor;
-                hazard.Connect("StartedContact", _playerNode, "SpeedUp");
-                hazard.Connect("StoppedContact", _playerNode, "SlowDown");
+                _ = hazard.Connect("StartedContact", _playerNode, "SpeedUp");
+                _ = hazard.Connect("StoppedContact", _playerNode, "SlowDown");
             }
             hazard.SetupHazard();
             return hazard;
@@ -192,14 +214,19 @@ namespace PackageResolved.Logic
         private Pickable MakePickable()
         {
             Pickable pickable = _pickablePacked.Instance() as Pickable;
-            var pickableSeed = GD.RandRange(0, 50);
+            double pickableSeed = GD.RandRange(0, 50);
             if (pickableSeed > 40)
+            {
                 pickable.Kind = Pickable.Type.PackagePlus;
+            }
             else if (pickableSeed > 30 && pickableSeed <= 39)
+            {
                 pickable.Kind = Pickable.Type.TimeModifier;
+            }
+
             pickable.RedrawSprite();
-            pickable.Connect("PickedPackage", this, "OnPickedPackage");
-            pickable.Connect("PickedModifier", this, "OnPickedModifier");
+            _ = pickable.Connect("PickedPackage", this, "OnPickedPackage");
+            _ = pickable.Connect("PickedModifier", this, "OnPickedModifier");
             return pickable;
         }
 
@@ -212,7 +239,10 @@ namespace PackageResolved.Logic
         private void OnBodyEntered(Node2D body)
         {
             if (!(body is Player))
+            {
                 return;
+            }
+
             body.Position = _teleportDestination.Position;
             Teardown();
             PlaceHazards();
@@ -229,10 +259,13 @@ namespace PackageResolved.Logic
         /// </remarks>
         private void OnPickedModifier()
         {
-            var state = GetNode<GameState>("/root/GameState");
+            GameState state = GetNode<GameState>("/root/GameState");
             if (state.GetGameMode() == GameState.GameMode.Endless)
+            {
                 return;
-            var elapsedTime = _timerLevel.TimeLeft;
+            }
+
+            float elapsedTime = _timerLevel.TimeLeft;
             _timerLevel.Stop();
             _timerLevel.WaitTime = elapsedTime + 7;
             _timerLevel.Start();
@@ -249,14 +282,18 @@ namespace PackageResolved.Logic
         /// </remarks>
         private void OnPickedPackage(int amount)
         {
-            var state = GetNode<GameState>("/root/GameState");
+            GameState state = GetNode<GameState>("/root/GameState");
             if (state.GetGameMode() == GameState.GameMode.Endless)
+            {
                 _remainingPackages += amount;
+            }
             else
             {
                 _remainingPackages -= amount;
                 if (_remainingPackages <= 0)
-                    GetTree().ChangeScene("res://scenes/level_success.tscn");
+                {
+                    _ = GetTree().ChangeScene("res://scenes/screens/level_success.tscn");
+                }
             }
             _headsUpDisplay.UpdatePackagesRemaining($"{_remainingPackages}");
         }
@@ -266,15 +303,18 @@ namespace PackageResolved.Logic
         /// </summary>
         private void PlaceHazards()
         {
-            var lastVertPosition = 300f;
+            float lastVertPosition = 300f;
             for (int i = 0; i <= 4; i += 1)
             {
-                var randomXPosition = (float)GD.RandRange(-4, 8);
+                float randomXPosition = (float)GD.RandRange(-4, 8);
                 if (randomXPosition == 0.0f)
+                {
                     randomXPosition += GD.Randf() > 0 ? 3 : -3;
+                }
+
                 Hazard hazard = MakeHazard();
                 hazard.Position = new Vector2(randomXPosition * 48 * 2, lastVertPosition);
-                _obstaclePositions.Add(hazard.Position);
+                _ = _obstaclePositions.Add(hazard.Position);
                 CallDeferred("add_child", hazard);
                 lastVertPosition += hazard.GetRect().Extents.y * 2;
                 lastVertPosition += hazard.GetRect().Extents.y / 3;
@@ -286,14 +326,17 @@ namespace PackageResolved.Logic
         /// </summary>
         private void PlacePickables()
         {
-            var lastVertPosition = -64;
+            int lastVertPosition = -64;
             for (int i = 0; i <= 8; i += 1)
             {
                 float randomXPosition = (float)GD.RandRange(-5, 7);
-                var pickableObject = MakePickable();
+                Pickable pickableObject = MakePickable();
                 pickableObject.Position = new Vector2(randomXPosition * 48 * 2, lastVertPosition);
                 if (_obstaclePositions.Contains(pickableObject.Position))
+                {
                     pickableObject.Position -= new Vector2(0, 48);
+                }
+
                 CallDeferred("add_child", pickableObject);
                 lastVertPosition += 50 * 2;
             }
@@ -307,10 +350,12 @@ namespace PackageResolved.Logic
         /// </remarks>
         public void Teardown()
         {
-            foreach (var child in GetChildren())
+            foreach (object child in GetChildren())
             {
                 if (child is ITeardownable)
+                {
                     (child as ITeardownable).Teardown();
+                }
             }
             _obstaclePositions.Clear();
         }
@@ -325,6 +370,11 @@ namespace PackageResolved.Logic
         {
             int timeLeft = (int)_timerLevel.TimeLeft;
             _headsUpDisplay.UpdateTimeLimit($"{timeLeft}");
+
+            if (_timerStart.TimeLeft >= 0)
+            {
+                _headsUpDisplay.UpdateStartTimer();
+            }
         }
     }
 }

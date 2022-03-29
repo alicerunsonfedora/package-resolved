@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://assets/sprites/tileset.png" type="Texture" id=1]
 [ext_resource path="res://scripts/UI/HUD.cs" type="Script" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://assets/fonts/JetBrainsMono-Regular.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://assets/fonts/mono.tres" type="DynamicFont" id=5]
 [ext_resource path="res://assets/fonts/s_mono.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://assets/fonts/dse-typewriter-font-lh.ttf" type="DynamicFontData" id=7]
+[ext_resource path="res://assets/fonts/s_typewriter.ttf" type="DynamicFontData" id=8]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 1 )
@@ -25,6 +27,11 @@ fallback/0 = ExtResource( 4 )
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 128, 300 )
 
+[sub_resource type="DynamicFont" id=7]
+size = 72
+font_data = ExtResource( 8 )
+fallback/0 = ExtResource( 7 )
+
 [node name="HUD" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -34,9 +41,6 @@ margin_right = 0.813477
 margin_bottom = 0.941284
 theme = ExtResource( 3 )
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="PackagesRemaining" type="TextureRect" parent="."]
 margin_left = 16.0
@@ -109,9 +113,6 @@ margin_left = -252.0
 margin_top = 16.0
 margin_right = 253.0
 margin_bottom = -15.9999
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Bottom" type="Panel" parent="IntroLabel"]
 anchor_left = 0.5
@@ -159,3 +160,17 @@ __meta__ = {
 wait_time = 5.0
 
 [node name="Tween" type="Tween" parent="."]
+
+[node name="StartTime" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -254.0
+margin_top = -56.0
+margin_right = 259.0
+margin_bottom = 56.0
+custom_fonts/font = SubResource( 7 )
+text = "GO"
+align = 1
+valign = 1

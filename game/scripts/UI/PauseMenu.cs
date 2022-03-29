@@ -65,7 +65,7 @@ namespace PackageResolved.UI
         private void BtnMainMenuPress()
         {
             GetTree().Paused = false;
-            GetTree().ChangeScene("res://scenes/main_menu.tscn");
+            GetTree().ChangeScene("res://scenes/screens/main_menu.tscn");
         }
 
         /// <summary>

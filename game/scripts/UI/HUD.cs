@@ -22,6 +22,16 @@ namespace PackageResolved.UI
         private Label _packagesRemaining;
 
         /// <summary>
+        /// The label that displays the start timer.
+        /// </summary>
+        private Label _startTimeLbl;
+
+        /// <summary>
+        /// The starting timer to display on the HUD.
+        /// </summary>
+        private int _startTime = 4;
+
+        /// <summary>
         /// A label that displays the time remaining.
         /// </summary>
         private Label _timeLimit;
@@ -72,6 +82,23 @@ namespace PackageResolved.UI
         }
 
         /// <summary>
+        /// Decrement the start timer and display it on the HUD.
+        /// </summary>
+        public void UpdateStartTimer()
+        {
+            if (_startTime < 1)
+            {
+                _startTimeLbl.Visible = false;
+                return;
+            }
+            _startTime -= 1;
+            if (_startTime > 0)
+                _startTimeLbl.Text = _startTime.ToString();
+            else
+                _startTimeLbl.Text = "GO";
+        }
+
+        /// <summary>
         /// Update the time limit label.
         /// </summary>
         /// <param name="text">The remaining time as a string value.</param>
@@ -92,6 +119,7 @@ namespace PackageResolved.UI
             _timer = GetNode<Timer>("Timer");
             _tween = GetNode<Tween>("Tween");
             _packagesRemaining = GetNode<Label>("PackagesRemaining/Label");
+            _startTimeLbl = GetNode<Label>("StartTime");
             _timeLimit = GetNode<Label>("TimeLimit/Label");
         }
     }
