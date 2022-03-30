@@ -205,6 +205,6 @@ margin_right = 259.0
 margin_bottom = 56.0
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_fonts/font = SubResource( 7 )
-text = "GO"
+text = "4"
 align = 1
 valign = 1

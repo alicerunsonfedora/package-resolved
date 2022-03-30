@@ -176,7 +176,30 @@ namespace PackageResolved.scripts.Logic
             _ = _timerStart.Connect("timeout", _timerLevel, "start");
             _ = _timerStart.Connect("timeout", _playerNode, nameof(_playerNode.UnblockMovement));
             _ = _timerTick.Connect("timeout", this, nameof(Tick));
-            _ = _timerLevel.Connect("timeout", this, nameof(GameOver));
+            if (this.GetCurrentState().GetGameMode() == GameState.GameMode.Arcade)
+                _ = _timerLevel.Connect("timeout", this, nameof(GameOver));
+        }
+
+        /// <summary>
+        /// Returns a random vector that describes a position for either a hazard or pickable item.
+        /// </summary>
+        /// <param name="lastVerticalPosition">The vertical position of the previous item placed.</param>
+        /// <param name="width">The width of the item that will be placed.</param>
+        /// <returns>A Vector2 that represents the position for the newly placed item.</returns>
+        private Vector2 GetPlacableVector(float lastVerticalPosition, float width)
+        {
+            float upperBound = 400f, lowerBound = -400f;
+
+            RandomNumberGenerator rand = new RandomNumberGenerator();
+            rand.Randomize();
+            float randomXPosition = rand.RandiRange(-5, 7);
+
+            Vector2 position = new Vector2(randomXPosition * width, lastVerticalPosition);
+            if (position.x > upperBound)
+                position.x = upperBound;
+            else if (position.x < lowerBound)
+                position.x = lowerBound;
+            return position;
         }
 
         /// <summary>
@@ -185,7 +208,10 @@ namespace PackageResolved.scripts.Logic
         private void GameOver()
         {
             GameState state = this.GetCurrentState();
-            state.UpdatePreviousRun(state.GetRequiredPackages() - _remainingPackages, (int)_timerLevel.WaitTime);
+            if (state.GetGameMode() == GameState.GameMode.Endless)
+                state.UpdatePreviousRun(state.GetRequiredPackages(), (int)_timerLevel.WaitTime);
+            else
+                state.UpdatePreviousRun(state.GetRequiredPackages() - _remainingPackages, (int)_timerLevel.WaitTime);
             _ = GetTree().ChangeScene("res://scenes/screens/game_over.tscn");
         }
 
@@ -210,17 +236,17 @@ namespace PackageResolved.scripts.Logic
         /// <summary>
         /// Creates a hazard node that will be placed in the scene tree.
         /// </summary>
-        /// <return>
-        /// An instance of <c>Hazard</c>. </return>
+        /// <return> An instance of <c>Hazard</c>. </return>
         /// <seealso> Hazard </seealso>
+        /// <remarks>
+        /// Hazards will start spawning on the third level in Arcade mode and after the first pass in Endless mode.
+        /// </remarks>
         private Hazard MakeHazard()
         {
             Hazard hazard = _hazardPackedScene.Instance() as Hazard;
             double hazardSeed = GD.RandRange(1, 20);
             if (hazardSeed < 15)
-            {
                 _ = hazard.Connect("StartedContact", this, "GameOver");
-            }
             else
             {
                 hazard.Kind = Hazard.Type.WetFloor;
@@ -236,18 +262,19 @@ namespace PackageResolved.scripts.Logic
         /// </summary>
         /// <return> An instance of <c>Pickable</c>. </return>
         /// <seealso> Pickable </seealso>
+        /// <remarks>
+        /// Timepieces will not be spawned on the first level in Arcade mode and in Endless mode.
+        /// </remarks>
         private Pickable MakePickable()
         {
             Pickable pickable = _pickablePacked.Instance() as Pickable;
-            double pickableSeed = GD.RandRange(0, 50);
-            if (pickableSeed > 40)
-            {
+            double seed = GD.RandRange(0, 50);
+            var state = this.GetCurrentState();
+            bool timepieceEligible = state.GetCurrentLevel() > 0 && state.GetGameMode() == GameState.GameMode.Arcade;
+            if (seed > 40)
                 pickable.Kind = Pickable.Type.PackagePlus;
-            }
-            else if (pickableSeed > 30 && pickableSeed <= 39 && this.GetCurrentState().GetCurrentLevel() > 0)
-            {
+            else if (seed > 30 && seed <= 39 && timepieceEligible)
                 pickable.Kind = Pickable.Type.TimeModifier;
-            }
 
             pickable.RedrawSprite();
             _ = pickable.Connect("PickedPackage", this, "OnPickedPackage");
@@ -264,13 +291,12 @@ namespace PackageResolved.scripts.Logic
         private void OnBodyEntered(Node2D body)
         {
             if (!(body is Player))
-            {
                 return;
-            }
 
             body.Position = _teleportDestination.Position;
             Teardown();
-            if (this.GetCurrentState().GetCurrentLevel() > 1)
+            var state = this.GetCurrentState();
+            if (state.GetCurrentLevel() > 1 || state.GetGameMode() == GameState.GameMode.Endless)
                 PlaceHazards();
             PlacePickables();
         }
@@ -326,18 +352,11 @@ namespace PackageResolved.scripts.Logic
             float lastVertPosition = 300f;
             for (int i = 0; i <= 4; i += 1)
             {
-                float randomXPosition = (float)GD.RandRange(-4, 8);
-                if (randomXPosition == 0.0f)
-                {
-                    randomXPosition += GD.Randf() > 0 ? 3 : -3;
-                }
-
                 Hazard hazard = MakeHazard();
-                hazard.Position = new Vector2(randomXPosition * 48 * 2, lastVertPosition);
+                hazard.Position = GetPlacableVector(lastVertPosition, 96);
                 _ = _obstaclePositions.Add(hazard.Position);
                 CallDeferred("add_child", hazard);
-                lastVertPosition += hazard.GetRect().Extents.y * 2;
-                lastVertPosition += hazard.GetRect().Extents.y / 3;
+                lastVertPosition += 64;
             }
         }
 
@@ -346,19 +365,17 @@ namespace PackageResolved.scripts.Logic
         /// </summary>
         private void PlacePickables()
         {
-            int lastVertPosition = -64;
+            float lastVertPosition = -64f;
             for (int i = 0; i <= 8; i += 1)
             {
-                float randomXPosition = (float)GD.RandRange(-5, 7);
                 Pickable pickableObject = MakePickable();
-                pickableObject.Position = new Vector2(randomXPosition * 48 * 2, lastVertPosition);
-                if (_obstaclePositions.Contains(pickableObject.Position))
-                {
-                    pickableObject.Position -= new Vector2(0, 48);
-                }
+                Vector2 position = GetPlacableVector(lastVertPosition, 48);
+                if (_obstaclePositions.Contains(position))
+                    position -= new Vector2(0, 48);
+                pickableObject.Position = position;
 
                 CallDeferred("add_child", pickableObject);
-                lastVertPosition += 50 * 2;
+                lastVertPosition += 100;
             }
         }
 

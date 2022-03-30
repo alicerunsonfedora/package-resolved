@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scripts/Objects/Hazard.cs" type="Script" id=1]
 [ext_resource path="res://assets/game_tileset.tres" type="TileSet" id=2]
 [ext_resource path="res://assets/audio/hit.wav" type="AudioStream" id=3]
+[ext_resource path="res://assets/sprites/light.png" type="Texture" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 30.4023, 30.0492 )
@@ -39,3 +40,10 @@ tile_data = PoolIntArray( -1, 6, 0, -65536, 1, 0, -65535, 6, 0, 0, 2, 0, 65536, 
 [node name="Effect" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 3 )
 bus = "SFX"
+
+[node name="Light" type="Light2D" parent="."]
+position = Vector2( 23.5982, -25.486 )
+texture = ExtResource( 4 )
+texture_scale = 3.0
+color = Color( 0.639216, 0.505882, 0.435294, 1 )
+energy = 0.85
