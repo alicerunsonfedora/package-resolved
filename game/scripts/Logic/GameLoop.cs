@@ -9,26 +9,38 @@
 using Godot;
 using Godot.Collections;
 using PackageResolved.Extensions;
-using PackageResolved.Logic;
 using PackageResolved.Objects;
 using PackageResolved.UI;
+using PackageResolved.Utilities;
 
-namespace PackageResolved.scripts.Logic
+namespace PackageResolved.Logic
 {
     /// <summary>
     /// The primary game loop.
     /// </summary>
     public class GameLoop : Node2D, ITeardownable
     {
+
+        /// <summary>
+        /// The rate at which timer modifiers grow over time.
+        /// </summary>
+        /// <remarks>
+        /// This is a hyperparamter which is used to control the equation for calculating how much time to add to the
+        /// timer: <c>bonusTime = packagesLeft * (lastPackageCollectTime - timeLeft) ^ (a)</c>, where <c>a</c> is the
+        /// timer growth rate.
+        /// </remarks>
+        [Export]
+        public float TimerGrowthRate = 0.1f;
+
         /// <summary>
         /// The heads-up display that shows over the main level.
         /// </summary>
         private HUD _headsUpDisplay;
 
         /// <summary>
-        /// The packed scene information to construct a hazard.
+        /// The timestamp for when the last package was collected.
         /// </summary>
-        private readonly PackedScene _hazardPackedScene = GD.Load("res://objects/hazard.tscn") as PackedScene;
+        private float _lastPackageTime = 0;
 
         /// <summary>
         /// An array of obstacle positions.
@@ -42,11 +54,6 @@ namespace PackageResolved.scripts.Logic
         /// The pause menu that will be displayed when the player presses the pause key.
         /// </summary>
         private PauseMenu _pauseMenu;
-
-        /// <summary>
-        /// The packed scene information to construct a pickable item.
-        /// </summary>
-        private readonly PackedScene _pickablePacked = GD.Load("res://objects/pickable.tscn") as PackedScene;
 
         /// <summary>
         /// The player controller used in the level.
@@ -148,6 +155,7 @@ namespace PackageResolved.scripts.Logic
                 _remainingPackages = state.GetRequiredPackages();
                 _timerLevel.WaitTime = state.GetTimeLimit();
                 _headsUpDisplay.UpdatePackagesRemaining($"{_remainingPackages}");
+                _headsUpDisplay.UpdateTimeLimit(state.GetTimeLimit().ToString());
                 Tick();
             }
 
@@ -178,28 +186,6 @@ namespace PackageResolved.scripts.Logic
             _ = _timerTick.Connect("timeout", this, nameof(Tick));
             if (this.GetCurrentState().GetGameMode() == GameState.GameMode.Arcade)
                 _ = _timerLevel.Connect("timeout", this, nameof(GameOver));
-        }
-
-        /// <summary>
-        /// Returns a random vector that describes a position for either a hazard or pickable item.
-        /// </summary>
-        /// <param name="lastVerticalPosition">The vertical position of the previous item placed.</param>
-        /// <param name="width">The width of the item that will be placed.</param>
-        /// <returns>A Vector2 that represents the position for the newly placed item.</returns>
-        private Vector2 GetPlacableVector(float lastVerticalPosition, float width)
-        {
-            float upperBound = 400f, lowerBound = -400f;
-
-            RandomNumberGenerator rand = new RandomNumberGenerator();
-            rand.Randomize();
-            float randomXPosition = rand.RandiRange(-5, 7);
-
-            Vector2 position = new Vector2(randomXPosition * width, lastVerticalPosition);
-            if (position.x > upperBound)
-                position.x = upperBound;
-            else if (position.x < lowerBound)
-                position.x = lowerBound;
-            return position;
         }
 
         /// <summary>
@@ -243,7 +229,7 @@ namespace PackageResolved.scripts.Logic
         /// </remarks>
         private Hazard MakeHazard()
         {
-            Hazard hazard = _hazardPackedScene.Instance() as Hazard;
+            Hazard hazard = Instancing.InstanceHazard();
             double hazardSeed = GD.RandRange(1, 20);
             if (hazardSeed < 15)
                 _ = hazard.Connect("StartedContact", this, "GameOver");
@@ -267,7 +253,7 @@ namespace PackageResolved.scripts.Logic
         /// </remarks>
         private Pickable MakePickable()
         {
-            Pickable pickable = _pickablePacked.Instance() as Pickable;
+            Pickable pickable = Instancing.InstancePickable();
             double seed = GD.RandRange(0, 50);
             var state = this.GetCurrentState();
             bool timepieceEligible = state.GetCurrentLevel() > 0 && state.GetGameMode() == GameState.GameMode.Arcade;
@@ -306,15 +292,25 @@ namespace PackageResolved.scripts.Logic
         /// time modifier.
         /// </summary>
         /// <remarks>
-        /// This method will reset the timer to add the additional time that the modifier will
-        /// provide.
+        /// This method will reset the timer to add the additional time that the modifier will provide using the formula
+        /// <c>bonusTime = packagesLeft * (lastPackageCollectTime - timeLeft) ^ (a)</c>, where <c>a</c> corresponds to
+        /// the growth rate described in the editor as <c>TimerGrowthRate</c>. If the algorithm's result value is
+        /// greater than zero, that time will be added to the timer. Effectively, this forces the player to consider 
+        /// whether to pick up modifiers all the time or to pick up modifiers less frequently in hopes of a bigger
+        /// rewarded time bonus.
         /// </remarks>
         private void OnPickedModifier()
         {
             GameState state = this.GetCurrentState();
             if (state.GetGameMode() == GameState.GameMode.Endless)
                 return;
-            _timerLevel.AddTime(7f);
+
+            var growth = _remainingPackages * (_lastPackageTime - _timerLevel.TimeLeft);
+            growth = Mathf.Pow(growth, TimerGrowthRate);
+            GD.Print($"[DEBUG] Growth Rate: {growth}");
+
+            if (growth > 0)
+                _timerLevel.AddTime(growth);
             Tick();
         }
 
@@ -339,6 +335,7 @@ namespace PackageResolved.scripts.Logic
                     _ = GetTree().ChangeScene("res://scenes/screens/level_success.tscn");
             }
             _headsUpDisplay.UpdatePackagesRemaining($"{_remainingPackages}");
+            _lastPackageTime = _timerLevel.TimeLeft;
         }
 
         /// <summary>
@@ -350,7 +347,7 @@ namespace PackageResolved.scripts.Logic
             for (int i = 0; i <= 4; i += 1)
             {
                 Hazard hazard = MakeHazard();
-                hazard.Position = GetPlacableVector(lastVertPosition, 96);
+                hazard.Position = Vector.GetPlacableVector(lastVertPosition, 96);
                 _ = _obstaclePositions.Add(hazard.Position);
                 CallDeferred("add_child", hazard);
                 lastVertPosition += 64;
@@ -366,7 +363,7 @@ namespace PackageResolved.scripts.Logic
             for (int i = 0; i <= 8; i += 1)
             {
                 Pickable pickableObject = MakePickable();
-                Vector2 position = GetPlacableVector(lastVertPosition, 48);
+                Vector2 position = Vector.GetPlacableVector(lastVertPosition, 48);
                 if (_obstaclePositions.Contains(position))
                     position -= new Vector2(0, 48);
                 pickableObject.Position = position;
