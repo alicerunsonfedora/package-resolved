@@ -185,7 +185,7 @@ margin_right = 682.0
 margin_bottom = 118.0
 custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
 custom_fonts/font = ExtResource( 9 )
-text = "Press the arrow keys or tap the left/right edges of the screen to move."
+text = "Follow the tutorial prompt provided. Remember to collect all packages."
 autowrap = true
 uppercase = true
 

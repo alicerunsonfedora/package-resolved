@@ -315,6 +315,7 @@ namespace PackageResolved.scripts.Logic
             if (state.GetGameMode() == GameState.GameMode.Endless)
                 return;
             _timerLevel.AddTime(7f);
+            Tick();
         }
 
         /// <summary>

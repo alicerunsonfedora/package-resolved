@@ -75,24 +75,29 @@ namespace PackageResolved.UI
         public override void _Ready()
         {
             InstantiateOnreadyInstances();
-            var introLabel = GetNode<Control>("IntroLabel");
+            var tutLbl = GetNode<Control>("IntroLabel");
             var state = this.GetCurrentState();
+
+            if (state.GetGameMode() == GameState.GameMode.Endless)
+                _timeLimit.GetParent<Control>().Visible = false;
+
             if (state.GetCurrentLevel() > 2 || state.GetGameMode() == GameState.GameMode.Endless)
-                introLabel.Visible = false;
+                tutLbl.Visible = false;
             else
-            {
-                _tween.InterpolateProperty(
-                    introLabel,
-                    "modulate",
-                    Colors.White,
-                    Colors.Transparent,
-                    0.5f,
-                    Tween.TransitionType.Linear,
-                    Tween.EaseType.InOut
-                );
-                _timer.Connect("timeout", _tween, "start");
-                _timer.Start();
-            }
+                ConnectAnimation(tutLbl);
+        }
+
+        /// <summary>
+        /// Connects the fade animation to the specified control.
+        /// </summary>
+        /// <param name="ctrl">The control to be faded out to transparency.</param>
+        private void ConnectAnimation(Control ctrl)
+        {
+            var trans = Tween.TransitionType.Linear;
+            var ease = Tween.EaseType.InOut;
+            _tween.InterpolateProperty(ctrl, "modulate", Colors.White, Colors.Transparent, 0.5f, trans, ease);
+            _timer.Connect("timeout", _tween, "start");
+            _timer.Start();
         }
 
         /// <summary>
@@ -108,13 +113,13 @@ namespace PackageResolved.UI
                     if (OS.HasTouchscreenUiHint())
                         lbl.Text = "Tap the left or right edges of the screen to move on the factory floor.";
                     else
-                        lbl.Text = "Press the left or right arrow keys to move on the factory floor.";
+                        lbl.Text = "Press the left/right arrow keys or the A/D keys to move on the factory floor.";
                     break;
                 case TutorialText.ExtraTime:
                     lbl.Text = "Collect timepieces to extend your time needed to fulfill requests.";
                     break;
                 case TutorialText.Hazards:
-                    lbl.Text = "Watch out for wet floors, and don't run into palettes.";
+                    lbl.Text = "Be safe. Be careful on wet floors, as they are slippery. Avoid running into palettes.";
                     break;
             }
         }
