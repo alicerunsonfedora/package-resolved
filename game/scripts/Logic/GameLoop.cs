@@ -314,11 +314,7 @@ namespace PackageResolved.scripts.Logic
             GameState state = this.GetCurrentState();
             if (state.GetGameMode() == GameState.GameMode.Endless)
                 return;
-
-            float elapsedTime = _timerLevel.TimeLeft;
-            _timerLevel.Stop();
-            _timerLevel.WaitTime = elapsedTime + 7;
-            _timerLevel.Start();
+            _timerLevel.AddTime(7f);
         }
 
         /// <summary>
@@ -373,7 +369,6 @@ namespace PackageResolved.scripts.Logic
                 if (_obstaclePositions.Contains(position))
                     position -= new Vector2(0, 48);
                 pickableObject.Position = position;
-
                 CallDeferred("add_child", pickableObject);
                 lastVertPosition += 100;
             }
@@ -407,9 +402,7 @@ namespace PackageResolved.scripts.Logic
             _headsUpDisplay.UpdateTimeLimit($"{timeLeft}");
 
             if (_timerStart.TimeLeft >= 0)
-            {
                 _headsUpDisplay.UpdateStartTimer();
-            }
         }
     }
 }
