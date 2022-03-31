@@ -15,6 +15,18 @@ extents = Vector2( 524.585, 44.2334 )
 script = ExtResource( 3 )
 TimerGrowthRate = 0.5
 
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+pause_mode = 2
+
+[node name="HUD" parent="CanvasLayer" instance=ExtResource( 4 )]
+
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource( 7 )]
+pause_mode = 2
+visible = false
+
+[node name="Darken" type="CanvasModulate" parent="."]
+color = Color( 0.388235, 0.364706, 0.356863, 1 )
+
 [node name="Tick" type="Timer" parent="."]
 autostart = true
 
@@ -32,17 +44,7 @@ volume_db = -0.7
 autoplay = true
 bus = "Music"
 
-[node name="Darken" type="CanvasModulate" parent="."]
-color = Color( 0.388235, 0.364706, 0.356863, 1 )
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-pause_mode = 2
-
-[node name="HUD" parent="CanvasLayer" instance=ExtResource( 4 )]
-
-[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource( 7 )]
-pause_mode = 2
-visible = false
+[node name="Tween" type="Tween" parent="."]
 
 [node name="Floor" type="TileMap" parent="."]
 tile_set = ExtResource( 2 )

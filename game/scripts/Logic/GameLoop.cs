@@ -109,6 +109,7 @@ namespace PackageResolved.Logic
         {
             InstantiateOnreadyInstances();
             ConnectInstances();
+            SetupTween();
             _playerNode.BlockMovement();
 
             GD.Randomize();
@@ -332,7 +333,7 @@ namespace PackageResolved.Logic
             {
                 _remainingPackages -= amount;
                 if (_remainingPackages <= 0)
-                    _ = GetTree().ChangeScene("res://scenes/screens/level_success.tscn");
+                    SuccessStart();
             }
             _headsUpDisplay.UpdatePackagesRemaining($"{_remainingPackages}");
             _lastPackageTime = _timerLevel.TimeLeft;
@@ -370,6 +371,40 @@ namespace PackageResolved.Logic
                 CallDeferred("add_child", pickableObject);
                 lastVertPosition += 100;
             }
+        }
+
+        /// <summary>
+        /// Sets up the tween node that fades the level out on a success.
+        /// </summary>
+        private void SetupTween()
+        {
+            var tween = GetNode<Tween>("Tween");
+            var trans = Tween.TransitionType.Linear;
+            var ease = Tween.EaseType.InOut;
+            tween.InterpolateProperty(this, "modulate", Colors.White, Colors.Transparent, 3.0f, trans, ease);
+            tween.Connect("tween_all_completed", this, nameof(SuccessCallback));
+        }
+
+        /// <summary>
+        /// Switch the scene to the level success screen.
+        /// </summary>
+        /// <remarks>
+        /// Called as a callback after the tween finishes animating.
+        /// </remarks>
+        private void SuccessCallback()
+        {
+            _ = GetTree().ChangeScene("res://scenes/screens/level_success.tscn");
+        }
+
+        /// <summary>
+        /// Start the tween to fade out the level, stop the player movement, and end the timer.
+        /// </summary>
+        private void SuccessStart()
+        {
+            _playerNode.BlockMovement();
+            _timerLevel.Stop();
+            var tween = GetNode<Tween>("Tween");
+            tween.Start();
         }
 
         /// <summary>
