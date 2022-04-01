@@ -48,7 +48,7 @@ namespace PackageResolved.Logic
         /// <remarks>
         /// This is typically used to determine what positions pickable items cannot be placed.
         /// </remarks>
-        private readonly Array _obstaclePositions = new Array();
+        private readonly Array _obstaclePositions = new();
 
         /// <summary>
         /// The pause menu that will be displayed when the player presses the pause key.
@@ -277,7 +277,7 @@ namespace PackageResolved.Logic
         /// </remarks>
         private void OnBodyEntered(Node2D body)
         {
-            if (!(body is Player))
+            if (body is not Player)
                 return;
 
             body.Position = _teleportDestination.Position;
