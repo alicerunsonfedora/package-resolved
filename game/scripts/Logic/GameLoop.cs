@@ -141,6 +141,16 @@ namespace PackageResolved.Logic
         }
 
         /// <summary>
+        /// Returns the current player in the game loop.
+        /// </summary>
+        public Player GetCurrentPlayer() => _playerNode;
+
+        /// <summary>
+        /// Returns an array containing the positions of the current obstacles on the map.
+        /// </summary>
+        public Array GetObstaclePositions() => _obstaclePositions;
+
+        /// <summary>
         /// Configures the heads-up display with the level requirements and any tutorials.
         /// </summary>
         private void ConfigureHeadsUpDisplay()
@@ -155,7 +165,7 @@ namespace PackageResolved.Logic
                 Tick();
             }
 
-            SetupTutorialText();
+            _headsUpDisplay.SetupTutorialText();
         }
 
         /// <summary>
@@ -177,10 +187,7 @@ namespace PackageResolved.Logic
         private void GameOver()
         {
             GameState state = this.GetCurrentState();
-            if (state.CurrentGameMode == GameState.GameMode.Endless)
-                state.UpdatePreviousRun(_state.PackagesRemaining, (int)_timerLevel.WaitTime);
-            else
-                state.UpdatePreviousRun(state.GetRequiredPackages() - _state.PackagesRemaining, (int)_timerLevel.WaitTime);
+            UpdatePreviousRunInState(state);
             _ = GetTree().ChangeScene("res://scenes/screens/game_over.tscn");
         }
 
@@ -200,55 +207,6 @@ namespace PackageResolved.Logic
             _timerStart = GetNode<Timer>("StartTimer");
             _timerTick = GetNode<Timer>("Tick");
             _timerLevel = GetNode<Timer>("Timer");
-        }
-
-        /// <summary>
-        /// Creates a hazard node that will be placed in the scene tree.
-        /// </summary>
-        /// <return> An instance of <c>Hazard</c>. </return>
-        /// <seealso> Hazard </seealso>
-        /// <remarks>
-        /// Hazards will start spawning on the third level in Arcade mode and after the first pass in Endless mode.
-        /// </remarks>
-        private Hazard MakeHazard()
-        {
-            Hazard hazard = Instancing.InstanceHazard();
-            double hazardSeed = GD.RandRange(1, 20);
-            if (hazardSeed < 15)
-                _ = hazard.Connect("StartedContact", this, "GameOver");
-            else
-            {
-                hazard.Kind = Hazard.Type.WetFloor;
-                _ = hazard.Connect("StartedContact", _playerNode, "SpeedUp");
-                _ = hazard.Connect("StoppedContact", _playerNode, "SlowDown");
-            }
-            hazard.SetupHazard();
-            return hazard;
-        }
-
-        /// <summary>
-        /// Creates a pickable item node that will be placed in the scene tree.
-        /// </summary>
-        /// <return> An instance of <c>Pickable</c>. </return>
-        /// <seealso> Pickable </seealso>
-        /// <remarks>
-        /// Timepieces will not be spawned on the first level in Arcade mode and in Endless mode.
-        /// </remarks>
-        private Pickable MakePickable()
-        {
-            Pickable pickable = Instancing.InstancePickable();
-            double seed = GD.RandRange(0, 50);
-            var state = this.GetCurrentState();
-            bool timeEligible = (state.GetCurrentLevel() > 0) && (state.CurrentGameMode == GameState.GameMode.Arcade);
-            if (seed > 40)
-                pickable.Kind = Pickable.Type.PackagePlus;
-            else if ((seed > 30) && (seed <= 39) && (timeEligible))
-                pickable.Kind = Pickable.Type.TimeModifier;
-
-            pickable.RedrawSprite();
-            _ = pickable.Connect("PickedPackage", this, "OnPickedPackage");
-            _ = pickable.Connect("PickedModifier", this, "OnPickedModifier");
-            return pickable;
         }
 
         /// <summary>
@@ -273,8 +231,7 @@ namespace PackageResolved.Logic
         }
 
         /// <summary>
-        /// A callback method that runs when the user picks up a pickable item marked as a 
-        /// time modifier.
+        /// A callback method that runs when the user picks up a pickable item marked as a time modifier.
         /// </summary>
         /// <remarks>
         /// This method will reset the timer to add the additional time that the modifier will provide using the formula
@@ -296,13 +253,12 @@ namespace PackageResolved.Logic
         }
 
         /// <summary>
-        /// A callback method that runs when the user picks up a pickable item marked as a package of some
-        /// kind.
+        /// A callback method that runs when the user picks up a pickable item marked as a package of some kind.
         /// </summary>
         /// <param name="amount"> The number of packages to decrease <c>PackagesRemaining</c> by. </param>
         /// <remarks>
-        /// This method will subtract the amount of packages the pickable represents from the number of
-        /// packages remaining.
+        /// This method will subtract the amount of packages the pickable represents from the number of packages
+        /// remaining.
         /// </remarks>
         private void OnPickedPackage(int amount)
         {
@@ -318,39 +274,7 @@ namespace PackageResolved.Logic
         {
             float lastVertPosition = 300f;
             for (int i = 0; i <= 4; i += 1)
-                lastVertPosition = PlaceNewHazard(lastVertPosition);
-        }
-
-        /// <summary>
-        /// Place a new hazard on the map.
-        /// </summary>
-        /// <param name="lastVertPosition">The vertical position of the last item that was placed.</param>
-        /// <returns>The next vertical position that the next item should be placed at.</returns>
-        private float PlaceNewHazard(float lastVertPosition)
-        {
-            Hazard hazard = MakeHazard();
-            hazard.Position = Vector.GetPlacableVector(lastVertPosition, 96);
-            _ = _obstaclePositions.Add(hazard.Position);
-            CallDeferred("add_child", hazard);
-            lastVertPosition += 64;
-            return lastVertPosition;
-        }
-
-        /// <summary>
-        /// Place a new pickable item on the map.
-        /// </summary>
-        /// <param name="lastVertPosition">The vertical position of the last item that was placed.</param>
-        /// <returns>The next vertical position that the next item should be placed at.</returns>
-        private float PlaceNewPickable(float lastVertPosition)
-        {
-            Pickable pickableObject = MakePickable();
-            Vector2 position = Vector.GetPlacableVector(lastVertPosition, 48);
-            if (_obstaclePositions.Contains(position))
-                position -= new Vector2(0, 48);
-            pickableObject.Position = position;
-            CallDeferred("add_child", pickableObject);
-            lastVertPosition += 100;
-            return lastVertPosition;
+                lastVertPosition = ProceduralGeneration.PlaceNewHazard(lastVertPosition, this);
         }
 
         /// <summary>
@@ -360,7 +284,7 @@ namespace PackageResolved.Logic
         {
             float lastVertPosition = -64f;
             for (int i = 0; i <= 8; i += 1)
-                lastVertPosition = PlaceNewPickable(lastVertPosition);
+                lastVertPosition = ProceduralGeneration.PlaceNewPickable(lastVertPosition, this);
         }
 
         /// <summary>
@@ -371,27 +295,6 @@ namespace PackageResolved.Logic
             var gameState = this.GetCurrentState();
             _state.PackagesRemaining = gameState.GetRequiredPackages();
             _timerLevel.WaitTime = gameState.GetTimeLimit();
-        }
-
-        /// <summary>
-        /// Sets up the tutorial text on the HUD.
-        /// </summary>
-        private void SetupTutorialText()
-        {
-            switch (this.GetCurrentState().GetCurrentLevel())
-            {
-                case 0:
-                    _headsUpDisplay.SetTutorialText(HUD.TutorialText.Movement);
-                    break;
-                case 1:
-                    _headsUpDisplay.SetTutorialText(HUD.TutorialText.ExtraTime);
-                    break;
-                case 2:
-                    _headsUpDisplay.SetTutorialText(HUD.TutorialText.Hazards);
-                    break;
-                default:
-                    break;
-            }
         }
 
         /// <summary>
@@ -482,6 +385,20 @@ namespace PackageResolved.Logic
             _state.PackagesRemaining -= amount;
             if (_state.PackagesRemaining <= 0)
                 SuccessStart();
+        }
+
+        /// <summary>
+        /// Updates the previous run scores in the specified game state.
+        /// </summary>
+        /// <param name="state">The state that will receive the previous scores.</param>
+        private void UpdatePreviousRunInState(GameState state)
+        {
+            if (state.CurrentGameMode == GameState.GameMode.Endless)
+            {
+                state.UpdatePreviousRun(_state.PackagesRemaining, (int)_timerLevel.WaitTime);
+                return;
+            }
+            state.UpdatePreviousRun(state.GetRequiredPackages() - _state.PackagesRemaining, (int)_timerLevel.WaitTime);
         }
     }
 }

@@ -88,6 +88,17 @@ namespace PackageResolved.UI
         }
 
         /// <summary>
+        /// Sets up the tutorial text on the HUD, based on the current level.
+        /// </summary>
+        public void SetupTutorialText()
+        {
+            var currentLevel = this.GetCurrentState().GetCurrentLevel();
+            if (currentLevel > 2)
+                return;
+            this.SetTutorialText((TutorialText)currentLevel);
+        }
+
+        /// <summary>
         /// Connects the fade animation to the specified control.
         /// </summary>
         /// <param name="ctrl">The control to be faded out to transparency.</param>
@@ -102,7 +113,7 @@ namespace PackageResolved.UI
         /// Sets the tutorial text on the HUD for the player to read.
         /// </summary>
         /// <param name="text">The kind of tutorial text to display.</param>
-        public void SetTutorialText(TutorialText text)
+        private void SetTutorialText(TutorialText text)
         {
             Label lbl = GetNode<Label>("IntroLabel/Top/VBoxContainer/Text");
             switch (text)
