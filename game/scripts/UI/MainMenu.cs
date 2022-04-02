@@ -66,7 +66,7 @@ namespace PackageResolved.UI
             var state = this.GetCurrentState();
             if (state.GetCurrentLevel() > 0)
                 state.Reset(true);
-            state.SetGameMode(GameState.GameMode.Arcade);
+            state.CurrentGameMode = GameState.GameMode.Arcade;
             GetTree().ChangeScene("res://scenes/screens/preflight.tscn");
         }
 
@@ -75,7 +75,7 @@ namespace PackageResolved.UI
         /// </summary>
         private void BtnPressStartEndless()
         {
-            this.GetCurrentState().SetGameMode(GameState.GameMode.Endless);
+            this.GetCurrentState().CurrentGameMode = GameState.GameMode.Endless;
             GetTree().ChangeScene("res://scenes/game_loop.tscn");
         }
 

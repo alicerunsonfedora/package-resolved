@@ -97,12 +97,12 @@ namespace PackageResolved.UI
         {
             string text;
             var state = this.GetCurrentState();
-            if (state.GetGameMode() == GameState.GameMode.Endless)
+            if (state.CurrentGameMode == GameState.GameMode.Endless)
             {
                 text = "Tripped over a palette and damaged company property.";
                 _timeRemainingStack.Visible = false;
             }
-            else if (state.GetGameMode() == GameState.GameMode.Arcade && state.GetPreviousTimeLeft() <= 0)
+            else if (state.CurrentGameMode == GameState.GameMode.Arcade && state.GetPreviousTimeLeft() <= 0)
             {
                 text = "Failed to fulfill request in alotted time.";
                 _timeRemaining.Text = "0";

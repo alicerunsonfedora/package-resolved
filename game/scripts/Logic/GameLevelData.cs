@@ -11,7 +11,7 @@ namespace PackageResolved.Logic
     /// <summary>
     /// A data structure that represents data for a particular level in the game.
     /// </summary>
-    struct GameLevelData
+    public struct GameLevelData
     {
         /// <summary>
         /// The number of packages the player needs to collect in this level.

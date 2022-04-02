@@ -6,9 +6,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System;
 using System.Collections.Generic;
 using Godot;
-using Godot.Collections;
 
 namespace PackageResolved.Logic
 {
@@ -42,14 +42,14 @@ namespace PackageResolved.Logic
         }
 
         /// <summary>
+        /// The current game mode for the session.
+        /// </summary>
+        public GameMode CurrentGameMode = GameMode.Arcade;
+
+        /// <summary>
         /// The current level that the player is playing or will play.
         /// </summary>
         private int _currentLevel = 0;
-
-        /// <summary>
-        /// The current game mode for the session.
-        /// </summary>
-        private GameMode _currentMode = GameMode.Arcade;
 
         /// <summary>
         /// An array containing all of the game's level data.
@@ -107,14 +107,18 @@ namespace PackageResolved.Logic
                 return;
 
 
-            var dataStream = jsonData.Result as Array;
+            var dataStream = jsonData.Result as Godot.Collections.Array;
             _gameLevelData = new List<GameLevelData>();
-            foreach (Dictionary level in dataStream)
+            foreach (Godot.Collections.Dictionary level in dataStream)
             {
                 var packages = System.Convert.ToInt32(level["requiredPackages"]);
                 var time = System.Convert.ToInt32(level["timeLimit"]);
                 _gameLevelData.Add(
-                    new GameLevelData { RequiredPackages = packages, TimeLimit = time }
+                    new GameLevelData
+                    {
+                        RequiredPackages = packages,
+                        TimeLimit = time
+                    }
                 );
             }
             _maxLevels = dataStream.Count;
@@ -128,7 +132,8 @@ namespace PackageResolved.Logic
         /// <summary>
         /// Gets the current game mode for the session.
         /// </summary>
-        public GameMode GetGameMode() => _currentMode;
+        [Obsolete("Use the property GameState.CurrentGameMode instead.")]
+        public GameMode GetGameMode() => CurrentGameMode;
 
         /// <summary>
         /// Gets the score from the previous run.
@@ -166,7 +171,7 @@ namespace PackageResolved.Logic
         /// </summary>
         public bool IsComplete()
         {
-            if (_currentMode == GameMode.Endless)
+            if (CurrentGameMode == GameMode.Endless)
                 return false;
             return _currentLevel > _maxLevels;
         }
@@ -206,9 +211,10 @@ namespace PackageResolved.Logic
         /// Sets the game mode for the session.
         /// </summary>
         /// <param name="mode">The new game mode that will be applied for the current session.</param>
+        [Obsolete("Use the property GameState.CurrentGameMode instead.")]
         public void SetGameMode(GameMode mode)
         {
-            _currentMode = mode;
+            CurrentGameMode = mode;
         }
 
         /// <summary>

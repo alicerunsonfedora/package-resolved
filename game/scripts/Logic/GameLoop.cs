@@ -48,7 +48,7 @@ namespace PackageResolved.Logic
         /// <remarks>
         /// This is typically used to determine what positions pickable items cannot be placed.
         /// </remarks>
-        private readonly Array _obstaclePositions = new();
+        private readonly Array _obstaclePositions = new Array();
 
         /// <summary>
         /// The pause menu that will be displayed when the player presses the pause key.
@@ -151,7 +151,7 @@ namespace PackageResolved.Logic
         private void ConfigureHeadsUpDisplay()
         {
             GameState state = this.GetCurrentState();
-            if (state.GetGameMode() == GameState.GameMode.Arcade)
+            if (state.CurrentGameMode == GameState.GameMode.Arcade)
             {
                 _remainingPackages = state.GetRequiredPackages();
                 _timerLevel.WaitTime = state.GetTimeLimit();
@@ -185,7 +185,7 @@ namespace PackageResolved.Logic
             _ = _timerStart.Connect("timeout", _timerLevel, "start");
             _ = _timerStart.Connect("timeout", _playerNode, nameof(_playerNode.UnblockMovement));
             _ = _timerTick.Connect("timeout", this, nameof(Tick));
-            if (this.GetCurrentState().GetGameMode() == GameState.GameMode.Arcade)
+            if (this.GetCurrentState().CurrentGameMode == GameState.GameMode.Arcade)
                 _ = _timerLevel.Connect("timeout", this, nameof(GameOver));
         }
 
@@ -195,7 +195,7 @@ namespace PackageResolved.Logic
         private void GameOver()
         {
             GameState state = this.GetCurrentState();
-            if (state.GetGameMode() == GameState.GameMode.Endless)
+            if (state.CurrentGameMode == GameState.GameMode.Endless)
                 state.UpdatePreviousRun(state.GetRequiredPackages(), (int)_timerLevel.WaitTime);
             else
                 state.UpdatePreviousRun(state.GetRequiredPackages() - _remainingPackages, (int)_timerLevel.WaitTime);
@@ -257,7 +257,7 @@ namespace PackageResolved.Logic
             Pickable pickable = Instancing.InstancePickable();
             double seed = GD.RandRange(0, 50);
             var state = this.GetCurrentState();
-            bool timepieceEligible = state.GetCurrentLevel() > 0 && state.GetGameMode() == GameState.GameMode.Arcade;
+            bool timepieceEligible = (state.GetCurrentLevel() > 0) && (state.CurrentGameMode == GameState.GameMode.Arcade);
             if (seed > 40)
                 pickable.Kind = Pickable.Type.PackagePlus;
             else if (seed > 30 && seed <= 39 && timepieceEligible)
@@ -277,13 +277,13 @@ namespace PackageResolved.Logic
         /// </remarks>
         private void OnBodyEntered(Node2D body)
         {
-            if (body is not Player)
+            if (!(body is Player))
                 return;
 
             body.Position = _teleportDestination.Position;
             Teardown();
             var state = this.GetCurrentState();
-            if (state.GetCurrentLevel() > 1 || state.GetGameMode() == GameState.GameMode.Endless)
+            if ((state.GetCurrentLevel() > 1) || (state.CurrentGameMode == GameState.GameMode.Endless))
                 PlaceHazards();
             PlacePickables();
         }
@@ -302,8 +302,7 @@ namespace PackageResolved.Logic
         /// </remarks>
         private void OnPickedModifier()
         {
-            GameState state = this.GetCurrentState();
-            if (state.GetGameMode() == GameState.GameMode.Endless)
+            if (this.GetCurrentState().CurrentGameMode == GameState.GameMode.Endless)
                 return;
 
             var growth = _remainingPackages * (_lastPackageTime - _timerLevel.TimeLeft);
@@ -327,7 +326,7 @@ namespace PackageResolved.Logic
         private void OnPickedPackage(int amount)
         {
             GameState state = this.GetCurrentState();
-            if (state.GetGameMode() == GameState.GameMode.Endless)
+            if (state.CurrentGameMode == GameState.GameMode.Endless)
                 _remainingPackages += amount;
             else
             {

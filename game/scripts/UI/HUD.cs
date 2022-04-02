@@ -78,10 +78,10 @@ namespace PackageResolved.UI
             var tutLbl = GetNode<Control>("IntroLabel");
             var state = this.GetCurrentState();
 
-            if (state.GetGameMode() == GameState.GameMode.Endless)
+            if (state.CurrentGameMode == GameState.GameMode.Endless)
                 _timeLimit.GetParent<Control>().Visible = false;
 
-            if (state.GetCurrentLevel() > 2 || state.GetGameMode() == GameState.GameMode.Endless)
+            if ((state.GetCurrentLevel() > 2) || (state.CurrentGameMode == GameState.GameMode.Endless))
                 tutLbl.Visible = false;
             else
                 ConnectAnimation(tutLbl);
