@@ -45,11 +45,6 @@ namespace PackageResolved.Logic
         private readonly Array _obstaclePositions = new Array();
 
         /// <summary>
-        /// The pause menu that will be displayed when the player presses the pause key.
-        /// </summary>
-        private PauseMenu _pauseMenu;
-
-        /// <summary>
         /// The player controller used in the level.
         /// </summary>
         private Player _playerNode;
@@ -73,28 +68,9 @@ namespace PackageResolved.Logic
         private Node2D _teleportDestination;
 
         /// <summary>
-        /// The timer used to halt the player for a few seconds before starting the level.
+        /// The time controller that handles all of the logic pertaining to the level's timers.
         /// </summary>
-        /// <remarks>
-        /// This is done to give the player enough time to prepare.
-        /// </remarks>
-        private Timer _timerStart;
-
-        /// <summary>
-        /// The timer used to run code on every second.
-        /// </summary>
-        /// <remarks>
-        /// The <c>Tick</c> method will be executed when this timer times out every day.
-        /// </remarks>
-        private Timer _timerTick;
-
-        /// <summary>
-        /// The timer used to run the game loop.
-        /// </summary>
-        /// <remarks>
-        /// This timer will correspond to how much time the player has left.
-        /// </remarks>
-        private Timer _timerLevel;
+        private GameTimeController _timeController;
 
         /// <summary>
         /// Instantiate the scene after entering the scene tree.
@@ -133,10 +109,17 @@ namespace PackageResolved.Logic
         public override void _UnhandledKeyInput(InputEventKey @event)
         {
             if (@event.GetActionStrength("ui_pause") > 0)
-            {
-                _pauseMenu.Visible = true;
-                GetTree().Paused = true;
-            }
+                HandlePause();
+        }
+
+        /// <summary>
+        /// Indicate the game is over and show the game over screen.
+        /// </summary>
+        public void GameOver()
+        {
+            GameState state = this.GetCurrentState();
+            UpdatePreviousRunInState(state);
+            _ = GetTree().ChangeScene("res://scenes/screens/game_over.tscn");
         }
 
         /// <summary>
@@ -148,6 +131,21 @@ namespace PackageResolved.Logic
         /// Returns an array containing the positions of the current obstacles on the map.
         /// </summary>
         public Array GetObstaclePositions() => _obstaclePositions;
+
+        /// <summary>
+        /// A callback method that runs every second when the <c>TimerTick</c> times out.
+        /// </summary>
+        /// <remarks>
+        /// This method primarily updates the heads-up display with the remaining time.
+        /// </remarks>
+        public void Tick()
+        {
+            int timeLeft = (int)_timeController.GetTimeLeft();
+            _headsUpDisplay.UpdateTimeLimit($"{timeLeft}");
+
+            if (_timeController.GetStartCountdown() >= 0)
+                _headsUpDisplay.UpdateStartTimer();
+        }
 
         /// <summary>
         /// Configures the heads-up display with the level requirements and any tutorials.
@@ -173,21 +171,30 @@ namespace PackageResolved.Logic
         private void ConnectInstances()
         {
             _ = _teleportTrigger.Connect("body_entered", this, nameof(OnBodyEntered));
-            _ = _timerStart.Connect("timeout", _timerLevel, "start");
-            _ = _timerStart.Connect("timeout", _playerNode, nameof(_playerNode.UnblockMovement));
-            _ = _timerTick.Connect("timeout", this, nameof(Tick));
-            if (this.GetCurrentState().CurrentGameMode == GameState.GameMode.Arcade)
-                _ = _timerLevel.Connect("timeout", this, nameof(GameOver));
+            _timeController.ConnectPlayerLock(_playerNode);
+            _timeController.ConnectTick(this);
+            _timeController.ConnectGameOver(this);
         }
 
         /// <summary>
-        /// Indicate the game is over and show the game over screen.
+        /// Grabs the timers in the level and instantiates the time controller.
         /// </summary>
-        private void GameOver()
+        private void CreateTimeController()
         {
-            GameState state = this.GetCurrentState();
-            UpdatePreviousRunInState(state);
-            _ = GetTree().ChangeScene("res://scenes/screens/game_over.tscn");
+            var timerStart = GetNode<Timer>("StartTimer");
+            var timerTick = GetNode<Timer>("Tick");
+            var timerLevel = GetNode<Timer>("Timer");
+            _timeController = new GameTimeController(timerStart, timerTick, timerLevel);
+        }
+
+        /// <summary>
+        /// Opens the pause menu and pauses the tree.
+        /// </summary>
+        private void HandlePause()
+        {
+            var pauseMenu = GetNode<PauseMenu>("CanvasLayer/PauseMenu");
+            pauseMenu.Visible = true;
+            GetTree().Paused = true;
         }
 
         /// <summary>
@@ -199,13 +206,9 @@ namespace PackageResolved.Logic
         private void InstantiateOnreadyInstances()
         {
             _headsUpDisplay = GetNode<HUD>("CanvasLayer/HUD");
-            _pauseMenu = GetNode<PauseMenu>("CanvasLayer/PauseMenu");
             _playerNode = GetNode<Player>("Player");
             _teleportTrigger = GetNode<Area2D>("TeleportTrigger");
             _teleportDestination = GetNode<Node2D>("TeleportDestination");
-            _timerStart = GetNode<Timer>("StartTimer");
-            _timerTick = GetNode<Timer>("Tick");
-            _timerLevel = GetNode<Timer>("Timer");
         }
 
         /// <summary>
@@ -245,9 +248,9 @@ namespace PackageResolved.Logic
             if (this.GetCurrentState().CurrentGameMode == GameState.GameMode.Endless)
                 return;
 
-            var growth = _state.CalculateTimeModifier(TimerGrowthRate, _timerLevel.TimeLeft);
+            var growth = _state.CalculateTimeModifier(TimerGrowthRate, _timeController.GetTimeLeft());
             if (growth > 0)
-                _timerLevel.AddTime(growth);
+                _timeController.AddTimeToLimit(growth);
             Tick();
         }
 
@@ -263,7 +266,7 @@ namespace PackageResolved.Logic
         {
             UpdatePackageCounter(amount);
             _headsUpDisplay.UpdatePackagesRemaining(_state.PackagesRemaining.ToString());
-            _state.LastPackageTimestamp = _timerLevel.TimeLeft;
+            _state.LastPackageTimestamp = _timeController.GetTimeLeft();
         }
 
         /// <summary>
@@ -293,7 +296,7 @@ namespace PackageResolved.Logic
         {
             var gameState = this.GetCurrentState();
             _state.PackagesRemaining = gameState.GetRequiredPackages();
-            _timerLevel.WaitTime = gameState.GetTimeLimit();
+            _timeController.SetTimeLimit(gameState.GetTimeLimit());
         }
 
         /// <summary>
@@ -323,7 +326,7 @@ namespace PackageResolved.Logic
         private void SuccessStart()
         {
             _playerNode.BlockMovement();
-            _timerLevel.Stop();
+            _timeController.StopLoop();
             var tween = GetNode<Tween>("Tween");
             tween.Start();
         }
@@ -355,21 +358,6 @@ namespace PackageResolved.Logic
         }
 
         /// <summary>
-        /// A callback method that runs every second when the <c>TimerTick</c> times out.
-        /// </summary>
-        /// <remarks>
-        /// This method primarily updates the heads-up display with the remaining time.
-        /// </remarks>
-        private void Tick()
-        {
-            int timeLeft = (int)_timerLevel.TimeLeft;
-            _headsUpDisplay.UpdateTimeLimit($"{timeLeft}");
-
-            if (_timerStart.TimeLeft >= 0)
-                _headsUpDisplay.UpdateStartTimer();
-        }
-
-        /// <summary>
         /// Updates the package counter by the amount specified from the pickup.
         /// </summary>
         /// <param name="amount">The number of packages to either add or remove.</param>
@@ -394,10 +382,11 @@ namespace PackageResolved.Logic
         {
             if (state.CurrentGameMode == GameState.GameMode.Endless)
             {
-                state.UpdatePreviousRun(_state.PackagesRemaining, (int)_timerLevel.WaitTime);
+                state.UpdatePreviousRun(_state.PackagesRemaining, 0);
                 return;
             }
-            state.UpdatePreviousRun(state.GetRequiredPackages() - _state.PackagesRemaining, (int)_timerLevel.WaitTime);
+            var time = _timeController.GetTimeLeft();
+            state.UpdatePreviousRun(state.GetRequiredPackages() - _state.PackagesRemaining, (int)time);
         }
     }
 }
