@@ -25,10 +25,9 @@ namespace PackageResolved.Logic
         /// The rate at which timer modifiers grow over time.
         /// </summary>
         /// <remarks>
-        /// This is a hyperparamter which is used to control the equation for calculating how much time to add to the
-        /// timer: <c>bonusTime = packagesLeft * (lastPackageCollectTime - timeLeft) ^ (a)</c>, where <c>a</c> is the
-        /// timer growth rate.
+        /// This is a hyperparamter which is used to control the timepiece addition algorithm.
         /// </remarks>
+        /// <seealso cref="PackageResolved.Logic.GameLevelState.CalculateTimeModifier(float, float)"/>
         [Export]
         public float TimerGrowthRate = 0.1f;
 

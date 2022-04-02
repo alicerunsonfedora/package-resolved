@@ -23,7 +23,7 @@ namespace PackageResolved.Utilities
         /// </summary>
         /// <param name="gameLoop">The game loop to create the hazard in.</param>
         /// <return> An instance of <c>Hazard</c>. </return>
-        /// <seealso> Hazard </seealso>
+        /// <seealso cref="PackageResolved.Objects.Hazard"/>
         /// <remarks>
         /// Hazards will start spawning on the third level in Arcade mode and after the first pass in Endless mode.
         /// </remarks>
@@ -40,7 +40,7 @@ namespace PackageResolved.Utilities
         /// </summary>
         /// <param name="gameLoop">The game loop to create the pickable item in.</param>
         /// <return> An instance of <c>Pickable</c>. </return>
-        /// <seealso> Pickable </seealso>
+        /// <seealso cref="PackageResolved.Objects.Pickable"/>
         /// <remarks>
         /// Timepieces will not be spawned on the first level in Arcade mode and in Endless mode.
         /// </remarks>
