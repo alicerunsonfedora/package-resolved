@@ -38,11 +38,6 @@ namespace PackageResolved.Logic
         private HUD _headsUpDisplay;
 
         /// <summary>
-        /// The timestamp for when the last package was collected.
-        /// </summary>
-        private float _lastPackageTime = 0;
-
-        /// <summary>
         /// An array of obstacle positions.
         /// </summary>
         /// <remarks>
@@ -61,9 +56,9 @@ namespace PackageResolved.Logic
         private Player _playerNode;
 
         /// <summary>
-        /// The number of packages the player still needs to collect.
+        /// The current game state of the level.
         /// </summary>
-        private int _remainingPackages;
+        private GameLevelState _state;
 
         /// <summary>
         /// The Area2D trigger that teleports the player to the top of the map.
@@ -150,30 +145,17 @@ namespace PackageResolved.Logic
         /// </summary>
         private void ConfigureHeadsUpDisplay()
         {
-            GameState state = this.GetCurrentState();
-            if (state.CurrentGameMode == GameState.GameMode.Arcade)
+            GameState gameState = this.GetCurrentState();
+            _state = new GameLevelState { PackagesRemaining = 0, LastPackageTimestamp = 0 };
+            if (gameState.CurrentGameMode == GameState.GameMode.Arcade)
             {
-                _remainingPackages = state.GetRequiredPackages();
-                _timerLevel.WaitTime = state.GetTimeLimit();
-                _headsUpDisplay.UpdatePackagesRemaining($"{_remainingPackages}");
-                _headsUpDisplay.UpdateTimeLimit(state.GetTimeLimit().ToString());
+                SetupArcadeMode();
+                _headsUpDisplay.UpdatePackagesRemaining(_state.PackagesRemaining.ToString());
+                _headsUpDisplay.UpdateTimeLimit(gameState.GetTimeLimit().ToString());
                 Tick();
             }
 
-            switch (state.GetCurrentLevel())
-            {
-                case 0:
-                    _headsUpDisplay.SetTutorialText(HUD.TutorialText.Movement);
-                    break;
-                case 1:
-                    _headsUpDisplay.SetTutorialText(HUD.TutorialText.ExtraTime);
-                    break;
-                case 2:
-                    _headsUpDisplay.SetTutorialText(HUD.TutorialText.Hazards);
-                    break;
-                default:
-                    break;
-            }
+            SetupTutorialText();
         }
 
         /// <summary>
@@ -196,9 +178,9 @@ namespace PackageResolved.Logic
         {
             GameState state = this.GetCurrentState();
             if (state.CurrentGameMode == GameState.GameMode.Endless)
-                state.UpdatePreviousRun(state.GetRequiredPackages(), (int)_timerLevel.WaitTime);
+                state.UpdatePreviousRun(_state.PackagesRemaining, (int)_timerLevel.WaitTime);
             else
-                state.UpdatePreviousRun(state.GetRequiredPackages() - _remainingPackages, (int)_timerLevel.WaitTime);
+                state.UpdatePreviousRun(state.GetRequiredPackages() - _state.PackagesRemaining, (int)_timerLevel.WaitTime);
             _ = GetTree().ChangeScene("res://scenes/screens/game_over.tscn");
         }
 
@@ -257,10 +239,10 @@ namespace PackageResolved.Logic
             Pickable pickable = Instancing.InstancePickable();
             double seed = GD.RandRange(0, 50);
             var state = this.GetCurrentState();
-            bool timepieceEligible = (state.GetCurrentLevel() > 0) && (state.CurrentGameMode == GameState.GameMode.Arcade);
+            bool timeEligible = (state.GetCurrentLevel() > 0) && (state.CurrentGameMode == GameState.GameMode.Arcade);
             if (seed > 40)
                 pickable.Kind = Pickable.Type.PackagePlus;
-            else if (seed > 30 && seed <= 39 && timepieceEligible)
+            else if ((seed > 30) && (seed <= 39) && (timeEligible))
                 pickable.Kind = Pickable.Type.TimeModifier;
 
             pickable.RedrawSprite();
@@ -282,9 +264,11 @@ namespace PackageResolved.Logic
 
             body.Position = _teleportDestination.Position;
             Teardown();
+
             var state = this.GetCurrentState();
             if ((state.GetCurrentLevel() > 1) || (state.CurrentGameMode == GameState.GameMode.Endless))
                 PlaceHazards();
+
             PlacePickables();
         }
 
@@ -305,10 +289,7 @@ namespace PackageResolved.Logic
             if (this.GetCurrentState().CurrentGameMode == GameState.GameMode.Endless)
                 return;
 
-            var growth = _remainingPackages * (_lastPackageTime - _timerLevel.TimeLeft);
-            growth = Mathf.Pow(growth, TimerGrowthRate);
-            GD.Print($"[DEBUG] Growth Rate: {growth}");
-
+            var growth = _state.CalculateTimeModifier(TimerGrowthRate, _timerLevel.TimeLeft);
             if (growth > 0)
                 _timerLevel.AddTime(growth);
             Tick();
@@ -325,17 +306,9 @@ namespace PackageResolved.Logic
         /// </remarks>
         private void OnPickedPackage(int amount)
         {
-            GameState state = this.GetCurrentState();
-            if (state.CurrentGameMode == GameState.GameMode.Endless)
-                _remainingPackages += amount;
-            else
-            {
-                _remainingPackages -= amount;
-                if (_remainingPackages <= 0)
-                    SuccessStart();
-            }
-            _headsUpDisplay.UpdatePackagesRemaining($"{_remainingPackages}");
-            _lastPackageTime = _timerLevel.TimeLeft;
+            UpdatePackageCounter(amount);
+            _headsUpDisplay.UpdatePackagesRemaining(_state.PackagesRemaining.ToString());
+            _state.LastPackageTimestamp = _timerLevel.TimeLeft;
         }
 
         /// <summary>
@@ -345,13 +318,39 @@ namespace PackageResolved.Logic
         {
             float lastVertPosition = 300f;
             for (int i = 0; i <= 4; i += 1)
-            {
-                Hazard hazard = MakeHazard();
-                hazard.Position = Vector.GetPlacableVector(lastVertPosition, 96);
-                _ = _obstaclePositions.Add(hazard.Position);
-                CallDeferred("add_child", hazard);
-                lastVertPosition += 64;
-            }
+                lastVertPosition = PlaceNewHazard(lastVertPosition);
+        }
+
+        /// <summary>
+        /// Place a new hazard on the map.
+        /// </summary>
+        /// <param name="lastVertPosition">The vertical position of the last item that was placed.</param>
+        /// <returns>The next vertical position that the next item should be placed at.</returns>
+        private float PlaceNewHazard(float lastVertPosition)
+        {
+            Hazard hazard = MakeHazard();
+            hazard.Position = Vector.GetPlacableVector(lastVertPosition, 96);
+            _ = _obstaclePositions.Add(hazard.Position);
+            CallDeferred("add_child", hazard);
+            lastVertPosition += 64;
+            return lastVertPosition;
+        }
+
+        /// <summary>
+        /// Place a new pickable item on the map.
+        /// </summary>
+        /// <param name="lastVertPosition">The vertical position of the last item that was placed.</param>
+        /// <returns>The next vertical position that the next item should be placed at.</returns>
+        private float PlaceNewPickable(float lastVertPosition)
+        {
+            Pickable pickableObject = MakePickable();
+            Vector2 position = Vector.GetPlacableVector(lastVertPosition, 48);
+            if (_obstaclePositions.Contains(position))
+                position -= new Vector2(0, 48);
+            pickableObject.Position = position;
+            CallDeferred("add_child", pickableObject);
+            lastVertPosition += 100;
+            return lastVertPosition;
         }
 
         /// <summary>
@@ -361,14 +360,37 @@ namespace PackageResolved.Logic
         {
             float lastVertPosition = -64f;
             for (int i = 0; i <= 8; i += 1)
+                lastVertPosition = PlaceNewPickable(lastVertPosition);
+        }
+
+        /// <summary>
+        /// Sets up the arcade mode for the game.
+        /// </summary>
+        private void SetupArcadeMode()
+        {
+            var gameState = this.GetCurrentState();
+            _state.PackagesRemaining = gameState.GetRequiredPackages();
+            _timerLevel.WaitTime = gameState.GetTimeLimit();
+        }
+
+        /// <summary>
+        /// Sets up the tutorial text on the HUD.
+        /// </summary>
+        private void SetupTutorialText()
+        {
+            switch (this.GetCurrentState().GetCurrentLevel())
             {
-                Pickable pickableObject = MakePickable();
-                Vector2 position = Vector.GetPlacableVector(lastVertPosition, 48);
-                if (_obstaclePositions.Contains(position))
-                    position -= new Vector2(0, 48);
-                pickableObject.Position = position;
-                CallDeferred("add_child", pickableObject);
-                lastVertPosition += 100;
+                case 0:
+                    _headsUpDisplay.SetTutorialText(HUD.TutorialText.Movement);
+                    break;
+                case 1:
+                    _headsUpDisplay.SetTutorialText(HUD.TutorialText.ExtraTime);
+                    break;
+                case 2:
+                    _headsUpDisplay.SetTutorialText(HUD.TutorialText.Hazards);
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -414,10 +436,20 @@ namespace PackageResolved.Logic
         {
             foreach (var child in GetChildren())
             {
-                if (child is ITeardownable)
-                    (child as ITeardownable).Teardown();
+                TeardownChild(child);
             }
             _obstaclePositions.Clear();
+        }
+
+        /// <summary>
+        /// Tears down a child node if they conform to the ITeardownable interface.
+        /// </summary>
+        /// <param name="child">The child to try tearing down.</param>
+        private static void TeardownChild(object child)
+        {
+            if (!(child is ITeardownable))
+                return;
+            (child as ITeardownable).Teardown();
         }
 
         /// <summary>
@@ -433,6 +465,23 @@ namespace PackageResolved.Logic
 
             if (_timerStart.TimeLeft >= 0)
                 _headsUpDisplay.UpdateStartTimer();
+        }
+
+        /// <summary>
+        /// Updates the package counter by the amount specified from the pickup.
+        /// </summary>
+        /// <param name="amount">The number of packages to either add or remove.</param>
+        private void UpdatePackageCounter(int amount)
+        {
+            var gameState = this.GetCurrentState();
+            if (gameState.CurrentGameMode == GameState.GameMode.Endless)
+            {
+                _state.PackagesRemaining += amount;
+                return;
+            }
+            _state.PackagesRemaining -= amount;
+            if (_state.PackagesRemaining <= 0)
+                SuccessStart();
         }
     }
 }
