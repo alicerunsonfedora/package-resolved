@@ -363,14 +363,9 @@ namespace PackageResolved.Logic
         /// <param name="amount">The number of packages to either add or remove.</param>
         private void UpdatePackageCounter(int amount)
         {
-            var gameState = this.GetCurrentState();
-            if (gameState.CurrentGameMode == GameState.GameMode.Endless)
-            {
-                _state.PackagesRemaining += amount;
-                return;
-            }
-            _state.PackagesRemaining -= amount;
-            if (_state.PackagesRemaining <= 0)
+            GameState.GameMode currentMode = this.GetCurrentState().CurrentGameMode;
+            int newPackages = _state.UpdatePackageAmount(amount, currentMode);
+            if (newPackages <= 0)
                 SuccessStart();
         }
 

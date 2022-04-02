@@ -44,6 +44,23 @@ namespace PackageResolved.Logic
             var growth = PackagesRemaining * (LastPackageTimestamp - timeLeft);
             return Mathf.Pow(growth, growthRate);
         }
+
+        /// <summary>
+        /// Update the amount of packages based on the specified game mode.
+        /// </summary>
+        /// <param name="magnitude">The amount of packages to either add or subtract from the state.</param>
+        /// <param name="mode">The game mode that determines which operation to perform.</param>
+        /// <returns></returns>
+        public int UpdatePackageAmount(int magnitude, GameState.GameMode mode)
+        {
+            if (mode == GameState.GameMode.Endless)
+            {
+                PackagesRemaining += magnitude;
+                return PackagesRemaining;
+            }
+            PackagesRemaining -= magnitude;
+            return PackagesRemaining;
+        }
     }
 }
 
