@@ -15,7 +15,7 @@ namespace PackageResolved.Logic
     /// <summary>
     /// A class that handles timing events with the starting countdown, the ticker, and the game's level timer.
     /// </summary>
-    public class GameTimeController
+    public class TimeController
     {
         /// <summary>
         /// The timer responsible for the starting countdown.
@@ -38,7 +38,7 @@ namespace PackageResolved.Logic
         /// <param name="start">The timer that holds the starting countdown.</param>
         /// <param name="tick">The timer that executes every second.</param>
         /// <param name="loop">The timer that controls how much time the player has.</param>
-        public GameTimeController(Timer start, Timer tick, Timer loop)
+        public TimeController(Timer start, Timer tick, Timer loop)
         {
             _start = start;
             _tick = tick;

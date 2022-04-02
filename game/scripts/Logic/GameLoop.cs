@@ -55,22 +55,14 @@ namespace PackageResolved.Logic
         private GameLevelState _state;
 
         /// <summary>
-        /// The Area2D trigger that teleports the player to the top of the map.
+        /// The teleportation controller that handles the teleportation logic.
         /// </summary>
-        private Area2D _teleportTrigger;
-
-        /// <summary>
-        /// The Area2D used to define the top of the map.
-        /// </summary>
-        /// <remarks>
-        /// This is used in conjunction with <c>TeleportTrigger</c> to teleport the player.
-        /// </remarks>
-        private Node2D _teleportDestination;
+        private TeleportController _teleportController;
 
         /// <summary>
         /// The time controller that handles all of the logic pertaining to the level's timers.
         /// </summary>
-        private GameTimeController _timeController;
+        private TimeController _timeController;
 
         /// <summary>
         /// Instantiate the scene after entering the scene tree.
@@ -81,12 +73,7 @@ namespace PackageResolved.Logic
             ConnectInstances();
             SetupTween();
             _playerNode.BlockMovement();
-
-            GD.Randomize();
-            if (this.GetCurrentState().GetCurrentLevel() > 1)
-                PlaceHazards();
-            PlacePickables();
-
+            SetupInitialScene();
             ConfigureHeadsUpDisplay();
         }
 
@@ -96,7 +83,7 @@ namespace PackageResolved.Logic
         /// <param name="delta">The change in time since the previous frame.</param>
         public override void _PhysicsProcess(float delta)
         {
-            _teleportDestination.Position = new Vector2(_playerNode.Position.x, _teleportDestination.Position.y);
+            _teleportController.UpdateTargetPosition(_playerNode.Position);
         }
 
         /// <summary>
@@ -170,10 +157,20 @@ namespace PackageResolved.Logic
         /// </summary>
         private void ConnectInstances()
         {
-            _ = _teleportTrigger.Connect("body_entered", this, nameof(OnBodyEntered));
             _timeController.ConnectPlayerLock(_playerNode);
             _timeController.ConnectTick(this);
             _timeController.ConnectGameOver(this);
+            _teleportController.Connect(nameof(TeleportController.Teleported), this, nameof(OnTeleported));
+        }
+
+        /// <summary>
+        /// Creates the teleportation controller used to teleport the player.
+        /// </summary>
+        private void CreateTeleportController()
+        {
+            var teleportTrigger = GetNode<Area2D>("TeleportTrigger");
+            var teleportDestination = GetNode<Node2D>("TeleportDestination");
+            _teleportController = new TeleportController(teleportTrigger, teleportDestination);
         }
 
         /// <summary>
@@ -184,7 +181,7 @@ namespace PackageResolved.Logic
             var timerStart = GetNode<Timer>("StartTimer");
             var timerTick = GetNode<Timer>("Tick");
             var timerLevel = GetNode<Timer>("Timer");
-            _timeController = new GameTimeController(timerStart, timerTick, timerLevel);
+            _timeController = new TimeController(timerStart, timerTick, timerLevel);
         }
 
         /// <summary>
@@ -207,29 +204,8 @@ namespace PackageResolved.Logic
         {
             _headsUpDisplay = GetNode<HUD>("CanvasLayer/HUD");
             _playerNode = GetNode<Player>("Player");
-            _teleportTrigger = GetNode<Area2D>("TeleportTrigger");
-            _teleportDestination = GetNode<Node2D>("TeleportDestination");
-        }
-
-        /// <summary>
-        /// A callback method that runs when the player enters the teleport trigger.
-        /// </summary>
-        /// <remarks> This method will teleport the player to the top of the screen and replace items in the
-        /// level.
-        /// </remarks>
-        private void OnBodyEntered(Node2D body)
-        {
-            if (!(body is Player))
-                return;
-
-            body.Position = _teleportDestination.Position;
-            Teardown();
-
-            var state = this.GetCurrentState();
-            if ((state.GetCurrentLevel() > 1) || (state.CurrentGameMode == GameState.GameMode.Endless))
-                PlaceHazards();
-
-            PlacePickables();
+            CreateTimeController();
+            CreateTeleportController();
         }
 
         /// <summary>
@@ -255,7 +231,7 @@ namespace PackageResolved.Logic
         }
 
         /// <summary>
-        /// A callback method that runs when the user picks up a pickable item marked as a package of some kind.
+        /// A callback method that runs when the player picks up a pickable item marked as a package of some kind.
         /// </summary>
         /// <param name="amount"> The number of packages to decrease <c>PackagesRemaining</c> by. </param>
         /// <remarks>
@@ -267,6 +243,21 @@ namespace PackageResolved.Logic
             UpdatePackageCounter(amount);
             _headsUpDisplay.UpdatePackagesRemaining(_state.PackagesRemaining.ToString());
             _state.LastPackageTimestamp = _timeController.GetTimeLeft();
+        }
+
+        /// <summary>
+        /// A callback method that runs when the player is teleported.
+        /// </summary>
+        /// <remarks>
+        /// This method will tear down the old generated pickable items and hazards and place new ones accordingly.
+        /// </remarks>
+        private void OnTeleported()
+        {
+            Teardown();
+            var state = this.GetCurrentState();
+            if ((state.GetCurrentLevel() > 1) || (state.CurrentGameMode == GameState.GameMode.Endless))
+                PlaceHazards();
+            PlacePickables();
         }
 
         /// <summary>
@@ -297,6 +288,17 @@ namespace PackageResolved.Logic
             var gameState = this.GetCurrentState();
             _state.PackagesRemaining = gameState.GetRequiredPackages();
             _timeController.SetTimeLimit(gameState.GetTimeLimit());
+        }
+
+        /// <summary>
+        /// Sets up the initial layout of the procedurally-generated items.
+        /// </summary>
+        private void SetupInitialScene()
+        {
+            GD.Randomize();
+            if (this.GetCurrentState().GetCurrentLevel() > 1)
+                PlaceHazards();
+            PlacePickables();
         }
 
         /// <summary>
@@ -340,9 +342,7 @@ namespace PackageResolved.Logic
         public void Teardown()
         {
             foreach (var child in GetChildren())
-            {
                 TeardownChild(child);
-            }
             _obstaclePositions.Clear();
         }
 
