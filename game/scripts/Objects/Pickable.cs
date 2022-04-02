@@ -7,6 +7,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using Godot;
+using PackageResolved.Extensions;
 using PackageResolved.Logic;
 
 namespace PackageResolved.Objects
@@ -101,7 +102,7 @@ namespace PackageResolved.Objects
         {
             var trans = Tween.TransitionType.Cubic;
             var ease = Tween.EaseType.InOut;
-            _tween.InterpolateProperty(_sprite, "modulate", Colors.White, Colors.Transparent, 0.25f, trans, ease);
+            _tween.Fadeout(_sprite, 0.25f);
             _tween.InterpolateProperty(GetNode("Sprite/Light"), "energy", 0.7, 0, 0.25f, trans, ease);
         }
 
@@ -117,7 +118,7 @@ namespace PackageResolved.Objects
             var ease = Tween.EaseType.InOut;
 
             _tween.InterpolateProperty(hint, "rect_position", origin, hintPositionOffset, 1.25f, trans, ease);
-            _tween.InterpolateProperty(hint, "modulate", Colors.White, Colors.Transparent, 1.25f, trans, ease);
+            _tween.Fadeout(hint, 1.25f);
         }
 
         /// <summary>

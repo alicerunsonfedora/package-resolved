@@ -93,9 +93,7 @@ namespace PackageResolved.UI
         /// <param name="ctrl">The control to be faded out to transparency.</param>
         private void ConnectAnimation(Control ctrl)
         {
-            var trans = Tween.TransitionType.Linear;
-            var ease = Tween.EaseType.InOut;
-            _tween.InterpolateProperty(ctrl, "modulate", Colors.White, Colors.Transparent, 0.5f, trans, ease);
+            _tween.Fadeout(ctrl, 0.5f);
             _timer.Connect("timeout", _tween, "start");
             _timer.Start();
         }

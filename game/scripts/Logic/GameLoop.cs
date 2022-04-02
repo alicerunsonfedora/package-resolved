@@ -378,9 +378,7 @@ namespace PackageResolved.Logic
         private void SetupTween()
         {
             var tween = GetNode<Tween>("Tween");
-            var trans = Tween.TransitionType.Linear;
-            var ease = Tween.EaseType.InOut;
-            tween.InterpolateProperty(this, "modulate", Colors.White, Colors.Transparent, 3.0f, trans, ease);
+            tween.Fadeout(this, 3.0f);
             tween.Connect("tween_all_completed", this, nameof(SuccessCallback));
         }
 
@@ -414,7 +412,7 @@ namespace PackageResolved.Logic
         /// </remarks>
         public void Teardown()
         {
-            foreach (object child in GetChildren())
+            foreach (var child in GetChildren())
             {
                 if (child is ITeardownable)
                     (child as ITeardownable).Teardown();
