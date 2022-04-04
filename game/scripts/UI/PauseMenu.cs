@@ -76,9 +76,9 @@ namespace PackageResolved.UI
         /// </remarks>
         private void InstantiateOnreadyInstances()
         {
-            _btnResume = GetNode<Button>("VBoxContainer/Resume");
-            _btnRestart = GetNode<Button>("VBoxContainer/Restart");
-            _btnMainMenu = GetNode<Button>("VBoxContainer/MainMenu");
+            _btnResume = GetNode<Button>("Form/VStack/Resume");
+            _btnRestart = GetNode<Button>("Form/VStack/Restart");
+            _btnMainMenu = GetNode<Button>("Form/VStack/MainMenu");
         }
     }
 }

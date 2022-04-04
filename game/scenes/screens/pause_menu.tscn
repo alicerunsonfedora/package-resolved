@@ -1,14 +1,54 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://assets/default_theme.tres" type="Theme" id=1]
-[ext_resource path="res://assets/fonts/Inter-Bold.otf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/papers/yellow.tres" type="StyleBox" id=2]
 [ext_resource path="res://scripts/UI/PauseMenu.cs" type="Script" id=3]
-[ext_resource path="res://assets/fonts/s_bold.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://assets/fonts/dse-typewriter-font-lh.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://assets/fonts/s_typewriter.ttf" type="DynamicFontData" id=7]
+[ext_resource path="res://assets/sprites/tileset.png" type="Texture" id=8]
 
-[sub_resource type="DynamicFont" id=1]
-size = 27
-font_data = ExtResource( 4 )
-fallback/0 = ExtResource( 2 )
+[sub_resource type="AtlasTexture" id=22]
+atlas = ExtResource( 8 )
+region = Rect2( 144, 192, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 8 )
+region = Rect2( 0, 240, 48, 48 )
+
+[sub_resource type="DynamicFont" id=24]
+size = 9
+font_data = ExtResource( 7 )
+fallback/0 = ExtResource( 6 )
+
+[sub_resource type="AtlasTexture" id=25]
+atlas = ExtResource( 8 )
+region = Rect2( 96, 192, 48, 48 )
+
+[sub_resource type="DynamicFont" id=31]
+size = 36
+font_data = ExtResource( 7 )
+fallback/0 = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=32]
+size = 9
+font_data = ExtResource( 7 )
+fallback/0 = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=33]
+size = 18
+font_data = ExtResource( 7 )
+fallback/0 = ExtResource( 6 )
+
+[sub_resource type="InputEventAction" id=21]
+action = "ui_accept"
+
+[sub_resource type="ShortCut" id=28]
+shortcut = SubResource( 21 )
+
+[sub_resource type="DynamicFont" id=30]
+size = 9
+font_data = ExtResource( 7 )
+fallback/0 = ExtResource( 6 )
 
 [node name="PauseMenu" type="Control"]
 anchor_right = 1.0
@@ -22,41 +62,145 @@ anchor_top = 0.00124166
 anchor_right = 1.0
 anchor_bottom = 1.00124
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="Form" type="Panel" parent="."]
+anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 48.0
+margin_left = 16.0
+margin_right = -364.0
+custom_styles/panel = ExtResource( 2 )
+
+[node name="CoffeeStain1" type="TextureRect" parent="Form"]
+modulate = Color( 1, 1, 1, 0.0666667 )
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -256.0
+margin_right = 256.0
+rect_min_size = Vector2( 256, 256 )
+texture = SubResource( 22 )
+expand = true
+
+[node name="CoffeeStain2" type="TextureRect" parent="Form"]
+modulate = Color( 1, 1, 1, 0.164706 )
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -256.0
+margin_bottom = 256.0
+rect_min_size = Vector2( 256, 256 )
+texture = SubResource( 23 )
+expand = true
+
+[node name="VStack" type="VBoxContainer" parent="Form"]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -282.0
 margin_top = 16.0
-margin_right = 458.0
+margin_right = 292.0
 margin_bottom = -16.0
-alignment = 1
+size_flags_horizontal = 3
 
-[node name="TitleText" type="Label" parent="VBoxContainer"]
-margin_right = 410.0
-margin_bottom = 52.0
-custom_fonts/font = SubResource( 1 )
-text = "On Break"
+[node name="HBoxContainer" type="HBoxContainer" parent="Form/VStack"]
+margin_right = 574.0
+margin_bottom = 48.0
 
-[node name="HSeparator3" type="HSeparator" parent="VBoxContainer"]
+[node name="Copyright" type="Label" parent="Form/VStack/HBoxContainer"]
+margin_top = 1.0
+margin_right = 518.0
+margin_bottom = 47.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 0.698039, 0.592157, 0.494118, 1 )
+custom_fonts/font = SubResource( 24 )
+text = "Swifty Package Factory
+BREAK NOTICE #14c11a"
+autowrap = true
+uppercase = true
+
+[node name="TextureRect" type="TextureRect" parent="Form/VStack/HBoxContainer"]
+margin_left = 526.0
+margin_right = 574.0
+margin_bottom = 48.0
+texture = SubResource( 25 )
+
+[node name="Title" type="Label" parent="Form/VStack"]
+margin_top = 56.0
+margin_right = 574.0
+margin_bottom = 120.0
+custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_fonts/font = SubResource( 31 )
+text = "Break Notice"
+align = 1
+uppercase = true
+
+[node name="FormNote" type="Label" parent="Form/VStack"]
+margin_top = 128.0
+margin_right = 574.0
+margin_bottom = 192.0
+custom_colors/font_color = Color( 0.219608, 0.101961, 0.0313726, 1 )
+custom_fonts/font = SubResource( 32 )
+text = "The following notice is provided to allow you to inform your supervisors, managers, managing supervisors, and micromanaging supervisors that you are on break and are scheduled to return to work within fifteen minutes."
+autowrap = true
+uppercase = true
+
+[node name="Spacer2" type="HSeparator" parent="Form/VStack"]
 modulate = Color( 1, 1, 1, 0 )
-margin_top = 60.0
-margin_right = 410.0
-margin_bottom = 406.0
+margin_top = 200.0
+margin_right = 574.0
+margin_bottom = 251.0
 size_flags_vertical = 3
 
-[node name="Resume" type="Button" parent="VBoxContainer"]
-margin_top = 414.0
-margin_right = 410.0
-margin_bottom = 460.0
-text = "Resume"
+[node name="Resume" type="Button" parent="Form/VStack"]
+margin_top = 259.0
+margin_right = 574.0
+margin_bottom = 307.0
+rect_min_size = Vector2( 0, 48 )
+custom_colors/font_color = Color( 0.788235, 0.486275, 0.227451, 1 )
+custom_colors/font_color_hover = Color( 0.4, 0.270588, 0.117647, 1 )
+custom_constants/hseparation = 0
+custom_fonts/font = SubResource( 33 )
+shortcut_in_tooltip = false
+shortcut = SubResource( 28 )
+text = "RETURN TO SHIFT"
+flat = true
 
-[node name="Restart" type="Button" parent="VBoxContainer"]
-margin_top = 468.0
-margin_right = 410.0
-margin_bottom = 514.0
-text = "Restart Level"
+[node name="Restart" type="Button" parent="Form/VStack"]
+margin_top = 315.0
+margin_right = 574.0
+margin_bottom = 363.0
+rect_min_size = Vector2( 0, 48 )
+custom_colors/font_color = Color( 0.788235, 0.486275, 0.227451, 1 )
+custom_colors/font_color_hover = Color( 0.4, 0.270588, 0.117647, 1 )
+custom_constants/hseparation = 0
+custom_fonts/font = SubResource( 33 )
+shortcut_in_tooltip = false
+text = "RETRY REQUEST"
+flat = true
 
-[node name="MainMenu" type="Button" parent="VBoxContainer"]
-margin_top = 522.0
-margin_right = 410.0
+[node name="MainMenu" type="Button" parent="Form/VStack"]
+margin_top = 371.0
+margin_right = 574.0
+margin_bottom = 419.0
+rect_min_size = Vector2( 0, 48 )
+custom_colors/font_color = Color( 0.788235, 0.486275, 0.227451, 1 )
+custom_colors/font_color_hover = Color( 0.4, 0.270588, 0.117647, 1 )
+custom_constants/hseparation = 0
+custom_fonts/font = SubResource( 33 )
+shortcut_in_tooltip = false
+text = "BACK TO MAIN MENU"
+flat = true
+
+[node name="Spacer4" type="HSeparator" parent="Form/VStack"]
+modulate = Color( 1, 1, 1, 0 )
+margin_top = 427.0
+margin_right = 574.0
+margin_bottom = 478.0
+size_flags_vertical = 3
+
+[node name="Footer" type="Label" parent="Form/VStack"]
+margin_top = 486.0
+margin_right = 574.0
 margin_bottom = 568.0
-text = "Back to Main Menu"
+custom_colors/font_color = Color( 0.7, 0.595117, 0.497, 1 )
+custom_fonts/font = SubResource( 30 )
+text = "To Employee: If you feel that your supervisor has disrespected your right to the break as noted in this notice, please contact your nearest micromanaging supervisor to disregard your feelings. You retain the right to have questions or concerns about this policy."
+autowrap = true
+uppercase = true

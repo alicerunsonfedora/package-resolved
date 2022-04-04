@@ -38,11 +38,11 @@ size = 27
 font_data = ExtResource( 7 )
 fallback/0 = ExtResource( 6 )
 
-[sub_resource type="InputEventAction" id=21]
+[sub_resource type="InputEventAction" id=35]
 action = "ui_accept"
 
 [sub_resource type="ShortCut" id=29]
-shortcut = SubResource( 21 )
+shortcut = SubResource( 35 )
 
 [sub_resource type="DynamicFont" id=31]
 size = 27
