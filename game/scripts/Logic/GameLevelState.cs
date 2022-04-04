@@ -53,12 +53,7 @@ namespace PackageResolved.Logic
         /// <returns></returns>
         public int UpdatePackageAmount(int magnitude, GameState.GameMode mode)
         {
-            if (mode == GameState.GameMode.Endless)
-            {
-                PackagesRemaining += magnitude;
-                return PackagesRemaining;
-            }
-            PackagesRemaining -= magnitude;
+            PackagesRemaining += (mode == GameState.GameMode.Endless) ? magnitude : -magnitude;
             return PackagesRemaining;
         }
     }

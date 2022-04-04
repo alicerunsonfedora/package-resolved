@@ -128,7 +128,7 @@ namespace PackageResolved.Logic
         public void Tick()
         {
             int timeLeft = (int)_timeController.GetTimeLeft();
-            _headsUpDisplay.UpdateTimeLimit($"{timeLeft}");
+            _headsUpDisplay.UpdateTimeLimit(timeLeft);
 
             if (_timeController.GetStartCountdown() >= 0)
                 _headsUpDisplay.UpdateStartTimer();
@@ -144,8 +144,7 @@ namespace PackageResolved.Logic
             if (gameState.CurrentGameMode == GameState.GameMode.Arcade)
             {
                 SetupArcadeMode();
-                _headsUpDisplay.UpdatePackagesRemaining(_state.PackagesRemaining.ToString());
-                _headsUpDisplay.UpdateTimeLimit(gameState.GetTimeLimit().ToString());
+                _headsUpDisplay.Update(_state.PackagesRemaining, gameState.GetTimeLimit());
                 Tick();
             }
 
@@ -225,8 +224,9 @@ namespace PackageResolved.Logic
                 return;
 
             var growth = _state.CalculateTimeModifier(TimerGrowthRate, _timeController.GetTimeLeft());
-            if (growth > 0)
-                _timeController.AddTimeToLimit(growth);
+            if (growth <= 0)
+                return;
+            _timeController.AddTimeToLimit(growth);
             Tick();
         }
 
@@ -241,7 +241,7 @@ namespace PackageResolved.Logic
         private void OnPickedPackage(int amount)
         {
             UpdatePackageCounter(amount);
-            _headsUpDisplay.UpdatePackagesRemaining(_state.PackagesRemaining.ToString());
+            _headsUpDisplay.UpdatePackagesRemaining(_state.PackagesRemaining);
             _state.LastPackageTimestamp = _timeController.GetTimeLeft();
         }
 

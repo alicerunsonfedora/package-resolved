@@ -6,6 +6,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+using System;
 using Godot;
 using PackageResolved.Extensions;
 using PackageResolved.Logic;
@@ -134,12 +135,45 @@ namespace PackageResolved.UI
         }
 
         /// <summary>
+        /// Upate the HUD simulatenously.
+        /// </summary>
+        /// <param name="packages">The number of packages remaining as a string value.</param>
+        /// <param name="timeLimit">The remaining time as a string value.</param>
+        [Obsolete("Please use Update(int, int)")]
+        public void Update(string packages, string timeLimit)
+        {
+            UpdatePackagesRemaining(packages);
+            UpdateTimeLimit(timeLimit);
+        }
+
+        /// <summary>
+        /// Upate the HUD simulatenously.
+        /// </summary>
+        /// <param name="packages">The number of packages remaining.</param>
+        /// <param name="timeLimit">The remaining time.</param>
+        public void Update(int packages, int timeLimit)
+        {
+            UpdatePackagesRemaining(packages);
+            UpdateTimeLimit(timeLimit);
+        }
+
+        /// <summary>
         /// Update the packages remaining label.
         /// </summary>
         /// <param name="text">The number of packages remaining as a string value.</param>
+        [Obsolete("Please use UpdatePackagesRemaining(int)")]
         public void UpdatePackagesRemaining(string text)
         {
             _packagesRemaining.Text = text;
+        }
+
+        /// <summary>
+        /// Update the packages remaining label.
+        /// </summary>
+        /// <param name="packages">The number of packages remaining.</param>
+        public void UpdatePackagesRemaining(int packages)
+        {
+            _packagesRemaining.Text = packages.ToString();
         }
 
         /// <summary>
@@ -163,9 +197,19 @@ namespace PackageResolved.UI
         /// Update the time limit label.
         /// </summary>
         /// <param name="text">The remaining time as a string value.</param>
+        [Obsolete("Please use UpdateTimeLimit(int)")]
         public void UpdateTimeLimit(string text)
         {
             _timeLimit.Text = text;
+        }
+
+        /// <summary>
+        /// Update the time limit label.
+        /// </summary>
+        /// <param name="time">The remaining time.</param>
+        public void UpdateTimeLimit(int time)
+        {
+            _timeLimit.Text = time.ToString();
         }
 
 
