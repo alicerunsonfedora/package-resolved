@@ -173,7 +173,7 @@ namespace PackageResolved.UI
         /// <param name="packages">The number of packages remaining.</param>
         public void UpdatePackagesRemaining(int packages)
         {
-            _packagesRemaining.Text = packages.ToString();
+            _packagesRemaining.Text = (Mathf.Max(packages, 0)).ToString();
         }
 
         /// <summary>

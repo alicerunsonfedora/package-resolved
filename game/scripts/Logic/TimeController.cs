@@ -51,9 +51,10 @@ namespace PackageResolved.Logic
         /// Adds time to the level timer.
         /// </summary>
         /// <param name="extraTime">The amount of time to add to the timer.</param>
-        public void AddTimeToLimit(float extraTime)
+        /// <returns>The new amount of time the player has to complete the level.</returns>
+        public float AddTimeToLimit(float extraTime)
         {
-            _loop.AddTime(extraTime);
+            return _loop.AddTime(extraTime);
         }
 
         /// <summary>

@@ -127,6 +127,7 @@ namespace PackageResolved.Logic
         /// </remarks>
         public void Tick()
         {
+            GD.Print($"Timer: {_timeController.GetTimeLeft()}");
             int timeLeft = (int)_timeController.GetTimeLeft();
             _headsUpDisplay.UpdateTimeLimit(timeLeft);
 
@@ -224,10 +225,8 @@ namespace PackageResolved.Logic
                 return;
 
             var growth = _state.CalculateTimeModifier(TimerGrowthRate, _timeController.GetTimeLeft());
-            if (growth <= 0)
-                return;
-            _timeController.AddTimeToLimit(growth);
-            Tick();
+            var time = _timeController.AddTimeToLimit(Mathf.Max(growth, 0.5f));
+            _headsUpDisplay.UpdateTimeLimit((int)time);
         }
 
         /// <summary>
